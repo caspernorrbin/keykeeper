@@ -14,3 +14,12 @@
 
 ## Server
 - Start using: `npm start`
+- Development start using: `npm run dev`
+
+#### Environment variables
+
+A `.env` file should be created in the `server/` folder containing the following data:
+```
+SESSION_SECRET=abcdefg
+PORT=8080
+```
