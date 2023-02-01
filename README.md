@@ -13,13 +13,15 @@
 - access using `sqlite3` command
 
 ## Server
-- Start using: `npm start`
-- Development start using: `npm run dev`
 
-#### Environment variables
+1. Navigate into `server/`
 
-A `.env` file should be created in the `server/` folder containing the following data:
-```
-SESSION_SECRET=abcdefg
-PORT=8080
-```
+2. Copy `.env-template` to `.env`, which should contain the following variables:
+
+    * `SESSION_SECRET`: Secret used to store cookies on the client
+    * `PORT`: The port that the server listens on
+    * `DB_LOC`: The location of the SQLite database file the server uses
+
+3. Run `npm install` to install dependencies
+
+4. Run `npm start` to start the server or `npm run dev` to start the user in development mode, which reloads the server on file changes.
