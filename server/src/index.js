@@ -8,13 +8,8 @@ const app = express();
 
 const PORT = process.env.PORT || 8080;
 
-// // Setup database connection
-// const sqlite3 = require("sqlite3").verbose();
-// const db = new sqlite3.Database(process.env.DB_LOC);
-
 // Middlewares
 const setDbMiddleWare = (req, _, next) => {
-    // req.db = db;
 
     next();
 };
