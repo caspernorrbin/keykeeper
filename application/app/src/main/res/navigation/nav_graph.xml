@@ -4,8 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/nav_storage_fragment">
+    app:startDestination="@id/nav_debug_fragment">
 
+    <fragment
+        android:id="@+id/nav_debug_fragment"
+        android:name="com.application.keykeeper.Debug"
+        android:label="@string/nav_debug"
+        tools:layout="@layout/fragment_debug" />
     <fragment
         android:id="@+id/nav_storage_fragment"
         android:name="com.application.keykeeper.StorageFragment"

@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@id/nav_storage_fragment"
-        android:icon="@drawable/ic_key"
-        android:title="@string/nav_storage" />
+        android:id="@id/nav_debug_fragment"
+        android:icon="@drawable/ic_debug"
+        android:title="@string/nav_debug" />
 
     <item
         android:id="@id/nav_account_fragment"
         android:icon="@drawable/ic_person"
         android:title="@string/nav_account" />
+
+    <item
+        android:id="@id/nav_storage_fragment"
+        android:icon="@drawable/ic_key"
+        android:title="@string/nav_storage" />
 </menu>

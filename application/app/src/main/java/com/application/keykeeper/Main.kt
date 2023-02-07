@@ -18,7 +18,7 @@ class Main : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
         setSupportActionBar(findViewById(R.id.toolbar))
-        var config = AppBarConfiguration(setOf(R.id.nav_storage_fragment, R.id.nav_account_fragment))
+        var config = AppBarConfiguration(setOf(R.id.nav_debug_fragment, R.id.nav_storage_fragment, R.id.nav_account_fragment))
         navController = findNavController(R.id.nav_host_fragment)
         bottomNav = findViewById(R.id.bottom_navigation_view)
         bottomNav.setupWithNavController(navController)

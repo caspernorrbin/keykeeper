@@ -7,6 +7,7 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <!-- Strings used for bottom navbar -->
+    <string name="nav_debug">Debug</string>
     <string name="nav_storage">Storage</string>
     <string name="nav_account">Account</string>
 
@@ -15,4 +16,6 @@
 
     <!-- Storage strings -->
     <string name="storage_query">Search …</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
