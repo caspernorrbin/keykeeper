@@ -1,37 +1,39 @@
 require("dotenv").config();
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database(process.env.DB_LOC);
+const db = require("better-sqlite3")(process.env.DB_LOC);
+db.pragma("journal_mode = WAL");
 
-db.serialize(() => {
-    const accountsTable = `CREATE TABLE IF NOT EXISTS accounts(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            email         TEXT NOT NULL UNIQUE,
-            password_hash TEXT NOT NULL,
-            symkey        TEXT NOT NULL);`;
-    db.run(accountsTable, (err) => {
-        if (err) {
-            throw err;
-        } else {
-            console.log("Created table 'accounts'");
-        }
-    });
+const accountsTable = db.prepare(`CREATE TABLE IF NOT EXISTS accounts(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email         TEXT NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL,
+    symkey        TEXT NOT NULL);`);
+
+try {
+    accountsTable.run();
+    console.log("Created table 'accounts'");
+} catch (err) {
+    console.log(err);
+}
         
-    const credentialsTable = `CREATE TABLE IF NOT EXISTS credentials(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            account_id INTEGER NOT NULL,
-            service_name TEXT NOT NULL,
-            username TEXT NOT NULL,
-            password TEXT NOT NULL,
-            uri TEXT NOT NULL,
-            notes TEXT NOT NULL,
-            FOREIGN KEY(account_id) REFERENCES accounts(id));`;
-    db.run(credentialsTable, (err) => {
-        if (err) {
-            throw err;
-        } else {
-            console.log("Created table 'credentials'");
-        }
-    });
-});
+const credentialsTable = db.prepare(`CREATE TABLE IF NOT EXISTS credentials(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    account_id INTEGER NOT NULL,
+    service_name TEXT NOT NULL,
+    username TEXT NOT NULL,
+    password TEXT NOT NULL,
+    uri TEXT NOT NULL,
+    notes TEXT NOT NULL,
+    FOREIGN KEY(account_id) REFERENCES accounts(id));`);
+
+try {
+    credentialsTable.run();
+    console.log("Created table 'credentials'");
+} catch (err) {
+    console.log(err);
+}
+
+res = db.prepare("INSERT INTO accounts (email, password_hash, symkey) VALUES (?, ?, ?)").run("d", "e", "f");
+res = db.prepare("SELECT * FROM accounts").all();
+console.log(res);
 
 db.close();

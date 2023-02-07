@@ -1,9 +1,7 @@
-const sqlite3 = require('sqlite3');
+const db = () => {
+    const db = require('better-sqlite3')(process.env.DB_LOC);
+    db.pragma('journal_mode = WAL');
+    return db;
+}
 
-const db = new sqlite3.Database(process.env.DB_LOC, (err) => {
-    if (err) {
-        throw err;
-    }
-});
-
-module.exports = db;
+module.exports = db();
