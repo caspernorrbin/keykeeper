@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/nav_debug_fragment"
-        android:name="com.application.keykeeper.Debug"
+        android:name="com.application.keykeeper.DebugFragment"
         android:label="@string/nav_debug"
         tools:layout="@layout/fragment_debug" />
     <fragment
