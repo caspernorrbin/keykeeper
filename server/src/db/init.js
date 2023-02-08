@@ -8,12 +8,8 @@ const accountsTable = db.prepare(`CREATE TABLE IF NOT EXISTS accounts(
     password_hash TEXT NOT NULL,
     symkey        TEXT NOT NULL);`);
 
-try {
-    accountsTable.run();
-    console.log("Created table 'accounts'");
-} catch (err) {
-    console.log(err);
-}
+accountsTable.run();
+console.log("Created table 'accounts'");
         
 const credentialsTable = db.prepare(`CREATE TABLE IF NOT EXISTS credentials(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,15 +21,7 @@ const credentialsTable = db.prepare(`CREATE TABLE IF NOT EXISTS credentials(
     notes TEXT NOT NULL,
     FOREIGN KEY(account_id) REFERENCES accounts(id));`);
 
-try {
-    credentialsTable.run();
-    console.log("Created table 'credentials'");
-} catch (err) {
-    console.log(err);
-}
-
-res = db.prepare("INSERT INTO accounts (email, password_hash, symkey) VALUES (?, ?, ?)").run("d", "e", "f");
-res = db.prepare("SELECT * FROM accounts").all();
-console.log(res);
+credentialsTable.run();
+console.log("Created table 'credentials'");
 
 db.close();
