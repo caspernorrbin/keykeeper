@@ -12,13 +12,31 @@
         android:label="@string/nav_debug"
         tools:layout="@layout/fragment_debug" />
     <fragment
-        android:id="@+id/nav_storage_fragment"
-        android:name="com.application.keykeeper.StorageFragment"
-        android:label="@string/nav_storage"
-        tools:layout="@layout/fragment_storage"/>
-    <fragment
         android:id="@+id/nav_account_fragment"
         android:name="com.application.keykeeper.AccountFragment"
         android:label="@string/nav_account"
         tools:layout="@layout/fragment_account"/>
+
+    <fragment
+        android:id="@+id/nav_storage_fragment"
+        android:name="com.application.keykeeper.StorageFragment"
+        android:label="@string/nav_storage"
+        tools:layout="@layout/fragment_storage">
+        <action
+            android:id="@+id/action_nav_storage_fragment_to_nav_storage_open_item"
+            app:destination="@id/nav_storage_open_item" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_storage_open_item"
+        android:name="com.application.keykeeper.StorageItem"
+        android:label="Storage Item"
+        tools:layout="@layout/storage_open_item">
+        <action
+            android:id="@+id/action_nav_storage_open_item_to_nav_storage_fragment"
+            app:destination="@id/nav_storage_fragment" />
+        <argument
+            android:name="credentials"
+            app:argType="structure.CredentialsItem" />
+    </fragment>
 </navigation>

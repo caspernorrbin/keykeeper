@@ -3,6 +3,7 @@
 
 # Databasefiles
 *.db
+*.db-*
 
 # Dependency directories
 node_modules/
