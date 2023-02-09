@@ -14,13 +14,13 @@
         android:text="@string/create_account_header"
         android:textSize="22sp"
         android:gravity="center"
-        app:layout_constraintBottom_toTopOf="@+id/inputAccountEmail"
+        app:layout_constraintBottom_toTopOf="@+id/inputCreateAccountEmail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/inputAccountEmail"
+        android:id="@+id/inputCreateAccountEmail"
         android:layout_width="275dp"
         android:layout_height="65dp"
         android:layout_marginStart="68dp"
@@ -34,7 +34,7 @@
         app:layout_constraintVertical_bias="0.379" />
 
     <EditText
-        android:id="@+id/inputAccountPassword"
+        android:id="@+id/inputCreateAccountPassword"
         android:layout_width="275dp"
         android:layout_height="65dp"
         android:layout_marginTop="8dp"
@@ -44,7 +44,7 @@
         android:hint="@string/create_account_password"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputAccountEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/inputCreateAccountEmail" />
 
     <Button
         android:id="@+id/buttonCreateAccount"
@@ -55,7 +55,7 @@
         android:layout_marginRight="120dp"
         android:text="@string/create_account_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputAccountPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/inputCreateAccountPassword" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
