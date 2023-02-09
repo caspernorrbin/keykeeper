@@ -1,9 +1,11 @@
 package com.application.keykeeper
 
-import android.text.TextUtils
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.extensions.jsonBody
 import org.json.JSONObject
+import javax.crypto.Cipher
+import javax.crypto.KeyGenerator
+import javax.crypto.SecretKey
 
 class AccountCreate(_email: String, _password: String) {
 
@@ -35,12 +37,26 @@ class AccountCreate(_email: String, _password: String) {
 
     private fun hashPassword(password: String): String {
         // TODO: Hash password using appropriate hashing method and email as salt.
-        return "this_is_not_yet_hashed"
+        // generate a symmetric key for the AES method
+        val symkey = generateSymkey()
+        val cipher = Cipher.getInstance("AES_256/CBC/PKCS5Padding")
+        cipher.init(Cipher.ENCRYPT_MODE, symkey)
+        val ciphertext: ByteArray = cipher.doFinal(password.toByteArray())
+        val iv: ByteArray = cipher.iv // TODO: might want some input on what this is..
+
+/*        cipher.init(Cipher.DECRYPT_MODE, symkey)
+        val passHash: ByteArray = cipher.doFinal(ciphertext)
+        val iv2: ByteArray = cipher.iv
+        return passHash.toString()*/
+
+        return "ciphertext: $ciphertext iv: $iv" // TODO: this is just to see what these values are
     }
 
-    private fun generateSymkey(): String {
+    private fun generateSymkey(): SecretKey {
         // TODO: Generate a symkey. This should probably be handled by a different class.
-        return "this_is_not_a_symkey"
+        val keygen = KeyGenerator.getInstance("AES") // encryption method
+        keygen.init(256)
+        return keygen.generateKey()
     }
 
 }
