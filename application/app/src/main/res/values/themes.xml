@@ -22,4 +22,6 @@
     <style name="Theme.KeyKeeper.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.KeyKeeper.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Theme.KeyKeeper.NavigationBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 </resources>
