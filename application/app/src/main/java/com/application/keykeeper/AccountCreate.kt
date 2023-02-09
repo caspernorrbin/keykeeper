@@ -1,5 +1,8 @@
 package com.application.keykeeper
 
+import com.github.kittinunf.fuel.Fuel
+import com.github.kittinunf.fuel.core.extensions.jsonBody
+import org.json.JSONObject
 
 class AccountCreate(_email: String, _password: String) {
 
@@ -12,8 +15,18 @@ class AccountCreate(_email: String, _password: String) {
     }
 
     public fun sendCreateRequest() {
-        // TODO: Send a HTTP request to the server with appropriate content.
-        //println("Sending create request to server..")
+        // Create object containing data to be sent to the server.
+        val jsonPostData = JSONObject()
+        jsonPostData.put("email", this.email)
+        jsonPostData.put("passwordHash", hashPassword(this.passwordHash))
+
+        // Make request.
+        val httpAsync = Fuel.post("http://10.0.2.2:8000")
+            .header("Content-Type", "application/json")
+            .jsonBody(jsonPostData.toString())
+            .response { _, response, _ ->
+                println("Got response with status code: " + response.statusCode)
+            }
     }
 
     private fun hashPassword(password: String): String {
