@@ -27,8 +27,6 @@ class AccountCreate(_email: String, _password: String) {
         passwordHash = hashPassword(_password)
 
         println(String.format("AccountCreate: { email: %s, password: %s }", email, passwordHash))
-        //val encryptedMessage =
-        //println(String.format("Encrypted: %s, Decrypted: %s }", encryptedMessage, decryptedMessage))
     }
 
     // Sends a request to the server to create a new account.
@@ -47,33 +45,20 @@ class AccountCreate(_email: String, _password: String) {
             }
     }
 
-    // create a cipher for encryption
-    /*@RequiresApi(Build.VERSION_CODES.M)
-    private val encryptCipher = Cipher.getInstance(TRANSFORMATION).apply {
-        init(Cipher.ENCRYPT_MODE, generateSymkey())
-    }*/
 
     //@RequiresApi(Build.VERSION_CODES.M)
     @RequiresApi(Build.VERSION_CODES.O)
     private fun hashPassword(password: String): String {
         // TODO: Hash password using appropriate hashing method and email as salt.
-        // generate a symmetric key for the AES method
 
 
-        //cipher.init(Cipher.ENCRYPT_MODE, symkey)
-        //val ciphertext: ByteArray = cipher.doFinal(password.toByteArray())
-        //val iv: ByteArray = cipher.iv // TODO: might want some input on what this is..
-        /*        cipher.init(Cipher.DECRYPT_MODE, symkey)
-        val passHash: ByteArray = cipher.doFinal(ciphertext)
-        val iv2: ByteArray = cipher.iv
-        return passHash.toString()*/
-
-
+        // generate a symmetric key for the AES method and create a cipher for encryption
         val symkey = generateSymkey()
         val encryptCipher = Cipher.getInstance(TRANSFORMATION).apply {
             init(Cipher.ENCRYPT_MODE, symkey)
         }
 
+        // Encrypt the message
         val encryptedMessage: ByteArray = encryptCipher.doFinal(password.toByteArray())
         val encoded = Base64.getEncoder().encodeToString(encryptedMessage)
 
@@ -82,11 +67,12 @@ class AccountCreate(_email: String, _password: String) {
         //val decryptedKey = decryptSymkey(encryptedKey, keyCipher, password)
         //val decryptCipher = getDecryptCipher(keyCipher.iv, decryptedKey)
 
-        //val symkey2 = generateSymkey()
+        // Decrypt the message
         val decryptCipher = getDecryptCipher(encryptCipher.iv, symkey)
         val decryptedMessage = decryptCipher.doFinal(Base64.getDecoder().decode(encoded))
         val plainText = String(decryptedMessage)
 
+        // Test if the decrypted message is the same as the original message
         if(plainText == password){
             return "Encryption works"
         } else {
@@ -94,9 +80,7 @@ class AccountCreate(_email: String, _password: String) {
         }
     }
 
-    /*private fun encryptCipher(): String {
-        return ""
-    }*/
+
 
     // get a cipher used for decryption of data (it pairs with 'encryptCipher')
     private fun getDecryptCipher(iv: ByteArray, symkey: SecretKey): Cipher {
@@ -108,17 +92,14 @@ class AccountCreate(_email: String, _password: String) {
     // This is to check if key exists. However, this might not be needed
     /*@RequiresApi(Build.VERSION_CODES.M)
     private fun getKey(): SecretKey {
-        val existingKey = false // TODO search if key exists
+        val existingKey = ... // TODO search if key exists
         return existingKey?.secretKey ?: generateSymkey()
     }*/
 
     // Generate a symmetric key for AES
     @RequiresApi(Build.VERSION_CODES.M)
     private fun generateSymkey(): SecretKey {
-        // TODO: Generate a symkey. This should probably be handled by a different class.
-        //val keygen = KeyGenerator.getInstance(ALGORITHM) // encryption method
-        //keygen.init(256)
-        //return keygen.generateKey()
+        // Generate a symkey. TODO: This should probably be handled by a different class.
         return KeyGenerator.getInstance(ALGORITHM).apply{
             init(
                 KeyGenParameterSpec.Builder(
@@ -134,7 +115,7 @@ class AccountCreate(_email: String, _password: String) {
         }.generateKey()
     }
 
-    // Encrypt ByteArray (message), outputStream used to know the iv
+    // Encrypt ByteArray (message), outputStream used to write to File
 /*    @RequiresApi(Build.VERSION_CODES.M)
     fun encrypt(bytes: ByteArray, outputStream: OutputStream): ByteArray {
         val encryptedBytes = encryptCipher.doFinal(bytes)
@@ -147,7 +128,7 @@ class AccountCreate(_email: String, _password: String) {
         return encryptedBytes
     }*/
 
-    // Decrypt the Input stream
+    // Decrypt the Input stream (from File)
  /*   fun decrypt(inputStream: InputStream): ByteArray {
         return inputStream.use {
             val ivSize = it.read()
@@ -162,7 +143,7 @@ class AccountCreate(_email: String, _password: String) {
         }
     }*/
 
-    // TODO: FIX THIS
+    // TODO: FIX THIS (encrypt the symmetric key)
     @RequiresApi(Build.VERSION_CODES.O)
     private fun encryptSymkey(symKey: SecretKey, master: String): Pair<String, Cipher> {
         val key = SecretKeySpec(master.toByteArray(), ALGORITHM)
@@ -174,7 +155,7 @@ class AccountCreate(_email: String, _password: String) {
     }
 
 
-    // TODO: FIX THIS
+    // TODO: FIX THIS (decryption of the symmetric key)
     @RequiresApi(Build.VERSION_CODES.O)
     private fun decryptSymkey(encryptedKey: String, encryptCipher: Cipher, master: String): SecretKey {
         val key = SecretKeySpec(master.toByteArray(), ALGORITHM)
@@ -185,7 +166,7 @@ class AccountCreate(_email: String, _password: String) {
         return SecretKeySpec(symkey, ALGORITHM)
     }
 
-    // Values used to us the same encryption method at every point
+    // Values used to us the same encryption method for ciphers, keys etc. 
     companion object {
         private const val ALGORITHM = KeyProperties.KEY_ALGORITHM_AES
         private const val BLOCK_MODE = KeyProperties.BLOCK_MODE_CBC
