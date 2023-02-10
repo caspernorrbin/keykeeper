@@ -9,10 +9,12 @@ import com.github.kittinunf.fuel.core.extensions.jsonBody
 import org.json.JSONObject
 import java.io.InputStream
 import java.io.OutputStream
+import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.SecretKeySpec
 
 @RequiresApi(Build.VERSION_CODES.M)
 class AccountCreate(_email: String, _password: String) {
@@ -51,28 +53,41 @@ class AccountCreate(_email: String, _password: String) {
         init(Cipher.ENCRYPT_MODE, generateSymkey())
     }*/
 
-    @RequiresApi(Build.VERSION_CODES.M)
+    //@RequiresApi(Build.VERSION_CODES.M)
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun hashPassword(password: String): String {
         // TODO: Hash password using appropriate hashing method and email as salt.
         // generate a symmetric key for the AES method
-        val symkey = generateSymkey()
+
 
         //cipher.init(Cipher.ENCRYPT_MODE, symkey)
         //val ciphertext: ByteArray = cipher.doFinal(password.toByteArray())
         //val iv: ByteArray = cipher.iv // TODO: might want some input on what this is..
-
-        val encryptCipher = Cipher.getInstance(TRANSFORMATION).apply {
-            init(Cipher.ENCRYPT_MODE, symkey)
-        }
-/*        cipher.init(Cipher.DECRYPT_MODE, symkey)
+        /*        cipher.init(Cipher.DECRYPT_MODE, symkey)
         val passHash: ByteArray = cipher.doFinal(ciphertext)
         val iv2: ByteArray = cipher.iv
         return passHash.toString()*/
-        val encryptedMessage: ByteArray = encryptCipher.doFinal(password.toByteArray())
-        val decryptCipher = getDecryptCipher(encryptCipher.iv, symkey)
-        val decryptedMessage = decryptCipher.doFinal(encryptedMessage)
 
-        return "encrypted: ${encryptedMessage.toString()}, decrypted: ${decryptedMessage.toString()}"
+
+        val symkey = generateSymkey()
+        val encryptCipher = Cipher.getInstance(TRANSFORMATION).apply {
+            init(Cipher.ENCRYPT_MODE, symkey)
+        }
+
+        val encryptedMessage: ByteArray = encryptCipher.doFinal(password.toByteArray())
+        val encoded = Base64.getEncoder().encodeToString(encryptedMessage)
+
+        // TODO: THESE DO NOT WORK (key length from using password as key I think)
+        //val (encryptedKey, keyCipher) = encryptSymkey(symkey, password)
+        //val decryptedKey = decryptSymkey(encryptedKey, keyCipher, password)
+        //val decryptCipher = getDecryptCipher(keyCipher.iv, decryptedKey)
+
+        //val symkey2 = generateSymkey()
+        val decryptCipher = getDecryptCipher(encryptCipher.iv, symkey)
+        val decryptedMessage = decryptCipher.doFinal(Base64.getDecoder().decode(encoded))
+        val plainText = String(decryptedMessage)
+
+        return "encrypted: ${encoded}, decrypted: ${plainText}"
         //return "ciphertext: $ciphertext iv: $iv" // TODO: this is just to see what these values are
     }
 
@@ -143,6 +158,29 @@ class AccountCreate(_email: String, _password: String) {
             getDecryptCipher(iv).doFinal(encryptedBytes)
         }
     }*/
+
+    // TODO: FIX THIS
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun encryptSymkey(symKey: SecretKey, master: String): Pair<String, Cipher> {
+        val key = SecretKeySpec(master.toByteArray(), ALGORITHM)
+        val symKeyCipher = Cipher.getInstance(TRANSFORMATION).apply {
+            init(Cipher.ENCRYPT_MODE, key)
+        }
+        val encryptedMessage: ByteArray = symKeyCipher.doFinal(symKey.encoded)
+        return Pair(Base64.getEncoder().encodeToString(encryptedMessage), symKeyCipher)
+    }
+
+
+    // TODO: FIX THIS
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun decryptSymkey(encryptedKey: String, encryptCipher: Cipher, master: String): SecretKey {
+        val key = SecretKeySpec(master.toByteArray(), ALGORITHM)
+        val decryptCipher = getDecryptCipher(encryptCipher.iv, key)
+        val symkey = decryptCipher.doFinal(Base64.getDecoder().decode(encryptedKey))
+        //val plainText = String(decryptedMessage)
+
+        return SecretKeySpec(symkey, ALGORITHM)
+    }
 
     // Values used to us the same encryption method at every point
     companion object {
