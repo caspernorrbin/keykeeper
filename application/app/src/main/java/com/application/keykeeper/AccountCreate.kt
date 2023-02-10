@@ -87,8 +87,11 @@ class AccountCreate(_email: String, _password: String) {
         val decryptedMessage = decryptCipher.doFinal(Base64.getDecoder().decode(encoded))
         val plainText = String(decryptedMessage)
 
-        return "encrypted: ${encoded}, decrypted: ${plainText}"
-        //return "ciphertext: $ciphertext iv: $iv" // TODO: this is just to see what these values are
+        if(plainText == password){
+            return "Encryption works"
+        } else {
+            return "Did not decrypt properly"
+        }
     }
 
     /*private fun encryptCipher(): String {
