@@ -27,6 +27,9 @@ const needsLogin = (req, res, next) => { // what is this?
 // Setup middlewares
 app.use(setDbMiddleWare);
 
+// Setup json parsing
+app.use(express.json());
+
 // Setup cookies and session
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
