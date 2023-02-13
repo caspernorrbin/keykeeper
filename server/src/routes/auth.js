@@ -1,24 +1,47 @@
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcrypt');
+const Account = require('../models/accountModel');
 
 // login request, creates a session if valid credentials are used in request.  
 router.post("/login", (req, res) => {
-    let password = req.body.password;
+    const { email, password } = req.body;
 
-    // Check if password is empty.
-    if (!password) {
-        res.sendStatus(400);
-        return;
+    if (!email || !password) {
+        return res.status(400).json({ message: "Empty email/password field" });
     }
 
-    // TODO: Check password against database. (this password should already be hashed, but hash again)
-    if (password == "pw") {
-        req.session.loggedIn = true;
-        req.session.id = "john.doe@gmail.com" // TODO: temporary value
-        res.sendStatus(200);
-    } else {
-        res.sendStatus(400);
+    // Get account from database
+    const account = Account.get(email);
+    if (!account) {
+        // Account does not exist
+        return res.status(400).json({ message: "Email or password incorrect" });
     }
+
+    // Compare password hashes
+    bcrypt.compare(password, account.password_hash, (err, result) => {
+        if (err) {
+            console.log(err);
+            return res.status(400).json({ message: "Login failed" });
+        }
+
+        if (result) {
+            // Set session variables
+            req.session.accountId = account.id;
+            req.session.loggedIn = true;
+
+            return res.status(200).json({ message: "Logged in" });
+        }
+        // Password incorrect
+        return res.status(400).json({ message: "Email or password incorrect" });
+    });
+
+
+});
+
+router.post("/logout", (req, res) => {
+    req.session.destroy();
+    res.status(200).json({ message: "Logged out" });
 });
 
 module.exports = router;

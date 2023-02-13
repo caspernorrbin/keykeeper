@@ -5,13 +5,17 @@ plugins {
     id "androidx.navigation.safeargs"
 }
 
+repositories {
+    mavenCentral()
+}
+
 android {
     compileSdkVersion 31
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.application.keykeeper"
-        minSdkVersion 16
+        minSdk 19
         targetSdkVersion 31
         versionCode 1
         versionName "1.0"
@@ -41,6 +45,9 @@ android {
 }
 
 dependencies {
+
+    implementation 'com.github.kittinunf.fuel:fuel-android:2.3.1'
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -53,4 +60,5 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
 }

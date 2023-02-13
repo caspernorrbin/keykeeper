@@ -11,7 +11,6 @@
         android:name="com.application.keykeeper.DebugFragment"
         android:label="@string/nav_debug"
         tools:layout="@layout/fragment_debug" />
-
     <fragment
         android:id="@+id/nav_account_fragment"
         android:name="com.application.keykeeper.AccountFragment"
@@ -45,9 +44,9 @@
 
     <fragment
         android:id="@+id/nav_storage_open_item"
-        android:name="com.application.keykeeper.StorageItem"
+        android:name="com.application.keykeeper.StorageItemFragment"
         android:label="Storage Item"
-        tools:layout="@layout/storage_open_item">
+        tools:layout="@layout/fragment_storage_item">
         <action
             android:id="@+id/action_nav_storage_open_item_to_nav_storage_fragment"
             app:destination="@id/nav_storage_fragment" />
