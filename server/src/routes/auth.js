@@ -26,9 +26,10 @@ router.post("/login", (req, res) => {
         }
 
         if (result) {
-            // Create session
-            req.session.accountid = account.id;
+            // Set session variables
+            req.session.accountId = account.id;
             req.session.loggedIn = true;
+
             return res.status(200).json({ message: "Logged in" });
         }
         // Password incorrect
