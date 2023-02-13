@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/nav_debug_fragment">
+    app:startDestination="@id/nav_home_fragment">
 
     <fragment
         android:id="@+id/nav_debug_fragment"
@@ -19,10 +19,25 @@
         tools:layout="@layout/fragment_account"/>
 
     <fragment
+        android:id="@+id/nav_home_fragment"
+        android:name="com.application.keykeeper.HomeFragment"
+        android:label="@string/nav_home"
+        tools:layout="@layout/fragment_home">
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_settings_fragment"
+        android:name="com.application.keykeeper.settingsFragment"
+        android:label="@string/nav_settings"
+        tools:layout="@layout/fragment_settings">
+    </fragment>
+
+    <fragment
         android:id="@+id/nav_storage_fragment"
         android:name="com.application.keykeeper.StorageFragment"
         android:label="@string/nav_storage"
         tools:layout="@layout/fragment_storage">
+
         <action
             android:id="@+id/action_nav_storage_fragment_to_nav_storage_open_item"
             app:destination="@id/nav_storage_open_item" />

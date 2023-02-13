@@ -28,7 +28,9 @@ class Main : AppCompatActivity() {
         var topLevelDestinations = setOf(
             R.id.nav_debug_fragment,
             R.id.nav_storage_fragment,
-            R.id.nav_account_fragment
+            R.id.nav_account_fragment,
+            R.id.nav_home_fragment,
+            R.id.nav_settings_fragment
         )
 
         var config = AppBarConfiguration(topLevelDestinations)
