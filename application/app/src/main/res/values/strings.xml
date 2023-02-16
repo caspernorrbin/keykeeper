@@ -39,4 +39,5 @@
     <string name="email">Email</string>
     <string name="welcome_to_keykeepr">Welcome to KeyKeepr</string>
     <string name="username">Username</string>
+    <string name="title">Title</string>
 </resources>
