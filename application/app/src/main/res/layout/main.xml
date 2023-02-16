@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_image"
     android:orientation="vertical"
+    android:theme="@style/Theme.KeyKeeper"
     tools:context=".Main">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/transparent"
         android:theme="@style/Theme.KeyKeeper.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@drawable/bg_shadow_bottom"
             app:layout_anchor="@+id/appBarLayout"
-            app:layout_anchorGravity="center"
-            app:popupTheme="@style/Theme.KeyKeeper.PopupOverlay" />
+            app:layout_anchorGravity="center" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -38,8 +39,7 @@
         android:id="@+id/bottom_navigation_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        app:menu="@menu/navigation_items">
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
-</LinearLayout >
+        android:background="@drawable/bg_shadow_top"
+        app:menu="@menu/navigation_items"
+        style="@style/Theme.KeyKeeper.BottomNavigationView" />
+</LinearLayout>

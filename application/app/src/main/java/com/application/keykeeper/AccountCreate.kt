@@ -15,8 +15,11 @@ import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
+import android.text.TextUtils
 
 @RequiresApi(Build.VERSION_CODES.M)
+
+
 class AccountCreate(_email: String, _password: String) {
 
     private val email: String
