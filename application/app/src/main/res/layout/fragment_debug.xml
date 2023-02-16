@@ -5,52 +5,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DebugFragment">
+    tools:context=".DebugFragment"
+    tools:background="@drawable/bg_image">
 
     <TextView
         android:id="@+id/createAccountHeader"
-        android:layout_width="186dp"
-        android:layout_height="71dp"
-        android:text="@string/create_account_header"
-        android:textSize="22sp"
-        android:gravity="center"
-        app:layout_constraintBottom_toTopOf="@+id/inputCreateAccountEmail"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/inputCreateAccountEmail"
-        android:layout_width="275dp"
-        android:layout_height="65dp"
-        android:ems="10"
-        android:hint="@string/create_account_email"
-        android:inputType="text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nav_debug"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.379"/>
-
-    <EditText
-        android:id="@+id/inputCreateAccountPassword"
-        android:layout_width="275dp"
-        android:layout_height="65dp"
-        android:ems="10"
-        android:hint="@string/create_account_password"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputCreateAccountEmail" />
-
-    <Button
-        android:id="@+id/buttonCreateAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:text="@string/create_account_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputCreateAccountPassword" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

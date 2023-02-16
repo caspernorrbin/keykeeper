@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".StorageFragment">
+    tools:context=".StorageFragment"
+    tools:background="@drawable/bg_image">
 
     <SearchView
         android:id="@+id/storage_search_view"
@@ -24,7 +25,8 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/storage_search_view"
         android:layout_margin="10dp"
-        android:dividerHeight="10dp"/>
+        android:dividerHeight="10dp"
+        tools:listitem="@layout/storage_item"/>
 
     <TextView
         android:id="@+id/storage_text_view"

@@ -43,7 +43,7 @@ class StorageFragment: Fragment() {
                 if (items.map{ it.label }.contains(query)) {
                     adapter.filter.filter(query)
                 } else {
-                    textView.text = "No Match found"
+                    textView.text = resources.getText(R.string.storage_query_no_match)
                 }
                 return false
             }

@@ -32,7 +32,6 @@ class AccountCreate(_email: String, _password: String) {
                 println("Got response with status code: " + response.statusCode)
             }
     }
-
     private fun hashPassword(password: String): String {
         // TODO: Hash password using appropriate hashing method and email as salt.
         return "this_is_not_yet_hashed"
