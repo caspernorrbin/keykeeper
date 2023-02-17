@@ -13,4 +13,7 @@
     <color name="bg_dark_transparent">#541E3353</color>
     <color name="bg_light">#A8CBFF</color>
     <color name="bg_light_transparent">#54A8CBFF</color>
+
+    <color name="fg_error_message">#C51818</color>
+    <color name="fg_success_message">#32B315</color>
 </resources>
