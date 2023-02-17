@@ -1,41 +1,75 @@
 package structure
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.TextView
+import android.widget.*
 import androidx.annotation.LayoutRes
-import androidx.navigation.findNavController
 import com.application.keykeeper.R
-import com.application.keykeeper.StorageFragmentDirections
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.net.HttpURLConnection
+import java.net.URL
+
 
 class CredentialsAdapter(
     context: Context,
     @LayoutRes private val layoutResource: Int,
     private val items: List<CredentialsItem>
 ): ArrayAdapter<CredentialsItem>(context, layoutResource, items) {
-
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var item = getItem(position)
+        val item = getItem(position)
         val view = convertView?: LayoutInflater.from(context).inflate(layoutResource, parent, false)
-
-        // Add onClick listener to navigate to the storage_open_item view with item as argument.
-        view.setOnClickListener {
-            var controller = it.findNavController()
-            var action = StorageFragmentDirections.actionNavStorageFragmentToNavStorageOpenItem(item!!)
-            controller.navigate(action)
-        }
+        val titleLabel = view.findViewById<TextView>(R.id.storage_item_title_label)
+        val urlLabel = view.findViewById<TextView>(R.id.storage_item_url_label)
+        val image = view.findViewById<ImageView>(R.id.storage_item_image)
+        titleLabel.text = item?.label
+        urlLabel.text = item?.url
 
         // Apply data from the item to the component view.
-        var titleLabel = view.findViewById<TextView>(R.id.storage_item_label)
-        var userNameLabel = view.findViewById<TextView>(R.id.storage_item_username)
-        var passwordLabel = view.findViewById<TextView>(R.id.storage_item_password)
-        titleLabel.text = item?.label
-        userNameLabel.text = item?.userName
-        passwordLabel.text = item?.password
+        if (item != null && item.image == null) {
+            // Network request can not be made in the main context
+            CoroutineScope(Dispatchers.Default).launch {
+                // FIXME: BUG where the first image is wrong
+                // FIXME: Runs multiple times for each item
+                item.image = getImageFromUrl(item.url)
+                if (item.image != null) {
+                    // View can only be modified in the main context
+                    withContext(Dispatchers.Main) {
+                        image.setImageBitmap(item.image)
+                    }
+                }
+            }
+        } else if (item != null) {
+            image.setImageBitmap(item.image)
+        }
 
         return view
+    }
+
+    private fun getImageFromUrl(urlString: String?): Bitmap? {
+        return try {
+            // Match for protocol and site
+            val groups = Regex("(.*)://([^/]*)/?").find(urlString!!)?.groups!!
+            val protocol = groups[1]?.value
+            val site = groups[2]?.value
+            val url = URL(protocol, site, "/favicon.ico")
+            // Establish connection
+            val connection = url.openConnection() as HttpURLConnection
+            connection.doInput = true
+            connection.connect()
+            BitmapFactory.decodeStream(connection.inputStream)
+        } catch (e: Exception) {
+            Log.e("getIconFromUrl", e.toString() + ' ' + e.message)
+            null
+        }
     }
 }

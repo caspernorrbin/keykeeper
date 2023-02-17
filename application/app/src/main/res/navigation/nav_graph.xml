@@ -25,7 +25,9 @@
         tools:layout="@layout/fragment_storage">
         <action
             android:id="@+id/action_nav_storage_fragment_to_nav_storage_open_item"
-            app:destination="@id/nav_storage_open_item" />
+            app:destination="@id/nav_storage_open_item"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit" />
     </fragment>
 
     <fragment

@@ -9,6 +9,8 @@
     <color name="light">#B5C9FF</color>
     <color name="light_transparent">#54B5C9FF</color>
     <color name="interactive">#3B86F6</color>
-    <color name="background">#1E3353</color>
-    <color name="background_transparent">#541E3353</color>
+    <color name="bg_dark">#1E3353</color>
+    <color name="bg_dark_transparent">#541E3353</color>
+    <color name="bg_light">#A8CBFF</color>
+    <color name="bg_light_transparent">#54A8CBFF</color>
 </resources>

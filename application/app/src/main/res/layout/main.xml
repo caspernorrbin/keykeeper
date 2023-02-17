@@ -6,25 +6,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:theme="@style/Theme.KeyKeeper"
+    android:id="@+id/main"
     android:background="@drawable/bg_image"
     tools:context=".Main">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/transparent"
-        android:theme="@style/Theme.KeyKeeper.AppBarOverlay">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@drawable/bg_shadow_bottom"
-            app:layout_anchor="@+id/appBarLayout"
-            app:layout_anchorGravity="center" />
-
-    </com.google.android.material.appbar.AppBarLayout>
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/bg_shadow_bottom"
+        app:layout_anchorGravity="center">
+        <!-- Toggled visible in the storage view -->
+        <ImageButton
+            android:id="@+id/toolbar_add_storage_item_button"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
+            android:src="@drawable/ic_add"
+            android:background="@color/transparent"
+            android:contentDescription="@string/add_storage_item_description"/>
+    </androidx.appcompat.widget.Toolbar>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment"
