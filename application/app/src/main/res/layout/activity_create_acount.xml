@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_image"
-    tools:context=".CreateAccountFragment">
+    tools:context=".LoginActivity">
 
     <TextView
         android:id="@+id/createAccountHeader"
@@ -17,6 +17,15 @@
         android:gravity="center"
         app:layout_constraintBottom_toTopOf="@+id/inputCreateAccountEmail"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/create_account_back_button"
+        android:layout_width="46sp"
+        android:layout_height="46sp"
+        android:background="@color/transparent"
+        android:src="@drawable/ic_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
