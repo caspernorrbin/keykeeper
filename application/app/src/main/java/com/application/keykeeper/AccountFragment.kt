@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.navigation.findNavController
 
 /**
@@ -14,6 +15,12 @@ import androidx.navigation.findNavController
 class AccountFragment: Fragment() {
     private lateinit var viewOfLayout: View
     private lateinit var buttonLogout: Button
+    private lateinit var button_edit_pofile: Button
+    private lateinit var name_view: TextView
+    private lateinit var email_view: TextView
+
+
+
 
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -21,11 +28,20 @@ class AccountFragment: Fragment() {
         viewOfLayout = inflater.inflate(R.layout.fragment_account, container, false)
         // Find view components
         buttonLogout = viewOfLayout.findViewById(R.id.account_logout_button)
+        button_edit_pofile = viewOfLayout.findViewById(R.id.btn_edit_profile)
+        name_view = viewOfLayout.findViewById(R.id.name_view)
+        name_view = viewOfLayout.findViewById(R.id.email_view)
         // Assign on click listeners
         buttonLogout.setOnClickListener {
             val controller = viewOfLayout.findNavController()
             val action = AccountFragmentDirections.actionNavAccountFragmentToLoginFragment()
             controller.navigate(action)
+        }
+        button_edit_pofile.setOnClickListener {
+            val controller = viewOfLayout.findNavController()
+            val action = AccountFragmentDirections.actionNavAccountFragmentToNavEditFragment()
+            controller.navigate(action)
+
         }
         return viewOfLayout
     }
