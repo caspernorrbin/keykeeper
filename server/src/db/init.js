@@ -10,18 +10,19 @@ const accountsTable = db.prepare(`CREATE TABLE IF NOT EXISTS accounts(
 
 accountsTable.run();
 console.log("Created table 'accounts'");
-        
-const credentialsTable = db.prepare(`CREATE TABLE IF NOT EXISTS credentials(
+
+
+const itemsTable = db.prepare(`CREATE TABLE IF NOT EXISTS items(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     account_id INTEGER NOT NULL,
-    service_name TEXT NOT NULL,
+    item_name TEXT NOT NULL,
     username TEXT NOT NULL,
     password TEXT NOT NULL,
     uri TEXT NOT NULL,
     notes TEXT NOT NULL,
     FOREIGN KEY(account_id) REFERENCES accounts(id));`);
 
-credentialsTable.run();
-console.log("Created table 'credentials'");
+itemsTable.run();
+console.log("Created table 'items'");
 
 db.close();

@@ -1,20 +1,64 @@
-//const db = require('../db')
+const db = require('../db/db');
 
+/**
+ * Model for accounts, handles database operations
+ */
 class Account {
-    async create(email, passwordhash, salt, symkey) {
-        // Check if email already exists in database (duplicates == bad)
-        sql1 = "SELECT * FROM accounts WHERE email = ?"
-        //let result = createAccountSql.run(email, passwordHash);
+    /**
+     * Creates an account in the database
+     * @param {string} email the email of the account
+     * @param {string} passwordhash the hashed password of the account, including salt
+     * @param {string} symkey the encrypted symmetric key
+     * @returns {boolean} true if the account was created, false otherwise
+     */
+    static create(email, passwordhash, symkey) {
+        // Create account
+        try {
+            const createAccount = db.prepare("INSERT INTO accounts (email, password_hash, symkey) VALUES (?, ?, ?)");
+            createAccount.run(email, passwordhash, symkey);
+        } catch (err) {
+            console.log(err);
+            return false;
+        }
+        return true;
+    }
 
-        // Create account (store credentials in database)
-        // if(result.bad) {
-            // account already exists, email bad...
-            //return bad
-        // }
+    /**
+     * Gets an account from the database
+     * @param {string} email the email of the account
+     * @returns {object} the account object if it exists, null otherwise
+     */
+    static get(email) {
+        let result;
+        try {
+            const getAccount = db.prepare("SELECT * FROM accounts WHERE email = ?");
+            result = getAccount.get(email);
+        } catch (err) {
+            console.log(err);
+            return null;
+        }
+        if (result === undefined) {
+            return null;
+        }
+        return result;
+    }
 
-        // Else success!
-
-        // Return account
-        return "john.smith@gmail.com" // TODO: temp value
+    /**
+     * Deletes an account from the database
+     * @param {string} email the email of the account
+     * @returns {boolean} true if the account was deleted, false otherwise
+     */
+    static delete(email) {
+        let result;
+        try {
+            const deleteAccount = db.prepare("DELETE FROM accounts WHERE email = ?");
+            result = deleteAccount.run(email);
+        } catch (err) {
+            console.log(err);
+            return false;
+        }
+        return true;
     }
 }
+
+module.exports = Account
