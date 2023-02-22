@@ -22,6 +22,18 @@ router.post('/create', async (req, res) => {
     return res.status(400).json({ message: "Item not created" });
 });
 
+// Get item associated with the logged in user request
+router.get('/get/:itemId', async (req, res) => {
+    // Get item with id '1' using "http://localhost:8080/api/item/get/1"
+    const { itemId } = req.params;
+    const result = Item.get(req.session.accountId, itemId);
+    if (result) {
+        return res.status(200).json(result);
+    }
+
+    return res.status(500).json({ message: "Failed to get item" });
+});
+
 // Get all items associated with the logged in user request
 router.get('/getAll', async (req, res) => {
 
@@ -32,6 +44,26 @@ router.get('/getAll', async (req, res) => {
 
     return res.status(500).json({ message: "Failed to get items" });
 });
+
+router.post("/update", async (req, res) => {
+    const { itemId, data } = req.body;
+
+    // Check if itemId is empty
+    if (!itemId) {
+        return res.status(400).json({ message: "Empty itemId field" });
+    }
+    // Check if data is empty
+    if (!data || Object.keys(data).length == 0) {
+        return res.status(400).json({ message: "Empty data field" });
+    }
+
+    const success = Item.update(req.session.accountId, itemId, data);
+    if (success) {
+        return res.status(200).json({ message: "Item updated" });
+    }
+
+    return res.status(400).json({ message: "Item not updated" });
+})
 
 // Delete item request
 router.post("/delete", async (req, res) => {
