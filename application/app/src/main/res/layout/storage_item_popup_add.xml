@@ -103,7 +103,7 @@
             android:layout_gravity="center"
             android:textAlignment="center"
             android:textSize="14sp"
-            tools:visibility="gone" />
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/storage_item_popup_add_button"

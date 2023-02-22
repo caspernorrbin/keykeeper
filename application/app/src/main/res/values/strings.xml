@@ -45,9 +45,13 @@
     <string name="storage_popup_label">Label</string>
     <string name="storage_popup_username">Username</string>
     <string name="storage_popup_password">Password</string>
+    <string name="storage_popup_show_password">Show password</string>
     <string name="storage_popup_notes">Notes</string>
     <string name="storage_popup_apply">Apply</string>
     <string name="storage_popup_add">Add Item</string>
+    <string name="storage_popup_edit">Edit</string>
+    <string name="storage_popup_delete">Delete</string>
+    <string name="storage_popup_confirm_delete">Confirm Delete</string>
     <string name="storage_popup_close_button_description">Close Popup</string>
     <string name="storage_popup_apply_button_description">Apply Changes</string>
     <string name="storage_popup_add_button_description">Add Item</string>

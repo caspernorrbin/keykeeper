@@ -101,7 +101,6 @@ class StorageFragment: Fragment() {
         val context = adapter.context
         val window = PopupWindowFactory.create(R.layout.storage_item_popup, context, viewOfLayout)
         val view = window.contentView
-        val editButton = view.findViewById<Button>(R.id.storage_item_popup_edit_button)
         val closeButton = view.findViewById<ImageButton>(R.id.storage_item_popup_close_button)
         val usernameGroup = view.findViewById<LinearLayout>(R.id.storage_item_popup_username_group)
         val usernameLabel = view.findViewById<TextView>(R.id.storage_item_popup_username_text)
@@ -109,7 +108,10 @@ class StorageFragment: Fragment() {
         val passwordLabel = view.findViewById<TextView>(R.id.storage_item_popup_password_text)
         val notesGroup = view.findViewById<LinearLayout>(R.id.storage_item_popup_notes_group)
         val notesLabel = view.findViewById<TextView>(R.id.storage_item_popup_notes_text)
+        val statusMessage = view.findViewById<TextView>(R.id.storage_item_popup_status_message)
         val showPasswordButton = passwordGroup.findViewById<ImageButton>(R.id.storage_item_popup_show_password_button)
+        val editButton = view.findViewById<Button>(R.id.storage_item_popup_edit_button)
+        val deleteButton = view.findViewById<Button>(R.id.storage_item_popup_delete_button)
 
         // Display hidden password
         passwordLabel.text = item.password.replace(".".toRegex(), "*")
@@ -128,10 +130,33 @@ class StorageFragment: Fragment() {
 
         // Open edit popup when clicked
         editButton.setOnClickListener {
+            Utils.hideStatusMessage(statusMessage)
             openEditItemPopup(adapter, index).setOnDismissListener {
                 // Dismiss this if still open when the editor closes, possibly contains invalid data
                 // TODO: Fix overlaying backgrounds
                 window.dismiss()
+            }
+        }
+
+        // Delete confirmation
+        deleteButton.setOnClickListener {
+            Utils.hideStatusMessage(statusMessage)
+            if (deleteButton.tag == "delete") {
+                deleteButton.tag = "confirm"
+                deleteButton.setText(R.string.storage_popup_confirm_delete)
+                deleteButton.setBackgroundColor(context.resources.getColor(R.color.light_dangerous))
+            } else {
+                Item.sendDeleteItemRequest(item) { successful, message ->
+                    if (successful) {
+                        deleteButton.tag = "delete"
+                        deleteButton.setText(R.string.storage_popup_delete)
+                        deleteButton.setBackgroundColor(context.resources.getColor(R.color.dangerous))
+                        fetchItems()
+                        window.dismiss()
+                    } else {
+                        Utils.showStatusMessage(statusMessage, message, true)
+                    }
+                }
             }
         }
 
@@ -213,6 +238,7 @@ class StorageFragment: Fragment() {
 
         return window
     }
+
     private fun openCreateItemPopup(): PopupWindow {
         val context = adapter.context
         val window = PopupWindowFactory.create(R.layout.storage_item_popup_add, context, viewOfLayout)

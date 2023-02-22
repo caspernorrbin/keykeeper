@@ -20,6 +20,12 @@ object Item {
 
         return itemData
     }
+    private fun jsonDeleteData(item: CredentialsItem): JSONObject {
+        // Create object containing data to be sent to the server.
+        val itemData = JSONObject()
+        itemData.put("itemId", item.id)
+        return itemData
+    }
 
     fun sendCreateItemRequest(item: CredentialsItem, callback: (successful: Boolean, message: String) -> Unit) {
         val jsonPostData = this.jsonItemData(item)
@@ -55,6 +61,27 @@ object Item {
                         403 -> "You're not logged in. Cannot access items when not logged in."
                         else -> "Something went wrong when communicating with the server. Try again later."
                     }.let { callback.invoke(response.statusCode == 200, it, serverResponse ?: arrayOf()) }
+                }
+        }
+    }
+
+    fun sendDeleteItemRequest(item: CredentialsItem, callback: (successful: Boolean, message: String) -> Unit) {
+        val jsonPostData = this.jsonDeleteData(item)
+
+        if(!Account.isLoggedIn()) {
+            callback.invoke(false, "User not logged in.")
+        } else {
+            Account.sendAuthenticatedPostRequest("http://10.0.2.2:8080/api/item/delete")
+                .header("Content-Type", "application/json")
+                .jsonBody(jsonPostData.toString())
+                .responseObject(ServerMessage.Deserializer()) { _, response, result ->
+                    val (serverResponse, _) = result
+                    when(response.statusCode) {
+                        200 -> serverResponse?.message ?: "No message"
+                        400 -> "Bad input data. Try again."
+                        403 -> "You're not logged in. Cannot create items when not logged in."
+                        else -> "Something went wrong when communicating with the server. Try again later."
+                    }.let { callback.invoke(response.statusCode == 200, it) }
                 }
         }
     }
