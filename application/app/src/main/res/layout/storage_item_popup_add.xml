@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/bg_light_transparent"
@@ -94,6 +95,15 @@
             android:background="@drawable/bg_text_input"
             android:hint="@string/storage_popup_notes"
             android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/storage_item_popup_status_message"
+            android:layout_width="match_parent"
+            android:layout_height="40sp"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            tools:visibility="gone" />
 
         <Button
             android:id="@+id/storage_item_popup_add_button"

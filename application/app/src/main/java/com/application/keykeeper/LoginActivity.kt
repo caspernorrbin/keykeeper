@@ -24,14 +24,11 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var rememberCheckBox: CheckBox
 
     private fun showStatusMessage(message: String, isErrorMessage: Boolean = false) {
+        // Set appropriate text color
+        val colorId = if (isErrorMessage) R.color.fg_error_message else R.color.fg_success_message;
+        statusMessage.setTextColor(ResourcesCompat.getColor(resources, colorId, null))
+
         statusMessage.text = message
-
-        if(isErrorMessage) {
-            statusMessage.setTextColor(ResourcesCompat.getColor(resources, R.color.fg_error_message, null))
-        } else {
-            statusMessage.setTextColor(ResourcesCompat.getColor(resources, R.color.fg_success_message, null))
-        }
-
         statusMessage.visibility = View.VISIBLE
     }
 
@@ -68,9 +65,9 @@ class LoginActivity : AppCompatActivity() {
 
             // Check if valid email and non-empty password
             if(email.isValidEmail() && password.isNotEmpty()) {
-                val ac = Account(email, password)
                 swapBodyLoading(true)
-                ac.sendLoginRequest { successful, message ->
+                
+                Account.sendLoginRequest(email, password) { successful, message ->
                     if(successful) {
                         // If checked save email
                         if (rememberCheckBox.isChecked) {

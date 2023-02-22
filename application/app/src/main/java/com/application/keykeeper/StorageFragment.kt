@@ -11,17 +11,18 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import data.storageExampleItems as items
+import communication.Item
 import structure.CredentialsAdapter
 import structure.CredentialsItem
 import structure.PopupWindowFactory
+import structure.Utils
 
 class StorageFragment: Fragment() {
     private lateinit var viewOfLayout: View
     private lateinit var searchView: SearchView
     private lateinit var textView: TextView
     private lateinit var listView: ListView
-    private lateinit var adapter: ArrayAdapter<CredentialsItem>
+    private lateinit var adapter: CredentialsAdapter
     private lateinit var toolbar: Toolbar
     private lateinit var toolbarAddItemButton: ImageButton
 
@@ -39,12 +40,12 @@ class StorageFragment: Fragment() {
 
         // Setup the adapter for the list view. It creates menu items from a list of data and
         // populates the view with them.
-        adapter = CredentialsAdapter(viewOfLayout.context, R.layout.storage_item, items)
+        adapter = CredentialsAdapter(viewOfLayout.context, R.layout.storage_item, arrayListOf())
+        fetchItems()
 
         // Setup filtering of the list view using the searchView.
         listView.adapter = adapter
         listView.setOnItemClickListener { adapterView, _, i, _ ->
-            // TODO: Find another fix for this error
             @Suppress("UNCHECKED_CAST")
             onSelectItem(adapterView as AdapterView<CredentialsAdapter>, i)
         }
@@ -62,12 +63,23 @@ class StorageFragment: Fragment() {
         return viewOfLayout
     }
 
+    private fun fetchItems() {
+        Item.sendGetItemsRequest { successful, message, items ->
+            if (successful) {
+                adapter.clear()
+                adapter.addAll(items.map { it.toCredentialsItem() })
+            } else {
+                adapter.clear()
+            }
+        }
+    }
+
     private fun onQueryTextListener(): SearchView.OnQueryTextListener {
         return object: SearchView.OnQueryTextListener {
             // When input is finalized
             override fun onQueryTextSubmit(query: String): Boolean {
                 // If some match in the label part of the item.
-                if (items.map{ it.label }.contains(query)) {
+                if (adapter.getItems().map{ it.label }.contains(query)) {
                     adapter.filter.filter(query)
                     textView.visibility = View.INVISIBLE
                 } else {
@@ -101,7 +113,7 @@ class StorageFragment: Fragment() {
 
         // Display hidden password
         passwordLabel.text = item.password.replace(".".toRegex(), "*")
-        usernameLabel.text = item.userName
+        usernameLabel.text = item.username
 
         // Disable notes group if no notes exist
         if (item.notes == null || item.notes.isEmpty()) {
@@ -127,7 +139,7 @@ class StorageFragment: Fragment() {
         usernameGroup.setOnClickListener {
             val clipboard =
                 ContextCompat.getSystemService(context, ClipboardManager::class.java)
-            val clip: ClipData = ClipData.newPlainText("Copied Username", item.userName)
+            val clip: ClipData = ClipData.newPlainText("Copied Username", item.username)
             clipboard!!.setPrimaryClip(clip)
         }
         passwordGroup.setOnClickListener {
@@ -172,8 +184,8 @@ class StorageFragment: Fragment() {
 
         // Set initial text
         labelInput.setText(item.label)
-        urlInput.setText(item.url)
-        usernameInput.setText(item.userName)
+        urlInput.setText(item.uri)
+        usernameInput.setText(item.username)
         passwordInput.setText(item.password)
         notesInput.setText(item.notes)
 
@@ -181,9 +193,12 @@ class StorageFragment: Fragment() {
         closeButton.setOnClickListener { window.dismiss() }
         applyButton.setOnClickListener {
             // Remove old item
+            val id = item.id
             adapter.adapter.remove(item)
             // TODO: Implement input validation
+            // TODO: Fetch changes from database
             val newItem = CredentialsItem(
+                id,
                 labelInput.text.toString(),
                 urlInput.text.toString(),
                 usernameInput.text.toString(),
@@ -213,22 +228,34 @@ class StorageFragment: Fragment() {
         val usernameInput = view.findViewById<EditText>(R.id.storage_item_popup_username_input)
         val passwordInput = view.findViewById<EditText>(R.id.storage_item_popup_password_input)
         val notesInput = view.findViewById<EditText>(R.id.storage_item_popup_notes_input)
+        val statusMessage = view.findViewById<TextView>(R.id.storage_item_popup_status_message)
 
         // Close window when clicked
         closeButton.setOnClickListener { window.dismiss() }
         addButton.setOnClickListener {
             // TODO: Implement input validation
+            // TODO: Fetch changes from database
             val newItem = CredentialsItem(
+                0,
                 labelInput.text.toString(),
                 urlInput.text.toString(),
                 usernameInput.text.toString(),
                 passwordInput.text.toString(),
                 notesInput.text.toString()
             )
-            // TODO: handle apply by applying changes to the database
-            // Insert new item
-            adapter.add(newItem)
-            window.dismiss()
+
+            // Send request to create new item on the server
+            Item.sendCreateItemRequest(newItem) { successful, message ->
+                println("Create item request: (successful: $successful), (message: $message)")
+
+                Utils.showStatusMessage(statusMessage, message, true)
+
+                if(successful) {
+                    fetchItems()
+                    // Close pop-up
+                    window.dismiss()
+                }
+            }
         }
 
         return window

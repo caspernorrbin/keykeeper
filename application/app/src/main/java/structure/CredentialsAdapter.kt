@@ -1,7 +1,5 @@
 package structure
 
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -26,13 +24,13 @@ class CredentialsAdapter(
     private val items: List<CredentialsItem>
 ): ArrayAdapter<CredentialsItem>(context, layoutResource, items) {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val item = getItem(position)
         val view = convertView?: LayoutInflater.from(context).inflate(layoutResource, parent, false)
+        val item = getItem(position)
         val titleLabel = view.findViewById<TextView>(R.id.storage_item_title_label)
         val urlLabel = view.findViewById<TextView>(R.id.storage_item_url_label)
         val image = view.findViewById<ImageView>(R.id.storage_item_image)
         titleLabel.text = item?.label
-        urlLabel.text = item?.url
+        urlLabel.text = item?.uri
 
         // Apply data from the item to the component view.
         if (item != null && item.image == null) {
@@ -40,7 +38,7 @@ class CredentialsAdapter(
             CoroutineScope(Dispatchers.Default).launch {
                 // FIXME: BUG where the first image is wrong
                 // FIXME: Runs multiple times for each item
-                item.image = getImageFromUrl(item.url)
+                item.image = getImageFromUrl(item.uri)
                 if (item.image != null) {
                     // View can only be modified in the main context
                     withContext(Dispatchers.Main) {
@@ -71,5 +69,9 @@ class CredentialsAdapter(
             Log.e("getIconFromUrl", e.toString() + ' ' + e.message)
             null
         }
+    }
+
+     fun getItems(): List<CredentialsItem> {
+        return this.items
     }
 }
