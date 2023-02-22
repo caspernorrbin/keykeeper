@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import structure.Storage
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var bodyLayout: LinearLayout
@@ -20,7 +21,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var statusMessage: TextView
     private lateinit var buttonCreateAccount: Button
     private lateinit var loadingIcon: ImageView
-
+    private lateinit var rememberCheckBox: CheckBox
 
     private fun showStatusMessage(message: String, isErrorMessage: Boolean = false) {
         statusMessage.text = message
@@ -50,6 +51,13 @@ class LoginActivity : AppCompatActivity() {
         statusMessage = findViewById(R.id.login_status_message)
         buttonCreateAccount = findViewById(R.id.login_create_button)
         loadingIcon = findViewById(R.id.login_loading_icon)
+        rememberCheckBox = findViewById(R.id.login_remember_checkbox)
+
+        // Apply remembered email if stored
+        Storage.getRememberedEmail(applicationContext)?.let {
+            emailInput.setText(it)
+            rememberCheckBox.isChecked = true
+        }
 
         swapBodyLoading(false)
 
@@ -64,6 +72,13 @@ class LoginActivity : AppCompatActivity() {
                 swapBodyLoading(true)
                 ac.sendLoginRequest { successful, message ->
                     if(successful) {
+                        // If checked save email
+                        if (rememberCheckBox.isChecked) {
+                            Storage.setRememberedEmail(applicationContext, email)
+                        } else {
+                            Storage.removeRememberedEmail(applicationContext)
+                        }
+
                         hideStatusMessage()
                         navigateToMain()
                     } else {

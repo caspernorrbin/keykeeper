@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_image"
+    android:theme="@style/Theme.KeyKeeper"
     tools:context=".LoginActivity">
 
     <TextView
@@ -48,6 +49,12 @@
             android:ems="10"
             android:hint="@string/login_password"
             android:inputType="textPassword" />
+
+        <CheckBox
+            android:id="@+id/login_remember_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login_remember_email"/>
 
         <Button
             android:id="@+id/login_button"

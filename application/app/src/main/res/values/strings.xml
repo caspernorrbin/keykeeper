@@ -28,6 +28,7 @@
     <string name="login_button">Login</string>
     <string name="login_no_account">No account?</string>
     <string name="login_create_account">Create new account</string>
+    <string name="login_remember_email">Remember Email</string>
 
     <!-- Create Account strings -->
     <string name="create_account_header">Create Account Debug</string>

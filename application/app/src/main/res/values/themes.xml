@@ -19,6 +19,7 @@
         <item name="android:textColorHint">@color/white_transparent</item>
         <item name="android:textColorHighlight">@color/white</item>
         <item name="android:textCursorDrawable">@drawable/cu_white_cursor</item>
+        <item name="checkboxStyle">@style/Theme.KeyKeeper.CheckBox</item>
     </style>
 
     <style name="Theme.KeyKeeper.NoActionBar">
@@ -39,5 +40,10 @@
     <style name="Theme.KeyKeeper.StorageItem">
         <item name="android:background">@drawable/bg_shadow</item>
         <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="Theme.KeyKeeper.CheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="buttonTint">@color/white</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 </resources>
