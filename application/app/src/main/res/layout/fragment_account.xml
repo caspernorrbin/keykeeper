@@ -12,15 +12,14 @@
         android:id="@+id/email_view"
         android:layout_width="216dp"
         android:layout_height="37dp"
-        android:layout_marginTop="184dp"
+        android:layout_marginTop="136dp"
         android:gravity="center"
         android:text="@string/test_test_example"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.555"
         app:layout_constraintStart_toEndOf="@+id/iv_profile_pic"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/account_logout_button"
@@ -32,18 +31,16 @@
         app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.871"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintVertical_bias="0.871" />
 
     <Button
         android:id="@+id/btn_edit_profile"
-        android:layout_width="205dp"
-        android:layout_height="48dp"
+        android:layout_width="275dp"
+        android:layout_height="65dp"
         android:layout_marginBottom="44dp"
         android:text="@string/edit_profile"
         app:layout_constraintBottom_toTopOf="@+id/account_logout_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.485"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.969" />
@@ -56,22 +53,9 @@
         android:layout_marginTop="92dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints"
         android:src="@drawable/ic_profile_pic"/>
 
-    <TextView
-        android:id="@+id/name_view"
-        android:layout_width="216dp"
-        android:layout_height="37dp"
-        android:layout_marginTop="112dp"
-        android:gravity="center"
-        android:text="@string/test_test"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.555"
-        app:layout_constraintStart_toEndOf="@+id/iv_profile_pic"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,6 @@
 package com.application.keykeeper
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,21 +8,20 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.TextView
-import androidx.navigation.findNavController
-
+import structure.User
 
 
 class EditProfileFragment : Fragment() {
     private lateinit var viewOfLayout: View
     private lateinit var checkBoxEmail: CheckBox
     private lateinit var editTextEmail: EditText
-    private lateinit var checkBoxName: CheckBox
-    private lateinit var editTextName: EditText
     private lateinit var checkBoxPassword: CheckBox
     private lateinit var editTextPassword: EditText
+    private lateinit var editTextOldPassword: EditText
     private lateinit var buttonSaveChanges: Button
 
+    // Declare a variable to hold the user data
+    private lateinit var user: User
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         // Inflate the layout for this fragment
@@ -32,42 +30,49 @@ class EditProfileFragment : Fragment() {
         // Initialize views
         checkBoxEmail = viewOfLayout.findViewById(R.id.checkBoxEmail)
         editTextEmail = viewOfLayout.findViewById(R.id.editTextEmail)
-        checkBoxName = viewOfLayout.findViewById(R.id.checkBoxName)
-        editTextName = viewOfLayout.findViewById(R.id.editTextName)
         checkBoxPassword = viewOfLayout.findViewById(R.id.checkBoxPassword)
         editTextPassword = viewOfLayout.findViewById(R.id.editTextPassword)
+        editTextOldPassword = viewOfLayout.findViewById(R.id.editTextOldPassword)
         buttonSaveChanges = viewOfLayout.findViewById(R.id.buttonSaveChanges)
+
+        editTextEmail.isEnabled = false
+        editTextPassword.isEnabled = false
 
         // Set click listener for "Save Changes" button
         buttonSaveChanges.setOnClickListener {
             saveChanges()
         }
-
-        // Set click listeners for checkboxes
-        checkBoxEmail.setOnCheckedChangeListener { buttonView, isChecked ->
-            editTextEmail.visibility = if (isChecked) View.VISIBLE else View.GONE
+        // Set enabled state of email and password fields based on checkbox state
+        checkBoxEmail.setOnCheckedChangeListener { _, isChecked ->
+            editTextEmail.isEnabled = isChecked
         }
 
-        checkBoxName.setOnCheckedChangeListener { buttonView, isChecked ->
-            editTextName.visibility = if (isChecked) View.VISIBLE else View.GONE
+        checkBoxPassword.setOnCheckedChangeListener { _, isChecked ->
+            editTextPassword.isEnabled = isChecked
         }
 
-        checkBoxPassword.setOnCheckedChangeListener { buttonView, isChecked ->
-            editTextPassword.visibility = if (isChecked) View.VISIBLE else View.GONE
-        }
+        // Fetch user data from the database
+        user = getUserInfo()
 
+        // Display the user data in the EditText fields
+        editTextEmail.setText(user.email)
+        editTextPassword.setText(user.password)
 
         return viewOfLayout
     }
     private fun saveChanges() {
-        // Get the current user's information from a database or API
-        val user = getUserInfo()
 
         // Check which fields the user wants to update
         val updateEmail = checkBoxEmail.isChecked
-        val updateName = checkBoxName.isChecked
         val updatePassword = checkBoxPassword.isChecked
+        val oldPassword = editTextOldPassword.text.toString()
 
+
+        // Check if the old password matches the current password
+        if (oldPassword != user.password) {
+            editTextOldPassword.error = "Incorrect password"
+            return
+        }
 
         // Update the corresponding fields if the user has selected them
         if (updateEmail) {
@@ -75,45 +80,32 @@ class EditProfileFragment : Fragment() {
             user.email = newEmail
         }
 
-        if (updateName) {
-            val newName = editTextName.text.toString()
-            user.name = newName
-        }
 
         if (updatePassword) {
             val newPassword = editTextPassword.text.toString()
             user.password = newPassword
         }
 
-        // Save the updated user information to the database or API
+        // Save the updated user information to the database
         saveUserInfo(user)
+
+        // Refresh the user data from the database
+        user = getUserInfo()
+
+        // Display the updated user data in the EditText fields
+        editTextEmail.setText(user.email)
+        editTextPassword.setText(user.password)
     }
 
     private fun getUserInfo(): User {
-        // Retrieve the user's information from the database or API
-        // In this example, we'll just return a hard-coded user object
-        return User(
-            "test@example.com",
-            "Test Test",
-            "password123"
-        )
+        // Retrieve the user's information from the database
+        return User()
     }
 
     private fun saveUserInfo(user: User) {
-        // Save the user's information to the database or API
-        // In this example, we'll just log the updated user object
-        Log.d("EditProfileFragment", "Updated user: $user")
+        // Save the user's information to the database
+
+
     }
 
 }
-
-// example for data
-data class User(
-    var email: String,
-    var name: String,
-    var password: String
-)
-
-
-
-

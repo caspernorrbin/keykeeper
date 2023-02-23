@@ -16,7 +16,6 @@ class AccountFragment: Fragment() {
     private lateinit var viewOfLayout: View
     private lateinit var buttonLogout: Button
     private lateinit var button_edit_pofile: Button
-    private lateinit var name_view: TextView
     private lateinit var email_view: TextView
 
 
@@ -29,8 +28,7 @@ class AccountFragment: Fragment() {
         // Find view components
         buttonLogout = viewOfLayout.findViewById(R.id.account_logout_button)
         button_edit_pofile = viewOfLayout.findViewById(R.id.btn_edit_profile)
-        name_view = viewOfLayout.findViewById(R.id.name_view)
-        name_view = viewOfLayout.findViewById(R.id.email_view)
+        email_view = viewOfLayout.findViewById(R.id.email_view)
         // Assign on click listeners
         buttonLogout.setOnClickListener {
             val controller = viewOfLayout.findNavController()

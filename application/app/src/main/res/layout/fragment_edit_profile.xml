@@ -1,107 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_image"
-    >
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".EditProfileFragment"
-        tools:ignore="ScrollViewSize">
+    android:background="@drawable/bg_image">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/edit_profile"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.077" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/editTextEmail"
-            android:layout_width="281dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="112dp"
-            android:hint="@string/new_email"
-            android:importantForAutofill="no"
-            android:inputType="textEmailAddress"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="148dp"
+                android:layout_marginTop="54dp"
+                android:layout_marginEnd="148dp"
+                android:text="@string/edit_profile"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/editTextName"
-            android:layout_width="281dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="64dp"
-            android:hint="@string/new_name"
-            android:importantForAutofill="no"
-            android:inputType="textPersonName"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
+            <EditText
+                android:id="@+id/editTextEmail"
+                android:layout_width="281dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="65dp"
+                android:layout_marginTop="48dp"
+                android:layout_marginEnd="65dp"
+                android:hint="@string/new_email"
+                android:inputType="textEmailAddress"
+                android:autofillHints="emailAddress"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/checkBoxEmail" />
 
-        <EditText
-            android:id="@+id/editTextPassword"
-            android:layout_width="281dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="64dp"
-            android:autofillHints=""
-            android:hint="@string/new_password"
-            android:inputType="textPassword"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextName" />
+            <EditText
+                android:id="@+id/editTextPassword"
+                android:layout_width="281dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="65dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="65dp"
+                android:autofillHints="password"
+                android:hint="@string/new_password"
+                android:inputType="textPassword"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
 
-        <Button
-            android:id="@+id/buttonSaveChanges"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:text="@string/save_changes"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.501"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/checkBoxPassword"
-            app:layout_constraintVertical_bias="1.0" />
+            <Button
+                android:id="@+id/buttonSaveChanges"
+                android:layout_width="275dp"
+                android:layout_height="65dp"
+                android:layout_gravity="end"
+                android:layout_marginStart="68dp"
+                android:layout_marginTop="48dp"
+                android:layout_marginEnd="68dp"
+                android:text="@string/save_changes"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextOldPassword" />
 
-        <CheckBox
-            android:id="@+id/checkBoxName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
-            android:text="@string/edit_nam"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.972"
-            app:layout_constraintStart_toEndOf="@+id/editTextName"
-            app:layout_constraintTop_toBottomOf="@+id/checkBoxEmail" />
+            <CheckBox
+                android:id="@+id/checkBoxPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="65dp"
+                android:text="@string/edit_password"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-        <CheckBox
-            android:id="@+id/checkBoxPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
-            android:text="@string/edit_password"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/editTextPassword"
-            app:layout_constraintTop_toBottomOf="@+id/checkBoxName" />
+            <CheckBox
+                android:id="@+id/checkBoxEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="65dp"
+                android:layout_marginTop="32dp"
+                android:text="@string/edit_email"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-        <CheckBox
-            android:id="@+id/checkBoxEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="196dp"
-            android:text="@string/edit_email"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.972"
-            app:layout_constraintStart_toEndOf="@+id/editTextEmail"
-            app:layout_constraintTop_toTopOf="parent" />
+            <EditText
+                android:id="@+id/editTextOldPassword"
+                android:layout_width="281dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="65dp"
+                android:layout_marginTop="96dp"
+                android:layout_marginEnd="65dp"
+                android:ems="10"
+                android:hint="@string/old_password"
+                android:inputType="textPassword"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="65dp"
+                android:layout_marginEnd="127dp"
+                android:text="@string/write_your_old_password_to_confirm"
+                app:layout_constraintBottom_toTopOf="@+id/editTextOldPassword"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextPassword"
+                app:layout_constraintVertical_bias="0.636" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
