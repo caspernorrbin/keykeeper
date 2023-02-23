@@ -95,6 +95,15 @@
             android:hint="@string/storage_popup_notes"
             android:textSize="14sp"/>
 
+        <TextView
+            android:id="@+id/storage_item_popup_status_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
         <Button
             android:id="@+id/storage_item_popup_apply_button"
             android:layout_width="match_parent"

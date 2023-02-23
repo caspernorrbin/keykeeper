@@ -41,7 +41,7 @@ class StorageFragment: Fragment() {
         // Setup the adapter for the list view. It creates menu items from a list of data and
         // populates the view with them.
         adapter = CredentialsAdapter(viewOfLayout.context, R.layout.storage_item, arrayListOf())
-        fetchItems()
+        fetchAndUpdateListView()
 
         // Setup filtering of the list view using the searchView.
         listView.adapter = adapter
@@ -63,8 +63,8 @@ class StorageFragment: Fragment() {
         return viewOfLayout
     }
 
-    private fun fetchItems() {
-        Item.sendGetItemsRequest { successful, message, items ->
+    private fun fetchAndUpdateListView() {
+        Item.sendGetItemsRequest { successful, _, items ->
             if (successful) {
                 adapter.clear()
                 adapter.addAll(items.map { it.toCredentialsItem() })
@@ -151,7 +151,7 @@ class StorageFragment: Fragment() {
                         deleteButton.tag = "delete"
                         deleteButton.setText(R.string.storage_popup_delete)
                         deleteButton.setBackgroundColor(context.resources.getColor(R.color.dangerous))
-                        fetchItems()
+                        fetchAndUpdateListView()
                         window.dismiss()
                     } else {
                         Utils.showStatusMessage(statusMessage, message, true)
@@ -206,6 +206,7 @@ class StorageFragment: Fragment() {
         val usernameInput = view.findViewById<EditText>(R.id.storage_item_popup_username_input)
         val passwordInput = view.findViewById<EditText>(R.id.storage_item_popup_password_input)
         val notesInput = view.findViewById<EditText>(R.id.storage_item_popup_notes_input)
+        val statusMessage = view.findViewById<TextView>(R.id.storage_item_popup_status_message)
 
         // Set initial text
         labelInput.setText(item.label)
@@ -217,23 +218,30 @@ class StorageFragment: Fragment() {
         // Close window when clicked
         closeButton.setOnClickListener { window.dismiss() }
         applyButton.setOnClickListener {
-            // Remove old item
-            val id = item.id
-            adapter.adapter.remove(item)
+            // Hide old message
+            Utils.hideStatusMessage(statusMessage)
+
             // TODO: Implement input validation
-            // TODO: Fetch changes from database
-            val newItem = CredentialsItem(
-                id,
+            val updateItem = CredentialsItem(
+                item.id,
                 labelInput.text.toString(),
                 urlInput.text.toString(),
                 usernameInput.text.toString(),
                 passwordInput.text.toString(),
                 notesInput.text.toString()
             )
-            // TODO: handle apply by applying changes to the database
-            // Insert new item
-            adapter.adapter.insert(newItem, index)
-            window.dismiss()
+
+            Item.sendUpdateItemRequest(updateItem) { successful, message ->
+                println("Update item request: (successful: $successful), (message: $message)")
+
+                if(successful) {
+                    fetchAndUpdateListView()
+                    // Close pop-up
+                    window.dismiss()
+                } else {
+                    Utils.showStatusMessage(statusMessage, message, true)
+                }
+            }
         }
 
         return window
@@ -260,7 +268,6 @@ class StorageFragment: Fragment() {
         closeButton.setOnClickListener { window.dismiss() }
         addButton.setOnClickListener {
             // TODO: Implement input validation
-            // TODO: Fetch changes from database
             val newItem = CredentialsItem(
                 0,
                 labelInput.text.toString(),
@@ -274,12 +281,12 @@ class StorageFragment: Fragment() {
             Item.sendCreateItemRequest(newItem) { successful, message ->
                 println("Create item request: (successful: $successful), (message: $message)")
 
-                Utils.showStatusMessage(statusMessage, message, true)
-
                 if(successful) {
-                    fetchItems()
+                    fetchAndUpdateListView()
                     // Close pop-up
                     window.dismiss()
+                } else {
+                    Utils.showStatusMessage(statusMessage, message, true)
                 }
             }
         }

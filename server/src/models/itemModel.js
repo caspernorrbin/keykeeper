@@ -21,7 +21,7 @@ class Item {
      * @param {string} item_name the name of the item
      * @param {string} username the username part of the item
      * @param {string} password the encrypted password part of the item
-     * @param {string} url the url part of the item
+     * @param {string} uri the url part of the item
      * @param {string} notes the notes part of the item
      * @returns {boolean} true if the item was created, false otherwise
      */
@@ -88,7 +88,7 @@ class Item {
      */
     static update(accountId, itemId, data) {
         try {
-            const validKeys = new Set(["item_name", "username", "password", "url", "notes"]);
+            const validKeys = new Set(["item_name", "username", "password", "uri", "notes"]);
             // Sanitize input
             let values = Object.keys(data).reduce((prev, item) => (
                 validKeys.has(item) 
