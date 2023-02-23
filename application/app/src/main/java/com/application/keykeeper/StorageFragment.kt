@@ -16,6 +16,7 @@ import structure.CredentialsAdapter
 import structure.CredentialsItem
 import structure.PopupWindowFactory
 import structure.Utils
+import kotlin.random.Random
 
 class StorageFragment: Fragment() {
     private lateinit var viewOfLayout: View
@@ -112,6 +113,8 @@ class StorageFragment: Fragment() {
         val showPasswordButton = passwordGroup.findViewById<ImageButton>(R.id.storage_item_popup_show_password_button)
         val editButton = view.findViewById<Button>(R.id.storage_item_popup_edit_button)
         val deleteButton = view.findViewById<Button>(R.id.storage_item_popup_delete_button)
+        val randomPassword = passwordGroup.findViewById<ImageButton>(R.id.storage_item_popup_add_randomize_password_button)
+
 
         // Display hidden password
         passwordLabel.text = item.password.replace(".".toRegex(), "*")
@@ -188,7 +191,14 @@ class StorageFragment: Fragment() {
 
             }
         }
+
+        randomPassword.setOnClickListener {
+            val randomizedPassword = createRandomPassword() // creates a random password of 32 chars.
+            passwordLabel.text = randomizedPassword
+        }
     }
+
+
 
     private fun openEditItemPopup(adapter: AdapterView<CredentialsAdapter>, index: Int): PopupWindow {
         val item = adapter.getItemAtPosition(index)!! as CredentialsItem
@@ -285,5 +295,17 @@ class StorageFragment: Fragment() {
         }
 
         return window
+    }
+
+    // creates a random password from 'characters'
+    private fun createRandomPassword(): String {
+        // The characters to use: (a-z, A-Z, 0-9). Just add more characters if needed
+        val characters: List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
+
+        var password = ""
+        for (i in 0..31) { // create 32 character randomized password from 'characters'
+            password += characters[Random.nextInt(characters.size)]
+        }
+        return password
     }
 }
