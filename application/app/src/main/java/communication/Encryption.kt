@@ -61,7 +61,7 @@ object Encryption {
     // Generates a symmetric key (SecretKey) and a cipher IV which will be used to encrypt and decrypt the data
     public fun generateSymkey(): String {
         val random = SecureRandom()
-        var randomArray = ByteArray(32) // 256 bit key length
+        val randomArray = ByteArray(32) // 256 bit key length
         random.nextBytes(randomArray)
 
         // Generate symmetric key

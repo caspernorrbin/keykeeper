@@ -1,11 +1,17 @@
 package com.application.keykeeper
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.Request
 import com.github.kittinunf.fuel.core.extensions.jsonBody
 import communication.ServerMessage
 import org.json.JSONObject
+import com.application.keykeeper.Encryption
+import communication.ServerResponseDeserializer
 
+
+@RequiresApi(Build.VERSION_CODES.O)
 /**
  * Represents an Account that can be used when logging in, creating an account and identifying
  * the current user.
@@ -19,9 +25,12 @@ object Account {
     // authenticated requests as the user.
     private var sessionCookie: String
 
+    private var symkey: String
+
     init {
         loggedIn = false
         sessionCookie = ""
+        symkey = ""
     }
 
     // Returns true if the user is logged in, false if not
@@ -30,17 +39,21 @@ object Account {
     }
 
     // Returns a JSONObject of the data associated with the account.
-    private fun jsonAccountData(email: String, password: String,
+
+    private fun jsonAccountData(email: String, passwordHash: String,
                                 includeSymKey: Boolean = false): JSONObject {
         // Create object containing data to be sent to the server.
         val accountData = JSONObject()
 
         // Insert data.
         accountData.put("email", email)
-        accountData.put("password", hashPassword(password))
+
+        accountData.put("password", passwordHash) // send hashed master
 
         if(includeSymKey) {
-            accountData.put("symkey", generateSymkey(password))
+            val symkey = Encryption.generateSymkey()
+            println("New symkey: $symkey")
+            accountData.put("symkey", Encryption.encryptSymkey(passwordHash, symkey)) // save encrypted key
         }
 
         return accountData
@@ -66,24 +79,27 @@ object Account {
     public fun sendLoginRequest(email: String, password: String,
                                 callback: (successful: Boolean, responseBody: String) -> Unit) {
 
-        val jsonPostData = this.jsonAccountData(email, password, false)
+        val passwordHash = Encryption.hashAuthentication(password, email)
+        val jsonPostData = this.jsonAccountData(email, passwordHash, false)
 
         // Make request.
         Fuel.post("http://10.0.2.2:8080/api/auth/login")
             .header("Content-Type", "application/json")
             .jsonBody(jsonPostData.toString())
-            .responseObject(ServerMessage.Deserializer()) { _, response, result ->
+            .responseObject(ServerResponseDeserializer()) { _, response, result ->
                 val (serverResponse, _) = result
 
                 // Set loggedIn
                 if(response.statusCode == 200) {
                     this.loggedIn = true
+                    this.symkey = Encryption.decryptSymkey(passwordHash, serverResponse!!)
+                    println("Decrypted symkey: ${this.symkey}")
                     sessionCookie = response.headers["Set-Cookie"].first()
                     println("Got session cookie: $sessionCookie")
                 }
 
                 when(response.statusCode) {
-                    200 -> serverResponse?.message
+                    200 -> "Logged in"
                     400 -> "Wrong email/password. Try again."
                     else -> "Something went wrong when communicating with the server. Try again later."
                 }?.let { callback.invoke(response.statusCode == 200, it) }
@@ -94,7 +110,8 @@ object Account {
     public fun sendCreateAccountRequest(email: String, password: String,
                                         callback: (success: Boolean, message: String) -> Unit) {
 
-        val jsonPostData = this.jsonAccountData(email, password, true)
+        val passwordHash = Encryption.hashAuthentication(password, email)
+        val jsonPostData = this.jsonAccountData(email, passwordHash, true)
 
         // Make request.
         Fuel.post("http://10.0.2.2:8080/api/account/create")
@@ -110,15 +127,4 @@ object Account {
                 }?.let { callback.invoke(response.statusCode == 200, it) }
             }
     }
-
-    private fun hashPassword(password: String): String {
-        // TODO: Hash password using appropriate hashing method and email as salt.
-        return password
-    }
-
-    private fun generateSymkey(password: String): String {
-        // TODO: Generate a symkey. This should probably be handled by a different class.
-        return "this_is_not_a_symkey"
-    }
-
 }
