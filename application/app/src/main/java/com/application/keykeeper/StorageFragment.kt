@@ -110,10 +110,9 @@ class StorageFragment: Fragment() {
         val notesGroup = view.findViewById<LinearLayout>(R.id.storage_item_popup_notes_group)
         val notesLabel = view.findViewById<TextView>(R.id.storage_item_popup_notes_text)
         val statusMessage = view.findViewById<TextView>(R.id.storage_item_popup_status_message)
-        val showPasswordButton = passwordGroup.findViewById<ImageButton>(R.id.storage_item_popup_show_password_button)
+        val showPasswordButton = view.findViewById<ImageButton>(R.id.storage_item_popup_show_password_button)
         val editButton = view.findViewById<Button>(R.id.storage_item_popup_edit_button)
         val deleteButton = view.findViewById<Button>(R.id.storage_item_popup_delete_button)
-        val randomPassword = passwordGroup.findViewById<ImageButton>(R.id.storage_item_popup_add_randomize_password_button)
 
 
         // Display hidden password
@@ -190,11 +189,6 @@ class StorageFragment: Fragment() {
                 passwordLabel.text = item.password
 
             }
-        }
-
-        randomPassword.setOnClickListener {
-            val randomizedPassword = createRandomPassword() // creates a random password of 32 chars.
-            passwordLabel.text = randomizedPassword
         }
     }
 
@@ -273,6 +267,7 @@ class StorageFragment: Fragment() {
         val passwordInput = view.findViewById<EditText>(R.id.storage_item_popup_password_input)
         val notesInput = view.findViewById<EditText>(R.id.storage_item_popup_notes_input)
         val statusMessage = view.findViewById<TextView>(R.id.storage_item_popup_status_message)
+        val randomPassword = view.findViewById<ImageButton>(R.id.storage_item_popup_add_randomize_password_button)
 
         // Close window when clicked
         closeButton.setOnClickListener { window.dismiss() }
@@ -299,6 +294,11 @@ class StorageFragment: Fragment() {
                     Utils.showStatusMessage(statusMessage, message, true)
                 }
             }
+        }
+
+        randomPassword.setOnClickListener {
+            val randomizedPassword = createRandomPassword() // creates a random password of 32 chars.
+            passwordInput.setText(randomizedPassword)
         }
 
         return window
