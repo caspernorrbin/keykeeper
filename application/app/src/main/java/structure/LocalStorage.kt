@@ -2,6 +2,7 @@ package structure
 
 import android.content.Context
 import android.util.Log
+import org.json.JSONArray
 
 object Storage {
     private const val PREF_NAME = "com.application.keykeeper"
@@ -19,7 +20,29 @@ object Storage {
         return load(context, "rememberedEmail")
     }
 
-    // Stores in `data/data/[package_name]/shared_prefs/[app name].xml`
+    fun setItems(context: Context, items: Collection<CredentialsItem>): Boolean {
+        return try {
+            val list = items.map { it.toJSON() }
+            val text = JSONArray(list).toString()
+            save(context, "items", text)
+        } catch (error: Throwable) {
+            Log.e("setItems", error.message.toString())
+            false
+        }
+    }
+
+    fun getItems(context: Context): Array<CredentialsItem>? {
+        val text = load(context, "items")
+        if (text != null) {
+            try {
+                return CredentialsItem.getArrayDeserializer().deserialize(text)
+            } catch (error: Throwable) {
+                Log.e("getItems", error.message.toString())
+            }
+        }
+        return null
+    }
+
     fun setRememberedEmail(context: Context, email: String): Boolean {
         return save(context, "rememberedEmail", email)
     }
