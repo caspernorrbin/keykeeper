@@ -1,5 +1,6 @@
 package com.application.keykeeper
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -31,9 +32,7 @@ class AccountFragment: Fragment() {
         email_view = viewOfLayout.findViewById(R.id.email_view)
         // Assign on click listeners
         buttonLogout.setOnClickListener {
-            val controller = viewOfLayout.findNavController()
-            val action = AccountFragmentDirections.actionNavAccountFragmentToLoginFragment()
-            controller.navigate(action)
+            navigateToLogin()
         }
         button_edit_pofile.setOnClickListener {
             val controller = viewOfLayout.findNavController()
@@ -42,5 +41,11 @@ class AccountFragment: Fragment() {
 
         }
         return viewOfLayout
+    }
+
+    private fun navigateToLogin() {
+        val intent = Intent(activity, LoginActivity::class.java)
+        startActivity(intent)
+        activity?.finish()
     }
 }

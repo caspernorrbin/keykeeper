@@ -19,21 +19,32 @@
         android:clickable="true"
         android:focusable="true"/>
 
-    <ListView
-        android:id="@+id/storage_list_view"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/storage_search_view"
-        android:layout_margin="10dp"
-        android:dividerHeight="10dp"
-        tools:listitem="@layout/storage_item"/>
-
-    <TextView
-        android:id="@+id/storage_text_view"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/nav_storage" />
+        android:layout_below="@+id/storage_search_view">
+        <ListView
+            android:id="@+id/storage_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:dividerHeight="5dp"
+            tools:listitem="@layout/storage_item" />
+
+        <TextView
+            android:id="@+id/storage_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/storage_query_no_match"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/storage_list_view"
+            app:layout_constraintEnd_toEndOf="@id/storage_list_view"
+            app:layout_constraintStart_toStartOf="@id/storage_list_view"
+            app:layout_constraintTop_toTopOf="@id/storage_list_view" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </RelativeLayout>
