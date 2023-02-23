@@ -1,11 +1,8 @@
 package com.application.keykeeper
 
 import com.github.kittinunf.fuel.Fuel
-import com.github.kittinunf.fuel.core.HeaderValues
 import com.github.kittinunf.fuel.core.Request
-import com.github.kittinunf.fuel.core.ResponseDeserializable
 import com.github.kittinunf.fuel.core.extensions.jsonBody
-import com.google.gson.Gson
 import communication.ServerMessage
 import org.json.JSONObject
 
@@ -49,11 +46,14 @@ object Account {
         return accountData
     }
 
-    // Returns a Fuel Request handle for sending an authenticated POST request to the specified URL.
+    // Returns a Fuel Request handle for sending an authenticated POST request to the specified URL
+    // with json data.
     // Note: Should only be used if the user is loggedIn
     public fun sendAuthenticatedPostRequest(url: String): Request {
         return Fuel.post(url).header("Cookie", sessionCookie)
+            .header("Content-Type", "application/json")
     }
+
 
     // Returns a Fuel Request handle for sending an authenticated GET request to the specified URL.
     // Note: Should only be used if the user is loggedIn
