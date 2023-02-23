@@ -18,7 +18,19 @@
     <string name="debug_input_prompt">Enter text …</string>
     <string name="debug_button">Confirm</string>
 
-    <!-- Debug Create Account strings -->
+    <!-- Account strings -->
+    <string name="account_logout">Logout</string>
+
+    <!-- Login strings -->
+    <string name="login_header">Login</string>
+    <string name="login_email">Email</string>
+    <string name="login_password">Password</string>
+    <string name="login_button">Login</string>
+    <string name="login_no_account">No account?</string>
+    <string name="login_create_account">Create new account</string>
+    <string name="login_remember_email">Remember Email</string>
+
+    <!-- Create Account strings -->
     <string name="create_account_header">Create Account Debug</string>
     <string name="create_account_email">Account email</string>
     <string name="create_account_password">Master password</string>
@@ -26,6 +38,28 @@
 
     <!-- Storage strings -->
     <string name="storage_query">Search …</string>
+    <string name="storage_query_no_match">No Match</string>
+
+    <!-- Storage Popup strings -->
+    <string name="storage_popup_url">Url</string>
+    <string name="storage_popup_label">Label</string>
+    <string name="storage_popup_username">Username</string>
+    <string name="storage_popup_password">Password</string>
+    <string name="storage_popup_show_password">Show password</string>
+    <string name="storage_popup_notes">Notes</string>
+    <string name="storage_popup_apply">Apply</string>
+    <string name="storage_popup_add">Add Item</string>
+    <string name="storage_popup_edit">Edit</string>
+    <string name="storage_popup_delete">Delete</string>
+    <string name="storage_popup_confirm_delete">Confirm Delete</string>
+    <string name="storage_popup_close_button_description">Close Popup</string>
+    <string name="storage_popup_apply_button_description">Apply Changes</string>
+    <string name="storage_popup_add_button_description">Add Item</string>
+    <string name="storage_popup_add_item_header">Add New Item</string>
+    <string name="storage_popup_edit_item_header">Edit Item</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add_storage_item_description">Add new item</string>
+
+
 </resources>
