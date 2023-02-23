@@ -1,7 +1,5 @@
-package communication
+package communication.structure
 
-import com.github.kittinunf.fuel.core.ResponseDeserializable
-import com.google.gson.Gson
 import structure.Deserializer
 
 /**
@@ -10,7 +8,7 @@ import structure.Deserializer
 data class ServerMessage(val message: String) {
     companion object {
         fun getDeserializer(): Deserializer<ServerMessage> {
-            return Deserializer()
+            return Deserializer(ServerMessage::class)
         }
     }
 }

@@ -1,4 +1,4 @@
-package communication
+package communication.structure
 import structure.CredentialsItem
 import structure.Deserializer
 
@@ -10,11 +10,11 @@ data class DatabaseItem(val id: Int, val account_id: Int, val item_name: String,
 
     companion object {
         fun getArrayDeserializer(): Deserializer<Array<DatabaseItem>>  {
-            return Deserializer()
+            return Deserializer(Array<DatabaseItem>::class)
         }
 
         fun getDeserializer(): Deserializer<DatabaseItem>  {
-            return Deserializer()
+            return Deserializer(DatabaseItem::class)
         }
     }
 }

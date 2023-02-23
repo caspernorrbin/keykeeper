@@ -4,54 +4,11 @@ import android.content.Context
 import android.util.Log
 import org.json.JSONArray
 
-object Storage {
+object LocalStorage {
+    // Stores in `data/data/[package_name]/shared_prefs/[app name].xml`
     private const val PREF_NAME = "com.application.keykeeper"
 
-    fun getSessionKey(context: Context): String? {
-        return load(context, "session")
-    }
-
-    // Stores in `data/data/[package_name]/shared_prefs/[app name].xml`
-    fun setSessionKey(context: Context, sessionKey: String): Boolean {
-        return save(context, "session", sessionKey)
-    }
-
-    fun getRememberedEmail(context: Context): String? {
-        return load(context, "rememberedEmail")
-    }
-
-    fun setItems(context: Context, items: Collection<CredentialsItem>): Boolean {
-        return try {
-            val list = items.map { it.toJSON() }
-            val text = JSONArray(list).toString()
-            save(context, "items", text)
-        } catch (error: Throwable) {
-            Log.e("setItems", error.message.toString())
-            false
-        }
-    }
-
-    fun getItems(context: Context): Array<CredentialsItem>? {
-        val text = load(context, "items")
-        if (text != null) {
-            try {
-                return CredentialsItem.getArrayDeserializer().deserialize(text)
-            } catch (error: Throwable) {
-                Log.e("getItems", error.message.toString())
-            }
-        }
-        return null
-    }
-
-    fun setRememberedEmail(context: Context, email: String): Boolean {
-        return save(context, "rememberedEmail", email)
-    }
-
-    fun removeRememberedEmail(context: Context): Boolean {
-        return remove(context, "rememberedEmail")
-    }
-
-    private fun save(context: Context, key: String, value: String): Boolean {
+    fun save(context: Context, key: String, value: String): Boolean {
         return try {
             val pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
             val editor = pref.edit()
@@ -64,7 +21,7 @@ object Storage {
         }
     }
 
-    private fun load(context: Context, key: String): String? {
+    fun load(context: Context, key: String): String? {
         return try {
             val pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
             return pref.getString(key, null)
@@ -74,7 +31,7 @@ object Storage {
         }
     }
 
-    private fun remove(context: Context, key: String): Boolean {
+    fun remove(context: Context, key: String): Boolean {
         return try {
             val pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
             val editor = pref.edit()
