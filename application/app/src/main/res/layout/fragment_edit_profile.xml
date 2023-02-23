@@ -16,11 +16,12 @@
                 android:layout_marginStart="148dp"
                 android:layout_marginTop="54dp"
                 android:layout_marginEnd="148dp"
-                android:text="@string/edit_profile"
+                android:text="@string/edit_profile_edit_profile_text_view"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:enabled="false"/>
 
             <EditText
                 android:id="@+id/editTextEmail"
@@ -29,7 +30,7 @@
                 android:layout_marginStart="65dp"
                 android:layout_marginTop="48dp"
                 android:layout_marginEnd="65dp"
-                android:hint="@string/new_email"
+                android:hint="@string/edit_profile_new_email_edit_text"
                 android:inputType="textEmailAddress"
                 android:autofillHints="emailAddress"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -45,12 +46,13 @@
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="65dp"
                 android:autofillHints="password"
-                android:hint="@string/new_password"
+                android:hint="@string/edit_profile_new_password_edit_text"
                 android:inputType="textPassword"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
+                app:layout_constraintTop_toBottomOf="@+id/editTextEmail"
+                android:enabled="false"/>
 
             <Button
                 android:id="@+id/buttonSaveChanges"
@@ -60,7 +62,7 @@
                 android:layout_marginStart="68dp"
                 android:layout_marginTop="48dp"
                 android:layout_marginEnd="68dp"
-                android:text="@string/save_changes"
+                android:text="@string/edit_profile_save_changes_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -69,10 +71,10 @@
             <CheckBox
                 android:id="@+id/checkBoxPassword"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="36dp"
                 android:layout_marginEnd="65dp"
-                android:text="@string/edit_password"
+                android:text="@string/edit_profile_edit_password_checkbox"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -80,10 +82,10 @@
             <CheckBox
                 android:id="@+id/checkBoxEmail"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginStart="65dp"
-                android:layout_marginTop="32dp"
-                android:text="@string/edit_email"
+                android:layout_marginTop="36dp"
+                android:text="@string/edit_profile_edit_email_check_box"
                 android:textColor="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -96,8 +98,9 @@
                 android:layout_marginTop="96dp"
                 android:layout_marginEnd="65dp"
                 android:ems="10"
-                android:hint="@string/old_password"
+                android:hint="@string/edit_profile_old_password_edit_text"
                 android:inputType="textPassword"
+                android:autofillHints="password"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -109,7 +112,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="65dp"
                 android:layout_marginEnd="127dp"
-                android:text="@string/write_your_old_password_to_confirm"
+                android:text="@string/edit_profile_text_explanation_text_view"
                 app:layout_constraintBottom_toTopOf="@+id/editTextOldPassword"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"

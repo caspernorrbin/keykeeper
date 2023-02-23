@@ -35,8 +35,6 @@ class EditProfileFragment : Fragment() {
         editTextOldPassword = viewOfLayout.findViewById(R.id.editTextOldPassword)
         buttonSaveChanges = viewOfLayout.findViewById(R.id.buttonSaveChanges)
 
-        editTextEmail.isEnabled = false
-        editTextPassword.isEnabled = false
 
         // Set click listener for "Save Changes" button
         buttonSaveChanges.setOnClickListener {
@@ -97,11 +95,13 @@ class EditProfileFragment : Fragment() {
         editTextPassword.setText(user.password)
     }
 
+    // TODO the next function for retrieving data from database
     private fun getUserInfo(): User {
         // Retrieve the user's information from the database
         return User()
     }
 
+    // TODO the next function for saving data to database
     private fun saveUserInfo(user: User) {
         // Save the user's information to the database
 
