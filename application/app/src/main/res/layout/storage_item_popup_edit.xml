@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/bg_light_transparent"
+    android:layout_gravity="center"
+    android:padding="10dp">
+    <LinearLayout
+        android:id="@+id/storage_item_popup"
+        android:layout_gravity="center"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:minWidth="220dp"
+        android:background="@color/bg_dark">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:textSize="18sp"
+                android:padding="5dp"
+                android:text="@string/storage_popup_edit_item_header"/>
+            <ImageButton
+                android:id="@+id/storage_item_popup_close_button"
+                android:layout_width="48sp"
+                android:layout_height="48sp"
+                android:src="@drawable/ic_close"
+                android:background="@color/transparent"
+                android:layout_gravity="end"
+                android:contentDescription="@string/storage_popup_close_button_description" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/storage_item_popup_label_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="13dp"
+            android:ems="10"
+            android:background="@drawable/bg_text_input"
+            android:hint="@string/storage_popup_label"
+            android:textSize="14sp"/>
+
+        <EditText
+            android:id="@+id/storage_item_popup_url_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="13dp"
+            android:ems="10"
+            android:background="@drawable/bg_text_input"
+            android:hint="@string/storage_popup_url"
+            android:textSize="14sp"
+            android:inputType="textUri"/>
+
+        <EditText
+            android:id="@+id/storage_item_popup_username_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="13dp"
+            android:ems="10"
+            android:background="@drawable/bg_text_input"
+            android:hint="@string/storage_popup_username"
+            android:textSize="14sp"
+            android:inputType="textPersonName"/>
+
+        <EditText
+            android:id="@+id/storage_item_popup_password_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="13dp"
+            android:ems="10"
+            android:background="@drawable/bg_text_input"
+            android:hint="@string/storage_popup_password"
+            android:textSize="14sp"
+            android:inputType="textVisiblePassword"/>
+
+        <EditText
+            android:id="@+id/storage_item_popup_notes_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="13dp"
+            android:ems="10"
+            android:background="@drawable/bg_text_input"
+            android:hint="@string/storage_popup_notes"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/storage_item_popup_status_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/storage_item_popup_apply_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_edit"
+            android:background="@color/interactive"
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:text="@string/storage_popup_apply"
+            android:textSize="12sp"
+            android:contentDescription="@string/storage_popup_apply_button_description">
+        </Button>
+    </LinearLayout>
+</FrameLayout>

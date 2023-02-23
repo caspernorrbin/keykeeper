@@ -16,13 +16,25 @@
         android:theme="@style/Theme.KeyKeeper">
         <activity
             android:name=".Main"
+            android:noHistory="false"
             android:exported="true"
-            android:label="@string/app_name"
+            android:theme="@style/Theme.KeyKeeper.NoActionBar">
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:noHistory="true"
+            android:exported="true"
             android:theme="@style/Theme.KeyKeeper.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".CreateAccountActivity"
+            android:exported="true"
+            android:noHistory="false"
+            android:theme="@style/Theme.KeyKeeper.NoActionBar">
         </activity>
     </application>
 </manifest>
