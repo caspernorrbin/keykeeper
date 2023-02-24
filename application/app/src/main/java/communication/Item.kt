@@ -15,7 +15,6 @@ object Item {
         // Create object containing data to be sent to the server.
         val itemData = JSONObject()
 
-        // TODO: Encrypt all information that is sent to the server.
         itemData.put("item_name", item.label)
         itemData.put("username", item.username)
         itemData.put("password", item.password)
