@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import structure.Model
 import structure.Utils
 
 
@@ -35,7 +36,7 @@ class CreateAccountActivity : AppCompatActivity() {
             val password = passwordInput.text.toString()
 
             if(email.isValidEmail()) {
-                Account.sendCreateAccountRequest(email, password) { successful, message ->
+                Model.Communication.createAccount(email, password) { successful, message ->
                     if(successful) {
                         // TODO: Perhaps also show a success message instead of just switching to
                         // the login view?

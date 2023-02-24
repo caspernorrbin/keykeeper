@@ -5,13 +5,12 @@ import android.content.Intent
 import android.graphics.drawable.Animatable
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
-import structure.Storage
+import structure.Model
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var bodyLayout: LinearLayout
@@ -51,7 +50,7 @@ class LoginActivity : AppCompatActivity() {
         rememberCheckBox = findViewById(R.id.login_remember_checkbox)
 
         // Apply remembered email if stored
-        Storage.getRememberedEmail(applicationContext)?.let {
+        Model.Storage.getRememberedEmail(applicationContext)?.let {
             emailInput.setText(it)
             rememberCheckBox.isChecked = true
         }
@@ -67,13 +66,13 @@ class LoginActivity : AppCompatActivity() {
             if(email.isValidEmail() && password.isNotEmpty()) {
                 swapBodyLoading(true)
                 
-                Account.sendLoginRequest(email, password) { successful, message ->
+                Model.Communication.login(email, password) { successful, message ->
                     if(successful) {
                         // If checked save email
                         if (rememberCheckBox.isChecked) {
-                            Storage.setRememberedEmail(applicationContext, email)
+                            Model.Storage.setRememberedEmail(applicationContext, email)
                         } else {
-                            Storage.removeRememberedEmail(applicationContext)
+                            Model.Storage.removeRememberedEmail(applicationContext)
                         }
 
                         hideStatusMessage()

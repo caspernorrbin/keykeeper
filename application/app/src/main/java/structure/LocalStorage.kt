@@ -2,33 +2,13 @@ package structure
 
 import android.content.Context
 import android.util.Log
+import org.json.JSONArray
 
-object Storage {
+object LocalStorage {
+    // Stores in `data/data/[package_name]/shared_prefs/[app name].xml`
     private const val PREF_NAME = "com.application.keykeeper"
 
-    fun getSessionKey(context: Context): String? {
-        return load(context, "session")
-    }
-
-    // Stores in `data/data/[package_name]/shared_prefs/[app name].xml`
-    fun setSessionKey(context: Context, sessionKey: String): Boolean {
-        return save(context, "session", sessionKey)
-    }
-
-    fun getRememberedEmail(context: Context): String? {
-        return load(context, "rememberedEmail")
-    }
-
-    // Stores in `data/data/[package_name]/shared_prefs/[app name].xml`
-    fun setRememberedEmail(context: Context, email: String): Boolean {
-        return save(context, "rememberedEmail", email)
-    }
-
-    fun removeRememberedEmail(context: Context): Boolean {
-        return remove(context, "rememberedEmail")
-    }
-
-    private fun save(context: Context, key: String, value: String): Boolean {
+    fun save(context: Context, key: String, value: String): Boolean {
         return try {
             val pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
             val editor = pref.edit()
@@ -41,7 +21,7 @@ object Storage {
         }
     }
 
-    private fun load(context: Context, key: String): String? {
+    fun load(context: Context, key: String): String? {
         return try {
             val pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
             return pref.getString(key, null)
@@ -51,7 +31,7 @@ object Storage {
         }
     }
 
-    private fun remove(context: Context, key: String): Boolean {
+    fun remove(context: Context, key: String): Boolean {
         return try {
             val pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
             val editor = pref.edit()
