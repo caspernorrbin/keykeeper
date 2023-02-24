@@ -1,6 +1,4 @@
 package communication
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.application.keykeeper.BuildConfig
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.Request
@@ -9,7 +7,6 @@ import communication.structure.ServerMessage
 import communication.structure.ServerResponseDeserializer
 import org.json.JSONObject
 
-@RequiresApi(Build.VERSION_CODES.O)
 /**
  * Represents an Account that can be used when logging in, creating an account and identifying
  * the current user.
