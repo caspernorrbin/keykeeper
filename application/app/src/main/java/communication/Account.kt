@@ -69,7 +69,7 @@ object Account {
     // Sends a request to login to the server and calls the callback function with the server
     // response. If the login was successful, the loggedIn property is set to true.
     fun sendLoginRequest(email: String, passwordHash: String,
-                         callback: (successful: Boolean, responseBody: String) -> Unit) {
+                                callback: (successful: Boolean, responseBody: String) -> Unit) {
 
         val jsonPostData = this.jsonAccountData(email, passwordHash, null)
 
