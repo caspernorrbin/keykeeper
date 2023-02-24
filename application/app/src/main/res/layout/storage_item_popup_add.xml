@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -85,6 +86,20 @@
             android:textSize="14sp"
             android:inputType="textVisiblePassword"/>
 
+        <!-- android:contentDescription="@string/storage_popup_show_password" TODO: what should this be? -->
+        <ImageButton
+            android:id="@+id/storage_item_popup_randomize_password_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_loading"
+            android:background="@color/transparent"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_gravity="center"
+            android:tag="hidden"/>
+
         <EditText
             android:id="@+id/storage_item_popup_notes_input"
             android:layout_width="match_parent"
@@ -119,5 +134,9 @@
             android:textSize="12sp"
             android:contentDescription="@string/storage_popup_add_button_description">
         </Button>
+
     </LinearLayout>
+
+
+
 </FrameLayout>
