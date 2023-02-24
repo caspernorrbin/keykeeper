@@ -72,31 +72,35 @@
             android:textSize="14sp"
             android:inputType="textPersonName"/>
 
-        <EditText
-            android:id="@+id/storage_item_popup_password_input"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:padding="13dp"
-            android:ems="10"
-            android:background="@drawable/bg_text_input"
-            android:hint="@string/storage_popup_password"
-            android:textSize="14sp"
-            android:inputType="textVisiblePassword"/>
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/storage_item_popup_password_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="13dp"
+                android:ems="10"
+                android:background="@drawable/bg_text_input"
+                android:layout_weight="1"
+                android:hint="@string/storage_popup_password"
+                android:textSize="14sp"
+                android:inputType="textVisiblePassword"/>
 
-        <!-- android:contentDescription="@string/storage_popup_show_password" TODO: what should this be? -->
-        <ImageButton
-            android:id="@+id/storage_item_popup_randomize_password_button"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_loading"
-            android:background="@color/transparent"
-            android:layout_marginEnd="3dp"
-            android:layout_marginRight="3dp"
-            android:layout_marginStart="3dp"
-            android:layout_marginLeft="3dp"
-            android:layout_gravity="center"
-            android:tag="hidden"/>
+            <ImageButton
+                android:id="@+id/storage_item_popup_randomize_password_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_dice"
+                android:background="@color/transparent"
+                android:layout_marginEnd="3dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginLeft="3dp"
+                android:layout_gravity="center"
+                android:tag="hidden"/>
+        </LinearLayout>
 
         <EditText
             android:id="@+id/storage_item_popup_notes_input"
