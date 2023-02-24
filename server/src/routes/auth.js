@@ -30,7 +30,8 @@ router.post("/login", (req, res) => {
             req.session.accountId = account.id;
             req.session.loggedIn = true;
 
-            return res.status(200).json({ message: "Logged in" });
+            return res.status(200).json(account.symkey); // (we want the symkey)
+            // return res.status(200).json({message: "Logged in"})
         }
         // Password incorrect
         return res.status(400).json({ message: "Email or password incorrect" });

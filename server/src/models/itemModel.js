@@ -72,7 +72,13 @@ class Item {
     static get(accountId, itemId) {
         try {
             const getItems = db.prepare("SELECT * FROM items WHERE account_id = ? AND id = ?");
-            return getItems.get(accountId, itemId) ?? null;
+            const result = getItems.get(accountId, itemId);
+            if (result === undefined) {
+                return null;
+            }
+            return result;
+
+            //return getItems.get(accountId, itemId) ?? null; // Does not work in node 12
         } catch (err) {
             console.log(err);
             return null;
