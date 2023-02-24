@@ -1,4 +1,5 @@
 package communication
+import com.application.keykeeper.BuildConfig
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.Request
 import com.github.kittinunf.fuel.core.extensions.jsonBody
@@ -66,9 +67,8 @@ object Account {
                                 callback: (successful: Boolean, responseBody: String) -> Unit) {
 
         val jsonPostData = this.jsonAccountData(email, password, false)
-
         // Make request.
-        Fuel.post("http://10.0.2.2:8080/api/auth/login")
+        Fuel.post(BuildConfig.SERVER_URL + "api/auth/login")
             .header("Content-Type", "application/json")
             .jsonBody(jsonPostData.toString())
             .responseObject(ServerMessage.getDeserializer()) { _, response, result ->
@@ -96,7 +96,7 @@ object Account {
         val jsonPostData = this.jsonAccountData(email, password, true)
 
         // Make request.
-        Fuel.post("http://10.0.2.2:8080/api/account/create")
+        Fuel.post(BuildConfig.SERVER_URL + "api/account/create")
             .header("Content-Type", "application/json")
             .jsonBody(jsonPostData.toString())
             .responseObject(ServerMessage.getDeserializer()) { _, response, result ->

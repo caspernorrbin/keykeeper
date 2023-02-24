@@ -24,7 +24,14 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField "String", "SERVER_URL", '"http://10.0.2.2:8080/"'
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
         release {
+            buildConfigField "String", "SERVER_URL", '"http://keykeeper.platform-spanning.systems:8080/"'
+            signingConfig signingConfigs.debug
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
