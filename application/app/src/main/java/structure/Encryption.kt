@@ -21,11 +21,11 @@ import java.util.Base64
  *    val symkey = Encryption.generateSymkey()
  *
  *    val plainText = "A nice message"
- *    val encryptedItem = Encryption.encryptItem(symkey, plainText)
+ *    val encryptedString = Encryption.encryptItem(symkey, plainText)
  *    val encryptedKey = Encryption.encryptSymkey(passwordHash, symkey)
  *
  *    val decryptedKey = Encryption.decryptSymkey(passwordHash, encryptedKey)
- *    val decryptedItem = Encryption.decryptItem(decryptedKey, encryptedItem)
+ *    val decryptedString = Encryption.decryptItem(decryptedKey, encryptedItem)
  *
  */
 object Encryption {
