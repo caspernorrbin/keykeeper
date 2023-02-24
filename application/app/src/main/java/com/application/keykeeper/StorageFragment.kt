@@ -11,11 +11,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import communication.Item
-import structure.CredentialsAdapter
-import structure.CredentialsItem
-import structure.PopupWindowFactory
-import structure.Utils
+import structure.*
 
 class StorageFragment: Fragment() {
     private lateinit var viewOfLayout: View
@@ -32,7 +28,6 @@ class StorageFragment: Fragment() {
         searchView = viewOfLayout.findViewById(R.id.storage_search_view)
         listView = viewOfLayout.findViewById(R.id.storage_list_view)
         textView = viewOfLayout.findViewById(R.id.storage_text_view)
-        textView.visibility = View.INVISIBLE
 
         // Find toolbar outside this view in the activity
         toolbar = requireActivity().findViewById(R.id.toolbar)
@@ -64,13 +59,12 @@ class StorageFragment: Fragment() {
     }
 
     private fun fetchAndUpdateListView() {
-        Item.sendGetItemsRequest { successful, _, items ->
-            if (successful) {
-                adapter.clear()
-                adapter.addAll(items.map { it.toCredentialsItem() })
-            } else {
-                adapter.clear()
+        Model.Communication.getItems(requireContext()) { successful, message, items ->
+            if (!successful) {
+                Utils.showStatusMessage(textView, message, true)
             }
+            adapter.clear()
+            adapter.addAll(items.toList())
         }
     }
 
@@ -81,16 +75,16 @@ class StorageFragment: Fragment() {
                 // If some match in the label part of the item.
                 if (adapter.getItems().map{ it.label }.contains(query)) {
                     adapter.filter.filter(query)
-                    textView.visibility = View.INVISIBLE
+                    Utils.hideStatusMessage(textView)
                 } else {
-                    textView.visibility = View.VISIBLE
+                    Utils.showStatusMessage(textView, "No match", false)
                 }
                 return false
             }
             // When input changes
             override fun onQueryTextChange(newText: String): Boolean {
                 adapter.filter.filter(newText)
-                textView.visibility = View.INVISIBLE
+                Utils.hideStatusMessage(textView)
                 return false
             }
         }
@@ -146,7 +140,7 @@ class StorageFragment: Fragment() {
                 deleteButton.setText(R.string.storage_popup_confirm_delete)
                 deleteButton.setBackgroundColor(context.resources.getColor(R.color.light_dangerous))
             } else {
-                Item.sendDeleteItemRequest(item) { successful, message ->
+                Model.Communication.deleteItem(item) { successful, message ->
                     if (successful) {
                         deleteButton.tag = "delete"
                         deleteButton.setText(R.string.storage_popup_delete)
@@ -231,7 +225,7 @@ class StorageFragment: Fragment() {
                 notesInput.text.toString()
             )
 
-            Item.sendUpdateItemRequest(updateItem) { successful, message ->
+            Model.Communication.updateItem(updateItem) { successful, message ->
                 println("Update item request: (successful: $successful), (message: $message)")
 
                 if(successful) {
@@ -278,7 +272,7 @@ class StorageFragment: Fragment() {
             )
 
             // Send request to create new item on the server
-            Item.sendCreateItemRequest(newItem) { successful, message ->
+            Model.Communication.createItem(newItem) { successful, message ->
                 println("Create item request: (successful: $successful), (message: $message)")
 
                 if(successful) {

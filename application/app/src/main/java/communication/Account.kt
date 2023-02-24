@@ -1,9 +1,8 @@
-package com.application.keykeeper
-
+package communication
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.Request
 import com.github.kittinunf.fuel.core.extensions.jsonBody
-import communication.ServerMessage
+import communication.structure.ServerMessage
 import org.json.JSONObject
 
 /**
@@ -25,7 +24,7 @@ object Account {
     }
 
     // Returns true if the user is logged in, false if not
-    public fun isLoggedIn(): Boolean {
+    fun isLoggedIn(): Boolean {
         return this.loggedIn
     }
 
@@ -49,7 +48,7 @@ object Account {
     // Returns a Fuel Request handle for sending an authenticated POST request to the specified URL
     // with json data.
     // Note: Should only be used if the user is loggedIn
-    public fun sendAuthenticatedPostRequest(url: String): Request {
+    fun sendAuthenticatedPostRequest(url: String): Request {
         return Fuel.post(url).header("Cookie", sessionCookie)
             .header("Content-Type", "application/json")
     }
@@ -57,13 +56,13 @@ object Account {
 
     // Returns a Fuel Request handle for sending an authenticated GET request to the specified URL.
     // Note: Should only be used if the user is loggedIn
-    public fun sendAuthenticatedGetRequest(url: String): Request {
+    fun sendAuthenticatedGetRequest(url: String): Request {
         return Fuel.get(url).header("Cookie", sessionCookie)
     }
 
     // Sends a request to login to the server and calls the callback function with the server
     // response. If the login was successful, the loggedIn property is set to true.
-    public fun sendLoginRequest(email: String, password: String,
+    fun sendLoginRequest(email: String, password: String,
                                 callback: (successful: Boolean, responseBody: String) -> Unit) {
 
         val jsonPostData = this.jsonAccountData(email, password, false)
@@ -72,7 +71,7 @@ object Account {
         Fuel.post("http://10.0.2.2:8080/api/auth/login")
             .header("Content-Type", "application/json")
             .jsonBody(jsonPostData.toString())
-            .responseObject(ServerMessage.Deserializer()) { _, response, result ->
+            .responseObject(ServerMessage.getDeserializer()) { _, response, result ->
                 val (serverResponse, _) = result
 
                 // Set loggedIn
@@ -91,7 +90,7 @@ object Account {
     }
 
     // Sends a request to the server to create a new account.
-    public fun sendCreateAccountRequest(email: String, password: String,
+    fun sendCreateAccountRequest(email: String, password: String,
                                         callback: (success: Boolean, message: String) -> Unit) {
 
         val jsonPostData = this.jsonAccountData(email, password, true)
@@ -100,7 +99,7 @@ object Account {
         Fuel.post("http://10.0.2.2:8080/api/account/create")
             .header("Content-Type", "application/json")
             .jsonBody(jsonPostData.toString())
-            .responseObject(ServerMessage.Deserializer()) { _, response, result ->
+            .responseObject(ServerMessage.getDeserializer()) { _, response, result ->
                 val (serverResponse, _) = result
 
                 when(response.statusCode) {

@@ -1,8 +1,9 @@
 package structure
-import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Parcelable
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
+import org.json.JSONObject
 
 @Parcelize
 data class CredentialsItem(val id: Number, val label: String, val uri: String, val username: String, val password: String, val notes: String?) : Parcelable {
@@ -12,5 +13,27 @@ data class CredentialsItem(val id: Number, val label: String, val uri: String, v
     }
 
     @IgnoredOnParcel
-    public var image: Bitmap? = null
+    var image: Drawable? = null
+
+    fun toJSON(): JSONObject {
+        val json = JSONObject()
+        // Insert data.
+        json.put("id", id)
+        json.put("label", label)
+        json.put("uri", uri)
+        json.put("username", username)
+        json.put("password", password)
+        json.put("notes", notes)
+        return json
+    }
+
+    companion object {
+        fun getArrayDeserializer(): Deserializer<Array<CredentialsItem>>  {
+            return Deserializer(Array<CredentialsItem>::class)
+        }
+
+        fun getDeserializer(): Deserializer<CredentialsItem>  {
+            return Deserializer(CredentialsItem::class)
+        }
+    }
 }
