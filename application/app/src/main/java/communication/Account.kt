@@ -4,7 +4,7 @@ import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.Request
 import com.github.kittinunf.fuel.core.extensions.jsonBody
 import communication.structure.ServerMessage
-import communication.structure.ServerResponseDeserializer
+import structure.Deserializer
 import org.json.JSONObject
 
 /**
@@ -75,7 +75,7 @@ object Account {
         Fuel.post(BuildConfig.SERVER_URL + "api/auth/login")
             .header("Content-Type", "application/json")
             .jsonBody(jsonPostData.toString())
-            .responseObject(ServerResponseDeserializer()) { _, response, result ->
+            .responseObject(Deserializer(String::class)) { _, response, result ->
                 val (serverResponse, _) = result
 
                 // Set loggedIn
