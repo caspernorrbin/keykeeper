@@ -211,6 +211,7 @@ class StorageFragment: Fragment() {
         val passwordInput = view.findViewById<EditText>(R.id.storage_item_popup_password_input)
         val notesInput = view.findViewById<EditText>(R.id.storage_item_popup_notes_input)
         val statusMessage = view.findViewById<TextView>(R.id.storage_item_popup_status_message)
+        val randomPassword = view.findViewById<EditText>(R.id.storage_item_popup_randomize_password_button)
 
         // Set initial text
         labelInput.setText(item.label)
@@ -248,6 +249,11 @@ class StorageFragment: Fragment() {
             }
         }
 
+        randomPassword.setOnClickListener {
+            val randomizedPassword = createRandomPassword() // creates a random password of 32 chars.
+            passwordInput.setText(randomizedPassword)
+        }
+
         return window
     }
 
@@ -267,7 +273,7 @@ class StorageFragment: Fragment() {
         val passwordInput = view.findViewById<EditText>(R.id.storage_item_popup_password_input)
         val notesInput = view.findViewById<EditText>(R.id.storage_item_popup_notes_input)
         val statusMessage = view.findViewById<TextView>(R.id.storage_item_popup_status_message)
-        val randomPassword = view.findViewById<ImageButton>(R.id.storage_item_popup_add_randomize_password_button)
+        val randomPassword = view.findViewById<ImageButton>(R.id.storage_item_popup_randomize_password_button)
 
         // Close window when clicked
         closeButton.setOnClickListener { window.dismiss() }

@@ -88,7 +88,7 @@
 
         <!-- android:contentDescription="@string/storage_popup_show_password" TODO: what should this be? -->
         <ImageButton
-            android:id="@+id/storage_item_popup_add_randomize_password_button"
+            android:id="@+id/storage_item_popup_randomize_password_button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@drawable/ic_loading"
