@@ -1,7 +1,9 @@
 package communication
 
-import com.application.keykeeper.Account
+import com.application.keykeeper.BuildConfig
 import com.github.kittinunf.fuel.core.extensions.jsonBody
+import communication.structure.DatabaseItem
+import communication.structure.ServerMessage
 import org.json.JSONObject
 import structure.CredentialsItem
 
@@ -52,7 +54,7 @@ object Item {
     private fun sendAuthenticatedPostRequestWithServerMessageResponse(url: String, jsonData: JSONObject, callback: (successful: Boolean, message: String) -> Unit) {
         Account.sendAuthenticatedPostRequest(url)
             .jsonBody(jsonData.toString())
-            .responseObject(ServerMessage.Deserializer()) { _, response, result ->
+            .responseObject(ServerMessage.getDeserializer()) { _, response, result ->
                 val (serverResponse, _) = result
 
                 callback.invoke(
@@ -69,19 +71,19 @@ object Item {
             callback.invoke(false, notLoggedInMessage)
         } else {
             sendAuthenticatedPostRequestWithServerMessageResponse(
-                "http://10.0.2.2:8080/api/item/create",
+                 BuildConfig.SERVER_URL + "api/item/create",
                 jsonPostData,
                 callback
             )
         }
     }
 
-    fun sendGetItemsRequest(callback: (successful: Boolean, message: String, items: Array<DatabaseCredentialsItem>) -> Unit) {
+    fun sendGetItemsRequest(callback: (successful: Boolean, message: String, items: Array<DatabaseItem>) -> Unit) {
         if(!Account.isLoggedIn()) {
             callback.invoke(false, notLoggedInMessage, arrayOf())
         } else {
-            Account.sendAuthenticatedGetRequest("http://10.0.2.2:8080/api/item/getAll")
-                .responseObject(DatabaseCredentialsItem.ArrayDeserializer()) { _, response, result ->
+            Account.sendAuthenticatedGetRequest(BuildConfig.SERVER_URL + "api/item/getAll")
+                .responseObject(DatabaseItem.getArrayDeserializer()) { _, response, result ->
                     val (serverResponse, _) = result
 
                     callback.invoke(
@@ -100,7 +102,7 @@ object Item {
             callback.invoke(false, notLoggedInMessage)
         } else {
             sendAuthenticatedPostRequestWithServerMessageResponse(
-                "http://10.0.2.2:8080/api/item/delete",
+                BuildConfig.SERVER_URL + "api/item/delete",
                 jsonPostData,
                 callback
             )
@@ -114,7 +116,7 @@ object Item {
             callback.invoke(false, notLoggedInMessage)
         } else {
             sendAuthenticatedPostRequestWithServerMessageResponse(
-                "http://10.0.2.2:8080/api/item/update",
+                BuildConfig.SERVER_URL + "api/item/update",
                 jsonPostData,
                 callback
             )

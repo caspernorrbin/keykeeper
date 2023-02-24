@@ -4,6 +4,9 @@ require("dotenv").config();
 const express = require("express");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
+const fs = require("fs");
+const path = require("path");
+const morgan = require("morgan");
 const app = express();
 
 const PORT = process.env.PORT || 8080;
@@ -26,6 +29,12 @@ const needsLogin = (req, res, next) => { // what is this?
 
 // Setup middlewares
 app.use(setDbMiddleWare);
+
+// Setup logging, STDOUT and log file
+app.use(morgan("dev"));
+app.use(morgan("common", {
+    stream: fs.createWriteStream(path.join(__dirname, "..", "access.log"), { flags: "a" })
+}));
 
 // Setup json parsing
 app.use(express.json());
