@@ -7,8 +7,6 @@ import com.github.kittinunf.fuel.core.extensions.jsonBody
 import communication.structure.ServerMessage
 import communication.structure.ServerResponseDeserializer
 import org.json.JSONObject
-import structure.Encryption
-
 
 @RequiresApi(Build.VERSION_CODES.O)
 /**
