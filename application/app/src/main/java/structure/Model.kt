@@ -1,15 +1,25 @@
 package structure
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import communication.Account
 import communication.Item
 import org.json.JSONArray
 
+@RequiresApi(Build.VERSION_CODES.O)
+
 object Model {
+    private var symkey: String = ""
+
     object Communication  {
+
         fun createAccount(email: String, password: String, callback: (success: Boolean, message: String) -> Unit) {
-            Account.sendCreateAccountRequest(email, password) { success, message ->
+            val passwordHash = Encryption.hashAuthentication(password, email)
+            val symkey = Encryption.generateSymkey()
+            val encSymkey = Encryption.encryptSymkey(password, symkey)
+            Account.sendCreateAccountRequest(email, passwordHash, encSymkey) { success, message ->
                 // TODO: Add accounts to local storage to allow offline logins
                 callback(success, message)
             }
@@ -17,9 +27,16 @@ object Model {
 
 
         fun login(email: String, password: String, callback: (success: Boolean, message: String) -> Unit) {
-            Account.sendLoginRequest(email, password) { success, message ->
+            val passwordHash = Encryption.hashAuthentication(password, email)
+            Account.sendLoginRequest(email, passwordHash) { success, symOrError ->
                 // TODO: Add accounts to local storage to allow offline logins
-                callback(success, message)
+
+                if (success) {
+                    symkey = Encryption.decryptSymkey(password, symOrError)
+                    //  TODO: Maybe store encSymkey in permanent storage
+                }
+
+                callback(success, if (success) "Logged in" else symOrError)
             }
         }
 
@@ -36,7 +53,8 @@ object Model {
         }
 
         fun createItem(item: CredentialsItem, callback: (success: Boolean, message: String) -> Unit) {
-            Item.sendCreateItemRequest(item) { success, message ->
+            val encItem = Encryption.encryptItem(symkey, item)
+            Item.sendCreateItemRequest(encItem) { success, message ->
                 // TODO: Anything to do here?
                 callback(success, message)
             }
@@ -50,7 +68,8 @@ object Model {
         }
 
         fun updateItem(updatedItem: CredentialsItem, callback: (success: Boolean, message: String) -> Unit) {
-            Item.sendUpdateItemRequest(updatedItem) { success, message ->
+            val updatedEncItem = Encryption.encryptItem(symkey, updatedItem)
+            Item.sendUpdateItemRequest(updatedEncItem) { success, message ->
                 // TODO: Anything to do here?
                 callback(success, message)
             }
@@ -85,7 +104,9 @@ object Model {
             val text = LocalStorage.load(context, "items")
             if (text != null) {
                 try {
-                    return CredentialsItem.getArrayDeserializer().deserialize(text)
+                    val encItems = CredentialsItem.getArrayDeserializer().deserialize(text)
+                    val items = encItems.map { Encryption.decryptItem(symkey, it) }
+                    return items.toTypedArray()
                 } catch (error: Throwable) {
                     Log.e("getItems", error.message.toString())
                 }

@@ -1,4 +1,4 @@
-package communication
+package communication.structure
 
 import com.github.kittinunf.fuel.core.ResponseDeserializable
 import com.google.gson.Gson

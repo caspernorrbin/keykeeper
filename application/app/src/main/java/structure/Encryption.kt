@@ -1,4 +1,4 @@
-package com.application.keykeeper
+package structure
 
 import android.os.Build
 import android.security.keystore.KeyProperties
@@ -59,7 +59,7 @@ object Encryption {
     }
 
     // Generates a symmetric key (SecretKey) and a cipher IV which will be used to encrypt and decrypt the data
-    public fun generateSymkey(): String {
+    fun generateSymkey(): String {
         val random = SecureRandom()
         val randomArray = ByteArray(32) // 256 bit key length
         random.nextBytes(randomArray)
@@ -81,29 +81,59 @@ object Encryption {
     }
 
     // Encrypts an item using the symmetric key
-    public fun encryptItem(symkeyString: String, item: String): String {
+    fun encryptString(symkeyString: String, str: String): String {
         // Extract the IV and symmetric key and generate a cipher
         val (iv, symkey) = splitIvSym(symkeyString)
         val cipher = generateEncryptCipher(symkey, iv)
 
         // Encrypt and encode the item
-        val encryptedMessage: ByteArray = cipher.doFinal(item.toByteArray())
+        val encryptedMessage: ByteArray = cipher.doFinal(str.toByteArray())
         return Base64.getEncoder().encodeToString(encryptedMessage)
     }
 
     // Decrypts an item using the symmetric key
-    public fun decryptItem(symkeyString: String, item: String): String {
+    fun decryptString(symkeyString: String, str: String): String {
         // Extract the IV and symmetric key and generate a cipher
         val (iv, symkey) = splitIvSym(symkeyString)
         val cipher = generateDecryptCipher(symkey, iv)
 
         // Decrypt and decode the item
-        val decryptedMessage = cipher.doFinal(Base64.getDecoder().decode(item))
-        return String(decryptedMessage)
+        // Assumes that bad-formatted strings are not encrypted are returned as is
+        return try {
+            val decryptedMessage = cipher.doFinal(Base64.getDecoder().decode(str))
+            String(decryptedMessage)
+        } catch (_:Exception) {
+            str
+        }
+
+    }
+
+    fun encryptItem(symkeyString: String, item: CredentialsItem): CredentialsItem {
+        if (symkeyString == "") return item
+
+        val encLabel = encryptString(symkeyString, item.label)
+        val encUser = encryptString(symkeyString, item.username)
+        val encPassword = encryptString(symkeyString, item.password)
+        val encURI = encryptString(symkeyString, item.uri)
+        val encNotes = encryptString(symkeyString, (item.notes ?: ""))
+
+        return CredentialsItem(item.id, encLabel, encURI, encUser, encPassword, encNotes)
+    }
+
+    fun decryptItem(symkeyString: String, item: CredentialsItem): CredentialsItem {
+        if (symkeyString == "") return item
+
+        val decLabel = decryptString(symkeyString, item.label)
+        val decUser = decryptString(symkeyString, item.username)
+        val decPassword = decryptString(symkeyString, item.password)
+        val decURI = decryptString(symkeyString, item.uri)
+        val decNotes = decryptString(symkeyString, (item.notes ?: ""))
+
+        return CredentialsItem(item.id, decLabel, decURI, decUser, decPassword, decNotes)
     }
 
     // Encrypts the symmetric key using the master password
-    public fun encryptSymkey(master: String, symkeyString: String): String {
+    fun encryptSymkey(master: String, symkeyString: String): String {
         // Hash the master password to get the correct length
         val digest = MessageDigest.getInstance("SHA-256")
         val pHash = digest.digest(master.toByteArray())
@@ -127,7 +157,7 @@ object Encryption {
     }
 
     // Decrypts the symmetric key using the master password
-    public fun decryptSymkey(master: String, symkeyString: String): String {
+    fun decryptSymkey(master: String, symkeyString: String): String {
         // Hash the master password to get the correct length
         val digest = MessageDigest.getInstance("SHA-256")
         val pHash = digest.digest(master.toByteArray())
@@ -135,22 +165,28 @@ object Encryption {
         // Generate new symmetric key that will be used to decrypt the original symmetric key
         val key = SecretKeySpec(pHash, ALGORITHM)
 
-        // Extract and decode the IV
-        val ivString = symkeyString.substring(0, 24)
-        val iv = Base64.getDecoder().decode(ivString)
+        // Assumes that bad-formatted symkeys are not encrypted are returned as is
+        return try {
+            // Extract and decode the IV
+            val ivString = symkeyString.substring(0, 24)
+            val iv = Base64.getDecoder().decode(ivString)
 
-        // Extract the original encrypted symmetric key
-        val keyString = symkeyString.substring(24, symkeyString.length)
+            // Extract the original encrypted symmetric key
+            val keyString = symkeyString.substring(24, symkeyString.length)
 
-        // Create a cipher and decrypt the original symmetric key
-        val cipher = generateDecryptCipher(key, iv)
-        val symkey = cipher.doFinal(Base64.getDecoder().decode(keyString))
+            // Create a cipher and decrypt the original symmetric key
+            val cipher = generateDecryptCipher(key, iv)
+            val symkey = cipher.doFinal(Base64.getDecoder().decode(keyString))
+            String(symkey)
+        } catch (_:Exception) {
+            symkeyString
+        }
         
-        return String(symkey)
+
     }
 
     // Hashes the master password using the email as a salt
-    public fun hashAuthentication(master: String, email: String): String {
+    fun hashAuthentication(master: String, email: String): String {
         val saltRounds = 12
 
         // Hash the email address to get the correct length for the salt
@@ -164,7 +200,7 @@ object Encryption {
     }
 
     // Compares the master password with the hashed password
-    public fun comparePasswordHash(master: String, hashedPW: String): Boolean {
+    fun comparePasswordHash(master: String, hashedPW: String): Boolean {
         val result = BCrypt.verifyer().verify(master.toByteArray(), hashedPW.toByteArray())
         return result.verified
     }
