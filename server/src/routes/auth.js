@@ -30,7 +30,6 @@ router.post("/login", (req, res) => {
             req.session.accountId = account.id;
             req.session.loggedIn = true;
 
-            console.log(account.symkey)
             return res.status(200).json(account.symkey); // (we want the symkey)
             // return res.status(200).json({message: "Logged in"})
         }
