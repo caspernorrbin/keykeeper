@@ -28,7 +28,7 @@
             android:layout_marginRight="12dp"
             android:src="@drawable/ic_add"
             android:background="@color/transparent"
-            android:contentDescription="Add new Item"/>
+            android:contentDescription="@string/toolbar_button_add_storage_item_description"/>
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.fragment.app.FragmentContainerView
