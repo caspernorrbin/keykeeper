@@ -68,5 +68,6 @@
     <string name="edit_profile_old_password_edit_text">Old Password</string>
     <string name="edit_profile_text_explanation_text_view">Write your old password to confirm</string>
     <string name="account_edit_profile_button">Edit Profile</string>
+    <string name="add_storage_item_description">Add new Item</string>
 
 </resources>
