@@ -18,7 +18,7 @@
         android:background="@drawable/bg_shadow_bottom"
         app:layout_anchorGravity="center">
         <!-- Toggled visible in the storage view -->
-        <ImageButton
+       <ImageButton
             android:id="@+id/toolbar_add_storage_item_button"
             android:visibility="gone"
             android:layout_width="wrap_content"
@@ -28,7 +28,7 @@
             android:layout_marginRight="12dp"
             android:src="@drawable/ic_add"
             android:background="@color/transparent"
-            android:contentDescription="@string/add_storage_item_description"/>
+            android:contentDescription="@string/toolbar_button_add_storage_item_description"/>
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.fragment.app.FragmentContainerView

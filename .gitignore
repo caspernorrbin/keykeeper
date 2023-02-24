@@ -1,5 +1,6 @@
 # Editors
 .vscode
+.DS_Store
 
 # Databasefiles
 *.db
@@ -13,3 +14,12 @@ node_modules/
 
 # Logs
 *.log
+server/.env-template
+server/.DS_Store
+server/package-lock.json
+server/package.json
+server/src/index.js
+server/src/models/itemModel.js
+application/app/build.gradle
+application/app/src/main/java/communication/Account.kt
+application/app/src/main/java/communication/Item.kt
