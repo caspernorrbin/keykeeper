@@ -12,6 +12,16 @@ import org.json.JSONArray
 
 object Model {
     private var symkey: String = ""
+    private var usedEmail: String = ""
+
+    fun getEmail(): String {
+        return usedEmail
+    }
+
+    fun clearValues() {
+        symkey = ""
+        usedEmail = ""
+    }
 
     object Communication  {
 
@@ -25,6 +35,26 @@ object Model {
             }
         }
 
+        fun updateAccount(oldPassword: String, newEmail: String, newPassword: String, callback: (success: Boolean, message: String) -> Unit) {
+            if (symkey == "") {
+                callback(false, "Application error")
+            }
+
+            val emailToUse = if (newEmail != "") newEmail else usedEmail
+            val passwordToUse = if (newPassword != "") newPassword else oldPassword
+
+            val oldPasswordHash = Encryption.hashAuthentication(oldPassword, usedEmail)
+            val passwordHash = Encryption.hashAuthentication(passwordToUse, emailToUse)
+
+            var encSymkey = ""
+            if (newPassword != "") {
+                encSymkey = Encryption.encryptSymkey(passwordToUse, symkey)
+            }
+
+            Account.sendUpdateAccountRequest(oldPasswordHash, newEmail, passwordHash, encSymkey) { success, message ->
+                callback(success, message)
+            }
+        }
 
         fun login(email: String, password: String, callback: (success: Boolean, message: String) -> Unit) {
             val passwordHash = Encryption.hashAuthentication(password, email)
@@ -33,6 +63,7 @@ object Model {
 
                 if (success) {
                     symkey = Encryption.decryptSymkey(password, symOrError)
+                    usedEmail = email
                     //  TODO: Maybe store encSymkey in permanent storage
                 }
 

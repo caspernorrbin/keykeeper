@@ -1,7 +1,9 @@
 package com.application.keykeeper
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,26 +11,30 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import structure.User
+import android.widget.TextView
+import structure.Model
+import structure.Utils
 
 
 class EditProfileFragment : Fragment() {
+    private lateinit var textView: TextView
     private lateinit var viewOfLayout: View
     private lateinit var editTextEmail: EditText
     private lateinit var editTextPassword: EditText
+    private lateinit var editTextPassword2: EditText
     private lateinit var editTextOldPassword: EditText
     private lateinit var buttonSaveChanges: Button
 
-    // Declare a variable to hold the user data
-    private lateinit var user: User
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         // Inflate the layout for this fragment
         viewOfLayout = inflater.inflate(R.layout.fragment_edit_profile, container, false)
 
         // Initialize views
+        textView = viewOfLayout.findViewById(R.id.textView)
         editTextEmail = viewOfLayout.findViewById(R.id.editTextEmail)
         editTextPassword = viewOfLayout.findViewById(R.id.editTextPassword)
+        editTextPassword2 = viewOfLayout.findViewById(R.id.editTextPassword2)
         editTextOldPassword = viewOfLayout.findViewById(R.id.editTextOldPassword)
         buttonSaveChanges = viewOfLayout.findViewById(R.id.buttonSaveChanges)
 
@@ -50,62 +56,44 @@ class EditProfileFragment : Fragment() {
 
         // Set click listener for "Save Changes" button
         buttonSaveChanges.setOnClickListener {
-            saveChanges()
+            updateAccount()
         }
-        // Fetch user data from the database
-        user = getUserInfo()
-
-        // Display the user data in the EditText fields
-        editTextEmail.setText(user.email)
-        editTextPassword.setText(user.password)
 
         return viewOfLayout
     }
-    private fun saveChanges() {
 
-        val oldPassword = editTextOldPassword.text.toString()
-
-
-        // Check if the old password matches the current password
-        if (oldPassword != user.password) {
-            editTextOldPassword.error = "Incorrect password"
-            return
-        }
-
+    private fun updateAccount() {
         val newEmail = editTextEmail.text.toString()
+        val oldPassword = editTextOldPassword.text.toString()
         val newPassword = editTextPassword.text.toString()
+        val newPassword2 = editTextPassword2.text.toString()
 
-        // Update the user data if necessary
-        if (newEmail != user.email) {
-            user.email = newEmail
+        if (newEmail != "" && !newEmail.isValidEmail()) {
+            Utils.showStatusMessage(textView, "Invalid email format", true)
         }
-
-        if (newPassword != user.password) {
-            user.password = newPassword
+        else if (newPassword != newPassword2) {
+            Utils.showStatusMessage(textView, "Passwords do not match", true)
         }
-
-        // Save the updated user information to the database
-        saveUserInfo(user)
-
-        // Refresh the user data from the database
-        user = getUserInfo()
-
-        // Display the updated user data in the EditText fields
-        editTextEmail.setText(user.email)
-        editTextPassword.setText(user.password)
+        else {
+            Model.Communication.updateAccount(oldPassword, newEmail, newPassword) { success, message ->
+                if (success) {
+                    navigateToLogin()
+                }
+                else {
+                    Utils.showStatusMessage(textView, message, true)
+                }
+            }
+        }
     }
 
-    // TODO the next function for retrieving data from database
-    private fun getUserInfo(): User {
-        // Retrieve the user's information from the database
-        return User()
+    private fun navigateToLogin() {
+        Model.clearValues()
+        val intent = Intent(activity, LoginActivity::class.java)
+        startActivity(intent)
+        activity?.finish()
     }
 
-    // TODO the next function for saving data to database
-    private fun saveUserInfo(user: User) {
-        // Save the user's information to the database
-
-
+    private fun String.isValidEmail(): Boolean {
+        return !TextUtils.isEmpty(this) && android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
     }
-
 }

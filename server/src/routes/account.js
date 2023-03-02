@@ -97,7 +97,7 @@ router.post("/update", async (req, res) => {
             });
         }
         else {
-            return res.status(400).json({ message: "Password incorrect" });
+            return res.status(400).json({ message: "Incorrect password" });
         }
     });
 });
