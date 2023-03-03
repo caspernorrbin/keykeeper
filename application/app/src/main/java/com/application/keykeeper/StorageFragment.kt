@@ -2,6 +2,7 @@ package com.application.keykeeper
 
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.graphics.drawable.Animatable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +12,8 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import kotlin.random.Random
 import structure.*
 
@@ -22,6 +25,7 @@ class StorageFragment: Fragment() {
     private lateinit var adapter: CredentialsAdapter
     private lateinit var toolbar: Toolbar
     private lateinit var toolbarAddItemButton: ImageButton
+    private lateinit var loadingIcon: ImageView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -29,6 +33,7 @@ class StorageFragment: Fragment() {
         searchView = viewOfLayout.findViewById(R.id.storage_search_view)
         listView = viewOfLayout.findViewById(R.id.storage_list_view)
         textView = viewOfLayout.findViewById(R.id.storage_text_view)
+        loadingIcon = viewOfLayout.findViewById(R.id.storage_loading_icon)
 
         // Find toolbar outside this view in the activity
         toolbar = requireActivity().findViewById(R.id.toolbar)
@@ -60,12 +65,17 @@ class StorageFragment: Fragment() {
     }
 
     private fun fetchAndUpdateListView() {
+        loadingIcon.visibility = View.VISIBLE
+        // Start animating loading icon
+        (loadingIcon.drawable as Animatable).start()
         Model.Communication.getItems(requireContext()) { successful, message, items ->
             if (!successful) {
                 Utils.showStatusMessage(textView, message, true)
             }
             adapter.clear()
-            adapter.addAll(items.toList())
+            adapter.addAll(items.toList()) {
+                loadingIcon.visibility = View.GONE
+            }
         }
     }
 
@@ -140,7 +150,7 @@ class StorageFragment: Fragment() {
             if (deleteButton.tag == "delete") {
                 deleteButton.tag = "confirm"
                 deleteButton.setText(R.string.storage_popup_confirm_delete)
-                deleteButton.setBackgroundColor(context.resources.getColor(R.color.light_dangerous))
+                deleteButton.setBackgroundColor(context.resources.getColor(R.color.dark_dangerous))
             } else {
                 Model.Communication.deleteItem(item) { successful, message ->
                     if (successful) {

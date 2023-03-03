@@ -30,9 +30,8 @@ class Main : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         val topLevelDestinations = setOf(
-            R.id.nav_debug_fragment,
             R.id.nav_storage_fragment,
-            R.id.nav_account_fragment
+            R.id.nav_account_fragment,
         )
 
         val config = AppBarConfiguration(topLevelDestinations)

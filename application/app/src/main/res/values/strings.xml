@@ -22,10 +22,16 @@
     <string name="debug_button">Confirm</string>
 
     <!-- Account strings -->
+    <string name="account_profile_image_text">Profile</string>
+    <string name="account_profile_email">email@provider.com</string>
     <string name="account_logout">Logout</string>
+    <string name="account_change_email">Change Email</string>
+    <string name="account_change_password">Change Password</string>
+    <string name="account_delete">Delete Account</string>
+    <string name="account_delete_confirm">Confirm Delete</string>
 
     <!-- Login strings -->
-    <string name="login_header">Login</string>
+    <string name="login_header">Welcome to KeyKeeper</string>
     <string name="login_email">Email</string>
     <string name="login_password">Password</string>
     <string name="login_button">Login</string>
@@ -43,7 +49,12 @@
     <string name="storage_query">Search …</string>
     <string name="storage_query_no_match">No Match</string>
 
+    <!-- Storage Item strings -->
+    <string name="storage_item_url">URL</string>
+    <string name="storage_item_name">Name</string>
+
     <!-- Storage Popup strings -->
+    <string name="storage_popup_click_prompt">Click field to copy</string>
     <string name="storage_popup_url">Url</string>
     <string name="storage_popup_label">Label</string>
     <string name="storage_popup_username">Username</string>

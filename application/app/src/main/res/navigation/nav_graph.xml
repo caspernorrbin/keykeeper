@@ -4,13 +4,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/nav_debug_fragment">
+    app:startDestination="@id/nav_storage_fragment">
 
     <fragment
-        android:id="@+id/nav_debug_fragment"
-        android:name="com.application.keykeeper.DebugFragment"
-        android:label="@string/nav_debug"
-        tools:layout="@layout/fragment_debug" />
+        android:id="@+id/nav_storage_fragment"
+        android:name="com.application.keykeeper.StorageFragment"
+        android:label="@string/nav_storage"
+        tools:layout="@layout/fragment_storage">
+    </fragment>
+
     <fragment
         android:id="@+id/nav_account_fragment"
         android:name="com.application.keykeeper.AccountFragment"
@@ -20,6 +22,7 @@
             android:id="@+id/action_nav_account_fragment_to_nav_edit_fragment"
             app:destination="@id/nav_edit_fragment" />
     </fragment>
+
     <fragment
         android:id="@+id/nav_edit_fragment"
         android:name="com.application.keykeeper.EditProfileFragment"
@@ -28,30 +31,5 @@
         <action
             android:id="@+id/action_nav_edit_fragment_to_nav_account_fragment"
             app:destination="@id/nav_account_fragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/nav_storage_fragment"
-        android:name="com.application.keykeeper.StorageFragment"
-        android:label="@string/nav_storage"
-        tools:layout="@layout/fragment_storage">
-        <action
-            android:id="@+id/action_nav_storage_fragment_to_nav_storage_open_item"
-            app:destination="@id/nav_storage_open_item"
-            app:enterAnim="@anim/fragment_fade_enter"
-            app:exitAnim="@anim/fragment_fade_exit" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/nav_storage_open_item"
-        android:name="com.application.keykeeper.StorageItemFragment"
-        android:label="Storage Item"
-        tools:layout="@layout/fragment_storage_item">
-        <action
-            android:id="@+id/action_nav_storage_open_item_to_nav_storage_fragment"
-            app:destination="@id/nav_storage_fragment" />
-        <argument
-            android:name="credentials"
-            app:argType="structure.CredentialsItem" />
     </fragment>
 </navigation>

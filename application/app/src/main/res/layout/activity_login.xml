@@ -11,7 +11,7 @@
 
     <TextView
         android:id="@+id/login_header_label"
-        android:layout_width="186dp"
+        android:layout_width="wrap_content"
         android:layout_height="71dp"
         android:gravity="center"
         android:text="@string/login_header"
@@ -54,7 +54,7 @@
             android:id="@+id/login_remember_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/login_remember_email"/>
+            android:text="@string/login_remember_email" />
 
         <Button
             android:id="@+id/login_button"
@@ -80,7 +80,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
             android:text="@string/login_create_account"
-            android:textSize="14sp" />
+            android:textSize="12sp"/>
     </LinearLayout>
 
     <TextView

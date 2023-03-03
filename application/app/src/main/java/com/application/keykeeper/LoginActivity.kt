@@ -74,7 +74,6 @@ class LoginActivity : AppCompatActivity() {
                         } else {
                             Model.Storage.removeRememberedEmail(applicationContext)
                         }
-
                         hideStatusMessage()
                         navigateToMain()
                     } else {

@@ -20,7 +20,7 @@ class CredentialsAdapter(
     private val items: List<CredentialsItem>
 ): ArrayAdapter<CredentialsItem>(context, layoutResource, items) {
 
-    override fun addAll(collection: Collection<CredentialsItem>) {
+    fun addAll(collection: Collection<CredentialsItem>, callback: (collection: Collection<CredentialsItem>) -> Unit) {
         // Load images before adding
         CoroutineScope(Dispatchers.Main).launch {
             // Internet requests cannot be performed on main thread
@@ -30,6 +30,7 @@ class CredentialsAdapter(
                 }
             }
             super.addAll(collection)
+            callback(collection)
         }
     }
 

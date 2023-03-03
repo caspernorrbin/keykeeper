@@ -6,6 +6,7 @@
     android:background="@color/bg_light_transparent"
     android:layout_gravity="center"
     android:padding="10dp">
+
     <LinearLayout
         android:id="@+id/storage_item_popup"
         android:layout_gravity="center"
@@ -31,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:padding="3dp"
-            android:text="Click to copy"
+            android:text="@string/storage_popup_click_prompt"
             android:textColor="@color/white"
             android:textSize="14sp"/>
 
@@ -45,17 +46,18 @@
             android:text="@string/storage_popup_username"
             android:textColor="@color/white_transparent"
             android:textSize="10sp" />
+
         <LinearLayout
             android:id="@+id/storage_item_popup_username_group"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="46sp"
             android:orientation="horizontal"
             android:background="@drawable/co_text_input"
             android:padding="10dp">
             <TextView
                 android:id="@+id/storage_item_popup_username_text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:padding="3dp"
                 android:text="@string/storage_popup_username"
@@ -76,14 +78,14 @@
         <LinearLayout
             android:id="@+id/storage_item_popup_password_group"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="46sp"
             android:orientation="horizontal"
             android:background="@drawable/co_text_input"
             android:padding="10dp">
             <TextView
                 android:id="@+id/storage_item_popup_password_text"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:padding="3dp"
                 android:layout_weight="1"

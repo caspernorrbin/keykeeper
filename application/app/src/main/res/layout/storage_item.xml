@@ -25,15 +25,14 @@
             android:id="@+id/storage_item_title_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Title"
+            android:text="@string/storage_item_name"
             android:textFontWeight="200"
-            android:textSize="18sp"
-            android:layout_weight="1"/>
+            android:textSize="18sp"/>
         <TextView
             android:id="@+id/storage_item_url_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="url"
+            android:text="@string/storage_item_url"
             android:textFontWeight="200"
             android:textSize="12sp"/>
     </LinearLayout>

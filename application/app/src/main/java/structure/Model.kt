@@ -8,13 +8,11 @@ import communication.Account
 import communication.Item
 import org.json.JSONArray
 
-@RequiresApi(Build.VERSION_CODES.O)
-
 object Model {
     private var symkey: String = ""
 
     object Communication  {
-
+        @RequiresApi(Build.VERSION_CODES.O)
         fun createAccount(email: String, password: String, callback: (success: Boolean, message: String) -> Unit) {
             val passwordHash = Encryption.hashAuthentication(password, email)
             val symkey = Encryption.generateSymkey()
@@ -25,7 +23,7 @@ object Model {
             }
         }
 
-
+        @RequiresApi(Build.VERSION_CODES.O)
         fun login(email: String, password: String, callback: (success: Boolean, message: String) -> Unit) {
             val passwordHash = Encryption.hashAuthentication(password, email)
             Account.sendLoginRequest(email, passwordHash) { success, symOrError ->
@@ -39,7 +37,7 @@ object Model {
                 callback(success, if (success) "Logged in" else symOrError)
             }
         }
-
+        @RequiresApi(Build.VERSION_CODES.O)
         fun getItems(context: Context, callback: (success: Boolean, message: String, data: Array<CredentialsItem>) -> Unit) {
             Item.sendGetItemsRequest() { success, message, data ->
                 if (success) {
@@ -47,32 +45,23 @@ object Model {
                     Storage.setItems(context, credentials)
                 }
                 val res = Storage.getItems(context) ?: arrayOf()
-                Log.v("getItems.size", res.size.toString())
                 callback(success, message, res)
             }
         }
 
+        @RequiresApi(Build.VERSION_CODES.O)
         fun createItem(item: CredentialsItem, callback: (success: Boolean, message: String) -> Unit) {
             val encItem = Encryption.encryptItem(symkey, item)
-            Item.sendCreateItemRequest(encItem) { success, message ->
-                // TODO: Anything to do here?
-                callback(success, message)
-            }
+            Item.sendCreateItemRequest(encItem, callback)
         }
 
         fun deleteItem(item: CredentialsItem, callback: (success: Boolean, message: String) -> Unit) {
-            Item.sendDeleteItemRequest(item) { success, message ->
-                // TODO: Anything to do here?
-                callback(success, message)
-            }
+            Item.sendDeleteItemRequest(item, callback)
         }
-
+        @RequiresApi(Build.VERSION_CODES.O)
         fun updateItem(updatedItem: CredentialsItem, callback: (success: Boolean, message: String) -> Unit) {
             val updatedEncItem = Encryption.encryptItem(symkey, updatedItem)
-            Item.sendUpdateItemRequest(updatedEncItem) { success, message ->
-                // TODO: Anything to do here?
-                callback(success, message)
-            }
+            Item.sendUpdateItemRequest(updatedEncItem, callback)
         }
     }
 
@@ -85,10 +74,6 @@ object Model {
             return LocalStorage.save(context, "session", sessionKey)
         }
 
-        fun getRememberedEmail(context: Context): String? {
-            return LocalStorage.load(context, "rememberedEmail")
-        }
-
         fun setItems(context: Context, items: Collection<CredentialsItem>): Boolean {
             return try {
                 val list = items.map { it.toJSON() }
@@ -99,7 +84,7 @@ object Model {
                 false
             }
         }
-
+        @RequiresApi(Build.VERSION_CODES.O)
         fun getItems(context: Context): Array<CredentialsItem>? {
             val text = LocalStorage.load(context, "items")
             if (text != null) {
@@ -112,6 +97,10 @@ object Model {
                 }
             }
             return null
+        }
+
+        fun getRememberedEmail(context: Context): String? {
+            return LocalStorage.load(context, "rememberedEmail")
         }
 
         fun setRememberedEmail(context: Context, email: String): Boolean {
