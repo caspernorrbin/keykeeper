@@ -173,10 +173,6 @@ class LoginActivity : AppCompatActivity() {
         // Close window when clicked
         closeButton.setOnClickListener { window.dismiss() }
 
-        // Get the string array of spinner items from strings.xml
-        val spinnerItems = resources.getStringArray(R.array.change_server_spinner_items).toMutableList()
-
-        // Create an ArrayAdapter to populate the spinner with items
         val items = Model.Storage.getServerItems(view.context) ?: arrayOf()
         val itemList = items.toMutableList()
         itemList.add(0, ServerItem("KeyKeeper Server", "", false))
@@ -184,12 +180,17 @@ class LoginActivity : AppCompatActivity() {
         val serverItemAdapter = ServerItemAdapter(view.context, R.layout.server_item, R.id.server_item_label, itemList)
         changeServerSpinner.adapter = serverItemAdapter
 
+        // Make the Edit texts visible when specific
         changeServerSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                // Enable the EditText when the specific item is selected
-                serverName.isEnabled = spinnerItems[position] == "Enter the Server"
-                urlInput.isEnabled = spinnerItems[position] == "Enter the Server"
-                // serverName.visibility = View.GONE
+                val selectedItem = itemList[position]
+                if (selectedItem.name == "Add new") {
+                    serverName.visibility = View.VISIBLE
+                    urlInput.visibility = View.VISIBLE
+                } else {
+                    serverName.visibility = View.GONE
+                    urlInput.visibility = View.GONE
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -199,32 +200,29 @@ class LoginActivity : AppCompatActivity() {
 
         // Set the click listener for the button
         confirmButton.setOnClickListener {
-            // Get the text entered in the EditText
-            val newItem = serverName.text.toString().trim()
-
-            // Check if the text is not empty
-            if (newItem.isNotEmpty()) {
-                // Add the item to the spinner items list
-                spinnerItems.add(newItem)
-
-                // Clear the EditText
-                serverName.setText("")
-
-                // Save the added item to the change_server_spinner_items string array in strings.xml
-                var stringArrayXml = "<string-array name=\"change_server_spinner_items\">\n"
-                for (item in spinnerItems) {
-                    stringArrayXml += "\t<item>$item</item>\n"
+            // Get the selected item and check if it is "Add new"
+            val selectedItem = itemList[changeServerSpinner.selectedItemPosition]
+            if (selectedItem.name == "Add new") {
+                // Get the new server name and URL from the EditTexts
+                val newServerName = serverName.text.toString()
+                val newServerURL = urlInput.text.toString()
+                // Create a new ServerItem object and add it to the server list
+                val newServerItem = ServerItem(newServerName, newServerURL, false)
+                val added = Model.Storage.addServerItem(view.context, newServerItem)
+                if (added) {
+                    // Add the new server item to the spinner
+                    itemList.add(itemList.size-1,newServerItem)
+                    serverItemAdapter.notifyDataSetChanged()
+                    // Select the new server item in the spinner
+                    changeServerSpinner.setSelection(itemList.indexOf(newServerItem))
+                    // Hide the EditTexts
+                    serverName.visibility = View.GONE
+                    urlInput.visibility = View.GONE
+                } else {
+                    Toast.makeText(view.context, "Failed to add new server item", Toast.LENGTH_SHORT).show()
                 }
-                stringArrayXml += "</string-array>"
-                val stringFile = File(applicationContext.filesDir, "strings.xml")
-                if (!stringFile.exists()) {
-                    // Create a new strings.xml file if it doesn't exist
-                    stringFile.createNewFile()
-                    stringFile.writeText("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<resources>\n</resources>")
-                }
-                // Replace the existing change_server_spinner_items string array with the updated one
-                val pattern = "<string-array name=\"change_server_spinner_items\">[\\s\\S]*?</string-array>"
-                stringFile.writeText(stringFile.readText().replace(Regex(pattern), stringArrayXml))
+            } else {
+                window.dismiss()
             }
         }
         return window

@@ -48,7 +48,6 @@
             android:layout_height="48dp"
             android:layout_gravity="center"
             android:ems="10"
-            android:entries="@array/change_server_spinner_items"
             android:spinnerMode="dropdown"
             android:textSize="14sp" />
 
@@ -62,7 +61,7 @@
             android:hint="@string/change_server_server_name"
             android:padding="13dp"
             android:textSize="14sp"
-            android:enabled="false"/>
+            android:visibility="invisible"/>
 
         <EditText
             android:id="@+id/change_server_popup_url_input"
@@ -75,7 +74,7 @@
             android:inputType="textUri"
             android:padding="13dp"
             android:textSize="14sp"
-            android:enabled="false"/>
+            android:visibility="invisible"/>
 
         <Button
             android:id="@+id/change_server_popup_button"
