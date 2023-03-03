@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import com.application.keykeeper.R
 import kotlinx.coroutines.*
@@ -17,8 +18,9 @@ import java.net.URL
 class ServerItemAdapter(
     context: Context,
     @LayoutRes private val layoutResource: Int,
+    @IdRes private val labelResource: Int,
     private val items: List<ServerItem>
-): ArrayAdapter<ServerItem>(context, layoutResource, items) {
+): ArrayAdapter<ServerItem>(context, layoutResource, labelResource, items) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = convertView?: LayoutInflater.from(context).inflate(layoutResource, parent, false)

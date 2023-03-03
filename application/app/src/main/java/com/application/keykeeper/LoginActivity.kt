@@ -177,7 +177,11 @@ class LoginActivity : AppCompatActivity() {
         val spinnerItems = resources.getStringArray(R.array.change_server_spinner_items).toMutableList()
 
         // Create an ArrayAdapter to populate the spinner with items
-        val serverItemAdapter = ServerItemAdapter(this, R.layout.server_item, items)
+        val items = Model.Storage.getServerItems(view.context) ?: arrayOf()
+        val itemList = items.toMutableList()
+        itemList.add(0, ServerItem("KeyKeeper Server", "", false))
+        itemList.add(ServerItem("Add new", "", false))
+        val serverItemAdapter = ServerItemAdapter(view.context, R.layout.server_item, R.id.server_item_label, itemList)
         changeServerSpinner.adapter = serverItemAdapter
 
         changeServerSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -185,6 +189,7 @@ class LoginActivity : AppCompatActivity() {
                 // Enable the EditText when the specific item is selected
                 serverName.isEnabled = spinnerItems[position] == "Enter the Server"
                 urlInput.isEnabled = spinnerItems[position] == "Enter the Server"
+                // serverName.visibility = View.GONE
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -226,8 +231,3 @@ class LoginActivity : AppCompatActivity() {
     }
 
 }
-
-val items = arrayListOf<ServerItem>(
-    ServerItem("Default", "..."),
-    ServerItem("Add New", "...")
-)
