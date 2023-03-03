@@ -113,4 +113,25 @@ object Account {
                 }?.let { callback.invoke(response.statusCode == 200, it) }
             }
     }
+
+    fun sendUpdateAccountRequest(oldPasswordHash: String, email: String, passwordHash: String, encSymkey: String,
+                                    callback: (success: Boolean, message: String) -> Unit) {
+        var jsonPostData = this.jsonAccountData(email, passwordHash, encSymkey)
+        jsonPostData.put("oldpassword", oldPasswordHash)
+        println(jsonPostData)
+
+        Fuel.post(BuildConfig.SERVER_URL + "api/account/update")
+            .header("Cookie", sessionCookie)
+            .header("Content-Type", "application/json")
+            .jsonBody(jsonPostData.toString())
+            .response() { _, response, result ->
+                // serverResponse always null on code 400 with deserializer?
+                //val (serverResponse, _) = result
+
+                when(response.statusCode) {
+                    200, 400 -> JSONObject(String(response.data)).get("message").toString()
+                    else -> "Something went wrong when communicating with the server. Try again later."
+                }?.let { callback.invoke(response.statusCode == 200, it) }
+            }
+    }
 }

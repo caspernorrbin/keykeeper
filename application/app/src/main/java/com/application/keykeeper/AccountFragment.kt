@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.navigation.findNavController
+import structure.Model
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -30,6 +31,7 @@ class AccountFragment: Fragment() {
         buttonLogout = viewOfLayout.findViewById(R.id.account_logout_button)
         button_edit_pofile = viewOfLayout.findViewById(R.id.btn_edit_profile)
         email_view = viewOfLayout.findViewById(R.id.email_view)
+        email_view.text = Model.getEmail()
         // Assign on click listeners
         buttonLogout.setOnClickListener {
             navigateToLogin()
@@ -44,6 +46,7 @@ class AccountFragment: Fragment() {
     }
 
     private fun navigateToLogin() {
+        Model.clearValues()
         val intent = Intent(activity, LoginActivity::class.java)
         startActivity(intent)
         activity?.finish()

@@ -65,6 +65,7 @@
     <string name="edit_profile_edit_profile_text_view">Edit Profile</string>
     <string name="edit_profile_save_changes_button">Save Changes</string>
     <string name="edit_profile_new_password_edit_text">New Password</string>
+    <string name="edit_profile_new_password_edit_text_2">Retype Password</string>
     <string name="edit_profile_new_email_edit_text">New Email</string>
     <string name="edit_profile_edit_email_check_box">Edit Email</string>
     <string name="edit_profile_edit_password_checkbox">Edit Password</string>
