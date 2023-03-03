@@ -11,7 +11,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import kotlin.random.Random
+import java.security.SecureRandom
 import structure.*
 
 class StorageFragment: Fragment() {
@@ -311,7 +311,7 @@ class StorageFragment: Fragment() {
 
         var password = ""
         for (i in 0..31) { // create 32 character randomized password from 'characters'
-            password += characters[Random.nextInt(characters.size)]
+            password += characters[SecureRandom().nextInt(characters.size)]
         }
         return password
     }
