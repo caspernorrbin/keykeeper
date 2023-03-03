@@ -73,7 +73,7 @@ class EditProfileFragment : Fragment() {
         } else if (newPassword != newPassword2) {
             Utils.showStatusMessage(textView, "Passwords do not match", true)
         } else {
-            Model.Communication.updateAccount(oldPassword, newEmail, newPassword) { success, message ->
+            Model.Communication.updateAccount(requireContext(), oldPassword, newEmail, newPassword) { success, message ->
                 if (success) {
                     navigateToLogin()
                 }

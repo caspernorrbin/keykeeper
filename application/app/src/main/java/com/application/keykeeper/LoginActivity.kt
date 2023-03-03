@@ -21,6 +21,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var buttonCreateAccount: Button
     private lateinit var loadingIcon: ImageView
     private lateinit var rememberCheckBox: CheckBox
+    private lateinit var offlineModeBox: CheckBox
 
     private fun showStatusMessage(message: String, isErrorMessage: Boolean = false) {
         // Set appropriate text color
@@ -48,6 +49,7 @@ class LoginActivity : AppCompatActivity() {
         buttonCreateAccount = findViewById(R.id.login_create_button)
         loadingIcon = findViewById(R.id.login_loading_icon)
         rememberCheckBox = findViewById(R.id.login_remember_checkbox)
+        offlineModeBox = findViewById(R.id.login_offline_mode)
 
         // Apply remembered email if stored
         Model.Storage.getRememberedEmail(applicationContext)?.let {
@@ -65,8 +67,10 @@ class LoginActivity : AppCompatActivity() {
             // Check if valid email and non-empty password
             if(email.isValidEmail() && password.isNotEmpty()) {
                 swapBodyLoading(true)
+
+                val offlineMode = offlineModeBox.isChecked
                 
-                Model.Communication.login(email, password) { successful, message ->
+                Model.Communication.login(this, offlineMode, email, password) { successful, message ->
                     if(successful) {
                         // If checked save email
                         if (rememberCheckBox.isChecked) {

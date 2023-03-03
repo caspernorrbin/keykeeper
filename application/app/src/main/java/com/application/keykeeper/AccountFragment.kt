@@ -31,16 +31,24 @@ class AccountFragment: Fragment() {
         buttonLogout = viewOfLayout.findViewById(R.id.account_logout_button)
         button_edit_pofile = viewOfLayout.findViewById(R.id.btn_edit_profile)
         email_view = viewOfLayout.findViewById(R.id.email_view)
-        email_view.text = Model.getEmail()
+        email_view.text = Model.Storage.getUsedEmail(requireContext())
+
+        val offlineMode = Model.Storage.inOfflineMode(requireContext())
+        // Grey out button if in offline mode
+        if (offlineMode) {
+            button_edit_pofile.alpha = .5f
+        }
+
         // Assign on click listeners
         buttonLogout.setOnClickListener {
             navigateToLogin()
         }
         button_edit_pofile.setOnClickListener {
-            val controller = viewOfLayout.findNavController()
-            val action = AccountFragmentDirections.actionNavAccountFragmentToNavEditFragment()
-            controller.navigate(action)
-
+            if (!offlineMode) {
+                val controller = viewOfLayout.findNavController()
+                val action = AccountFragmentDirections.actionNavAccountFragmentToNavEditFragment()
+                controller.navigate(action)
+            }
         }
         return viewOfLayout
     }
