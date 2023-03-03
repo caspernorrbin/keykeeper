@@ -10,7 +10,11 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import structure.CredentialsAdapter
+import structure.CredentialsItem
 import structure.Model
+import structure.PopupWindowFactory
+import java.io.File
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var bodyLayout: LinearLayout
@@ -21,10 +25,12 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var buttonCreateAccount: Button
     private lateinit var loadingIcon: ImageView
     private lateinit var rememberCheckBox: CheckBox
+    private lateinit var buttonChangeServer: Button
+    private lateinit var viewOfLayout: View
 
     private fun showStatusMessage(message: String, isErrorMessage: Boolean = false) {
         // Set appropriate text color
-        val colorId = if (isErrorMessage) R.color.fg_error_message else R.color.fg_success_message;
+        val colorId = if (isErrorMessage) R.color.fg_error_message else R.color.fg_success_message
         statusMessage.setTextColor(ResourcesCompat.getColor(resources, colorId, null))
 
         statusMessage.text = message
@@ -43,11 +49,12 @@ class LoginActivity : AppCompatActivity() {
         bodyLayout = findViewById(R.id.login_body_layout)
         emailInput = findViewById(R.id.login_email_input)
         passwordInput = findViewById(R.id.login_password_input)
-        buttonLogin = findViewById(R.id.login_button);
+        buttonLogin = findViewById(R.id.login_button)
         statusMessage = findViewById(R.id.login_status_message)
         buttonCreateAccount = findViewById(R.id.login_create_button)
         loadingIcon = findViewById(R.id.login_loading_icon)
         rememberCheckBox = findViewById(R.id.login_remember_checkbox)
+        buttonChangeServer = findViewById(R.id.change_server)
 
         // Apply remembered email if stored
         Model.Storage.getRememberedEmail(applicationContext)?.let {
@@ -95,6 +102,10 @@ class LoginActivity : AppCompatActivity() {
 
         buttonCreateAccount.setOnClickListener {
             navigateToCreateAccount()
+        }
+        buttonChangeServer.setOnClickListener{
+            openChangeServerPopup()
+
         }
     }
 
@@ -148,4 +159,79 @@ class LoginActivity : AppCompatActivity() {
     private fun String.isValidEmail(): Boolean {
         return !TextUtils.isEmpty(this) && android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
     }
+    private fun openChangeServerPopup(): PopupWindow {
+
+        val window = PopupWindowFactory.create(R.layout.login_change_server, this, window.decorView.rootView)
+
+        // Allow editing within the window
+        window.isFocusable = true
+        window.update()
+        val view = window.contentView
+
+        // Find components
+        val closeButton = view.findViewById<ImageButton>(R.id.change_server_popup_close_button)
+        val changeServerSpinner = view.findViewById<Spinner>(R.id.change_server_spinner)
+        val serverName = view.findViewById<EditText>(R.id.change_server_popup_server_name)
+        val urlInput = view.findViewById<EditText>(R.id.change_server_popup_url_input)
+        val confirmButton = view.findViewById<Button>(R.id.change_server_popup_button)
+
+        // Close window when clicked
+        closeButton.setOnClickListener { window.dismiss() }
+
+        // Get the string array of spinner items from strings.xml
+        val spinnerItems = resources.getStringArray(R.array.change_server_spinner_items).toMutableList()
+
+        // Create an ArrayAdapter to populate the spinner with items
+        val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, spinnerItems)
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        changeServerSpinner.adapter = spinnerAdapter
+
+        changeServerSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                // Enable the EditText when the specific item is selected
+                serverName.isEnabled = spinnerItems[position] == "Enter the Server"
+                urlInput.isEnabled = spinnerItems[position] == "Enter the Server"
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // Do nothing
+            }
+        }
+
+        // Set the click listener for the button
+        confirmButton.setOnClickListener {
+            // Get the text entered in the EditText
+            val newItem = serverName.text.toString().trim()
+
+            // Check if the text is not empty
+            if (newItem.isNotEmpty()) {
+                // Add the item to the spinner items list
+                spinnerItems.add(newItem)
+
+                // Notify the spinner adapter that the items list has changed
+                spinnerAdapter.notifyDataSetChanged()
+
+                // Clear the EditText
+                serverName.setText("")
+
+                // Save the added item to the change_server_spinner_items string array in strings.xml
+                var stringArrayXml = "<string-array name=\"change_server_spinner_items\">\n"
+                for (item in spinnerItems) {
+                    stringArrayXml += "\t<item>$item</item>\n"
+                }
+                stringArrayXml += "</string-array>"
+                val stringFile = File(applicationContext.filesDir, "strings.xml")
+                if (!stringFile.exists()) {
+                    // Create a new strings.xml file if it doesn't exist
+                    stringFile.createNewFile()
+                    stringFile.writeText("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<resources>\n</resources>")
+                }
+                // Replace the existing change_server_spinner_items string array with the updated one
+                val pattern = "<string-array name=\"change_server_spinner_items\">[\\s\\S]*?</string-array>"
+                stringFile.writeText(stringFile.readText().replace(Regex(pattern), stringArrayXml))
+            }
+        }
+        return window
+    }
+
 }

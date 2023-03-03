@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/bg_light_transparent"
+    android:layout_gravity="center"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:id="@+id/change_server_popup"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/bg_dark"
+        android:orientation="vertical"
+        android:padding="10dp"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:padding="5dp"
+                android:text="@string/change_server_text_view"
+                android:textSize="18sp" />
+
+            <ImageButton
+                android:id="@+id/change_server_popup_close_button"
+                android:layout_width="48sp"
+                android:layout_height="48sp"
+                android:layout_gravity="end"
+                android:background="@color/transparent"
+                android:contentDescription="@string/change_server_popup_close_button_description"
+                android:src="@drawable/ic_close" />
+        </LinearLayout>
+
+        <Spinner
+            android:id="@+id/change_server_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:ems="10"
+            android:entries="@array/change_server_spinner_items"
+            android:spinnerMode="dropdown"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/change_server_popup_server_name"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_text_input"
+            android:ems="10"
+            android:hint="@string/change_server_server_name"
+            android:padding="13dp"
+            android:textSize="14sp"
+            android:enabled="false"/>
+
+        <EditText
+            android:id="@+id/change_server_popup_url_input"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_text_input"
+            android:ems="10"
+            android:hint="@string/change_server_url"
+            android:inputType="textUri"
+            android:padding="13dp"
+            android:textSize="14sp"
+            android:enabled="false"/>
+
+        <Button
+            android:id="@+id/change_server_popup_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/interactive"
+            android:text="@string/change_server_confirm"
+            android:textSize="12sp" />
+
+
+    </LinearLayout>
+</FrameLayout>
