@@ -70,11 +70,9 @@ class EditProfileFragment : Fragment() {
 
         if (newEmail != "" && !newEmail.isValidEmail()) {
             Utils.showStatusMessage(textView, "Invalid email format", true)
-        }
-        else if (newPassword != newPassword2) {
+        } else if (newPassword != newPassword2) {
             Utils.showStatusMessage(textView, "Passwords do not match", true)
-        }
-        else {
+        } else {
             Model.Communication.updateAccount(oldPassword, newEmail, newPassword) { success, message ->
                 if (success) {
                     navigateToLogin()

@@ -12,8 +12,7 @@ router.post('/create', async (req, res) => {
     }
 
     // Validate email format, not perfect but good enough for our use
-    const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/ig;
-    if (!emailRegex.test(email)) {
+    if (!validateEmail(email)) {
         return res.status(400).json({ message: 'Invalid email format' });
     }
 
@@ -55,8 +54,7 @@ router.post("/update", async (req, res) => {
 
     if (email) {
         // Validate email format
-        const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/ig;
-        if (!emailRegex.test(email)) {
+        if (!validateEmail(email)) {
             return res.status(400).json({ message: "Invalid email format" });
         }
 
@@ -138,5 +136,10 @@ router.post("/delete", async (req, res) => {
     });
 
 });
+
+function validateEmail(email) {
+    const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/ig;
+    return emailRegex.test(email);
+}
 
 module.exports = router;

@@ -64,7 +64,6 @@ object Model {
                 if (success) {
                     symkey = Encryption.decryptSymkey(password, symOrError)
                     usedEmail = email
-                    //  TODO: Maybe store encSymkey in permanent storage
                 }
 
                 callback(success, if (success) "Logged in" else symOrError)
