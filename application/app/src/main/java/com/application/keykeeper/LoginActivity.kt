@@ -10,10 +10,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
-import structure.CredentialsAdapter
-import structure.CredentialsItem
-import structure.Model
-import structure.PopupWindowFactory
+import structure.*
 import java.io.File
 
 class LoginActivity : AppCompatActivity() {
@@ -26,7 +23,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var loadingIcon: ImageView
     private lateinit var rememberCheckBox: CheckBox
     private lateinit var buttonChangeServer: Button
-    private lateinit var viewOfLayout: View
 
     private fun showStatusMessage(message: String, isErrorMessage: Boolean = false) {
         // Set appropriate text color
@@ -105,7 +101,6 @@ class LoginActivity : AppCompatActivity() {
         }
         buttonChangeServer.setOnClickListener{
             openChangeServerPopup()
-
         }
     }
 
@@ -182,9 +177,8 @@ class LoginActivity : AppCompatActivity() {
         val spinnerItems = resources.getStringArray(R.array.change_server_spinner_items).toMutableList()
 
         // Create an ArrayAdapter to populate the spinner with items
-        val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, spinnerItems)
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        changeServerSpinner.adapter = spinnerAdapter
+        val serverItemAdapter = ServerItemAdapter(this, R.layout.server_item, items)
+        changeServerSpinner.adapter = serverItemAdapter
 
         changeServerSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
@@ -207,9 +201,6 @@ class LoginActivity : AppCompatActivity() {
             if (newItem.isNotEmpty()) {
                 // Add the item to the spinner items list
                 spinnerItems.add(newItem)
-
-                // Notify the spinner adapter that the items list has changed
-                spinnerAdapter.notifyDataSetChanged()
 
                 // Clear the EditText
                 serverName.setText("")
@@ -235,3 +226,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
 }
+
+val items = arrayListOf<ServerItem>(
+    ServerItem("Default", "..."),
+    ServerItem("Add New", "...")
+)
