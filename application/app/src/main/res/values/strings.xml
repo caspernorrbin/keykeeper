@@ -93,5 +93,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="account_test_test_example_text_view">test@test.example</string>
+    <string name="server_item_label">Label</string>
+    <string name="server_item_remove_the_server">Remove the server</string>
 
 </resources>

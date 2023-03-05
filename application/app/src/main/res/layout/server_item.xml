@@ -1,22 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:background="@color/bg_dark"
     style="@style/Theme.KeyKeeper.ServerItem">
 
     <TextView
         android:id="@+id/server_item_label"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Label"
+        android:text="@string/server_item_label"
         android:textFontWeight="200"
         android:textSize="18sp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        tools:targetApi="p"
+        android:background="@drawable/bg_text_input"
+        />
+
     <ImageView
         android:id="@+id/server_item_remove"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_dice"/>
+        android:background="@color/transparent"
+        android:contentDescription="@string/server_item_remove_the_server"
+        android:src="@drawable/ic_delete" />
 </LinearLayout >
