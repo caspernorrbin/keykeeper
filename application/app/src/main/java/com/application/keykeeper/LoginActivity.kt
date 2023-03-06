@@ -9,9 +9,9 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import structure.*
-import java.io.File
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var bodyLayout: LinearLayout
@@ -157,6 +157,8 @@ class LoginActivity : AppCompatActivity() {
     private fun openChangeServerPopup(): PopupWindow {
 
         val window = PopupWindowFactory.create(R.layout.login_change_server, this, window.decorView.rootView)
+        //val serverItemLayout = layoutInflater.inflate(R.layout.server_item,null) // Try -1
+        //val serverItemLayout = findViewById<LinearLayout>(R.id.server_item_layout) // Try -2
 
         // Allow editing within the window
         window.isFocusable = true
@@ -169,6 +171,7 @@ class LoginActivity : AppCompatActivity() {
         val serverName = view.findViewById<EditText>(R.id.change_server_popup_server_name)
         val urlInput = view.findViewById<EditText>(R.id.change_server_popup_url_input)
         val confirmButton = view.findViewById<Button>(R.id.change_server_popup_button)
+        //val removeButton = serverItemLayout.findViewById<ImageButton>(R.id.server_item_remove)
 
         // Close window when clicked
         closeButton.setOnClickListener { window.dismiss() }
@@ -207,7 +210,7 @@ class LoginActivity : AppCompatActivity() {
                 val newServerName = serverName.text.toString()
                 val newServerURL = urlInput.text.toString()
                 // Create a new ServerItem object and add it to the server list
-                val newServerItem = ServerItem(newServerName, newServerURL, false)
+                val newServerItem = ServerItem(newServerName, newServerURL, true)
                 val added = Model.Storage.addServerItem(view.context, newServerItem)
                 if (added) {
                     // Add the new server item to the spinner
@@ -222,10 +225,31 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(view.context, "Failed to add new server item", Toast.LENGTH_SHORT).show()
                 }
             } else {
+                // Save the selected server name to Shared Preferences
+                val selectedServerName = selectedItem.name
+                val sharedPreferences = view.context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+                val editor = sharedPreferences.edit()
+                editor.putString("selectedServerName", selectedServerName)
+                editor.apply()
                 window.dismiss()
+                // Set the saved server name to a TextView in another layout
+                val otherLayout = findViewById<ConstraintLayout>(R.id.Login_activity_layout)
+                val serverNameTextView = otherLayout.findViewById<TextView>(R.id.server_name_view)
+                serverNameTextView.text = "Connect to:$selectedServerName"
             }
         }
+        /*
+        //Remove selected item from spinner when remove button is clicked
+        removeButton.setOnClickListener {
+            val selectedItem = changeServerSpinner.selectedItem as ServerItem
+            if (selectedItem != itemList[0] && selectedItem != itemList.last()) {
+                if (Model.Storage.removeServerItem(view.context, selectedItem)) {
+                    itemList.remove(selectedItem)
+                    serverItemAdapter.notifyDataSetChanged()
+                }
+            }
+        }*/
         return window
-    }
+        }
 
-}
+    }

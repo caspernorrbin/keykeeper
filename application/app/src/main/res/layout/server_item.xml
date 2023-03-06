@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:background="@color/bg_dark"
+    android:id="@+id/server_item_layout"
     style="@style/Theme.KeyKeeper.ServerItem">
 
     <TextView

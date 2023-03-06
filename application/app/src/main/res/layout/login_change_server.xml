@@ -24,6 +24,7 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/change_server_popup_Text_view"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -61,7 +62,9 @@
             android:hint="@string/change_server_server_name"
             android:padding="13dp"
             android:textSize="14sp"
-            android:visibility="invisible"/>
+            android:visibility="invisible"
+            android:autofillHints="@string/change_server_server_name"
+            android:inputType="textPersonName" />
 
         <EditText
             android:id="@+id/change_server_popup_url_input"
@@ -74,7 +77,8 @@
             android:inputType="textUri"
             android:padding="13dp"
             android:textSize="14sp"
-            android:visibility="invisible"/>
+            android:visibility="invisible"
+            android:autofillHints="@string/change_server_url" />
 
         <Button
             android:id="@+id/change_server_popup_button"

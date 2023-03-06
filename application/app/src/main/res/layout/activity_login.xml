@@ -7,7 +7,9 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_image"
     android:theme="@style/Theme.KeyKeeper"
-    tools:context=".LoginActivity">
+    tools:context=".LoginActivity"
+    android:id="@+id/Login_activity_layout"
+    >
 
     <TextView
         android:id="@+id/login_header_label"
