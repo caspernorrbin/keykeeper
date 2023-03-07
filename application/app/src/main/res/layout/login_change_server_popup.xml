@@ -85,7 +85,24 @@
             android:layout_height="wrap_content"
             android:background="@color/interactive"
             android:text="@string/change_server_confirm"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"/>
+        <Button
+            android:id="@+id/change_server_remove"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/dangerous"
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:text="@string/change_server_remove_server"
+            android:textSize="12sp"
+            android:tag="delete">
+        </Button>
 
 
     </LinearLayout>

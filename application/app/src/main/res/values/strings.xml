@@ -41,12 +41,8 @@
     <string name="change_server_url">Url</string>
     <string name="change_server_server_name">Server Name</string>
     <string name="change_server_confirm">Confirm</string>
-    <string-array name="change_server_spinner_items">
-        <item>Item 1</item>
-        <item>Item 2</item>
-        <item>Item 3</item>
-        <item>Enter the Server</item>
-    </string-array>
+    <string name="change_server_remove_server">Remove Server</string>
+
 
 
     <!-- Create Account strings -->

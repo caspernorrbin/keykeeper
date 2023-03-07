@@ -187,7 +187,7 @@ class LoginActivity : AppCompatActivity() {
         val serverName = view.findViewById<EditText>(R.id.change_server_popup_server_name)
         val urlInput = view.findViewById<EditText>(R.id.change_server_popup_url_input)
         val confirmButton = view.findViewById<Button>(R.id.change_server_popup_button)
-        //val removeButton = serverItemLayout.findViewById<ImageButton>(R.id.server_item_remove)
+        val removeButton = view.findViewById<Button>(R.id.change_server_remove)
 
         // Close window when clicked
         closeButton.setOnClickListener { window.dismiss() }
@@ -248,20 +248,25 @@ class LoginActivity : AppCompatActivity() {
                 // Close window
                 window.dismiss()
             } else {
-                // TODO: Add error message
+                Toast.makeText(view.context, "Failed to set selected server", Toast.LENGTH_SHORT).show()
             }
         }
-        /*
+
         //Remove selected item from spinner when remove button is clicked
         removeButton.setOnClickListener {
-            val selectedItem = changeServerSpinner.selectedItem as ServerItem
-            if (selectedItem != serverItems[0] && selectedItem != serverItems.last()) {
+            val selectedItem = serverItems[changeServerSpinner.selectedItemPosition]
+            if (selectedItem != defaultServerItem && selectedItem != addServerItem) {
                 if (Model.Storage.removeServerItem(view.context, selectedItem)) {
-                    serverItems.remove(selectedItem)
-                    serverItemAdapter.notifyDataSetChanged()
+                    // Remove the selected item from the adapter
+                    serverItemAdapter.remove(selectedItem)
+                    // Select the default server
+                    changeServerSpinner.setSelection(0)
+                } else {
+                    // Show an error message if the server item couldn't be removed
+                    Toast.makeText(view.context, "Failed to remove the selected server item", Toast.LENGTH_SHORT).show()
                 }
             }
-        }*/
+        }
         return window
     }
 }
