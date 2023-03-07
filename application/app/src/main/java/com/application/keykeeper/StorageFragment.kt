@@ -52,7 +52,7 @@ class StorageFragment: Fragment() {
         searchView.setOnClickListener { searchView.isIconified = false }
 
         // Hide the add item button if in offline mode
-        offlineMode = Model.Storage.inOfflineMode(context!!)
+        offlineMode = Model.Storage.inOfflineMode(requireContext())
         toolbarAddItemButton.visibility = if (offlineMode) View.INVISIBLE else View.VISIBLE
 
         // Setup toolbar button
@@ -113,11 +113,8 @@ class StorageFragment: Fragment() {
         val editButton = view.findViewById<Button>(R.id.storage_item_popup_edit_button)
         val deleteButton = view.findViewById<Button>(R.id.storage_item_popup_delete_button)
 
-        // Grey out buttons if in offline mode
-        if (offlineMode) {
-            editButton.alpha = .5f
-            deleteButton.alpha = .5f
-        }
+        editButton.isEnabled = !offlineMode
+        deleteButton.isEnabled = !offlineMode
 
         // Display hidden password
         passwordLabel.text = item.password.replace(".".toRegex(), "*")
@@ -136,35 +133,31 @@ class StorageFragment: Fragment() {
 
         // Open edit popup when clicked
         editButton.setOnClickListener {
-            if (!offlineMode) {
-                Utils.hideStatusMessage(statusMessage)
-                openEditItemPopup(adapter, index).setOnDismissListener {
-                    // Dismiss this if still open when the editor closes, possibly contains invalid data
-                    // TODO: Fix overlaying backgrounds
-                    window.dismiss()
-                }
+            Utils.hideStatusMessage(statusMessage)
+            openEditItemPopup(adapter, index).setOnDismissListener {
+                // Dismiss this if still open when the editor closes, possibly contains invalid data
+                // TODO: Fix overlaying backgrounds
+                window.dismiss()
             }
         }
 
         // Delete confirmation
         deleteButton.setOnClickListener {
-            if (!offlineMode) {
-                Utils.hideStatusMessage(statusMessage)
-                if (deleteButton.tag == "delete") {
-                    deleteButton.tag = "confirm"
-                    deleteButton.setText(R.string.storage_popup_confirm_delete)
-                    deleteButton.setBackgroundColor(context.resources.getColor(R.color.light_dangerous))
-                } else {
-                    Model.Communication.deleteItem(item) { successful, message ->
-                        if (successful) {
-                            deleteButton.tag = "delete"
-                            deleteButton.setText(R.string.storage_popup_delete)
-                            deleteButton.setBackgroundColor(context.resources.getColor(R.color.dangerous))
-                            fetchAndUpdateListView()
-                            window.dismiss()
-                        } else {
-                            Utils.showStatusMessage(statusMessage, message, true)
-                        }
+            Utils.hideStatusMessage(statusMessage)
+            if (deleteButton.tag == "delete") {
+                deleteButton.tag = "confirm"
+                deleteButton.setText(R.string.storage_popup_confirm_delete)
+                deleteButton.setBackgroundColor(context.resources.getColor(R.color.light_dangerous))
+            } else {
+                Model.Communication.deleteItem(item) { successful, message ->
+                    if (successful) {
+                        deleteButton.tag = "delete"
+                        deleteButton.setText(R.string.storage_popup_delete)
+                        deleteButton.setBackgroundColor(context.resources.getColor(R.color.dangerous))
+                        fetchAndUpdateListView()
+                        window.dismiss()
+                    } else {
+                        Utils.showStatusMessage(statusMessage, message, true)
                     }
                 }
             }

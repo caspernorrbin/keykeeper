@@ -34,21 +34,17 @@ class AccountFragment: Fragment() {
         email_view.text = Model.Storage.getUsedEmail(requireContext())
 
         val offlineMode = Model.Storage.inOfflineMode(requireContext())
-        // Grey out button if in offline mode
-        if (offlineMode) {
-            button_edit_pofile.alpha = .5f
-        }
+
+        button_edit_pofile.isEnabled = !offlineMode
 
         // Assign on click listeners
         buttonLogout.setOnClickListener {
             navigateToLogin()
         }
         button_edit_pofile.setOnClickListener {
-            if (!offlineMode) {
-                val controller = viewOfLayout.findNavController()
-                val action = AccountFragmentDirections.actionNavAccountFragmentToNavEditFragment()
-                controller.navigate(action)
-            }
+            val controller = viewOfLayout.findNavController()
+            val action = AccountFragmentDirections.actionNavAccountFragmentToNavEditFragment()
+            controller.navigate(action)
         }
         return viewOfLayout
     }

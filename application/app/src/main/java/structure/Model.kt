@@ -48,6 +48,9 @@ object Model {
             }
 
             Account.sendUpdateAccountRequest(oldPasswordHash, newEmail, passwordHash, encSymkey) { success, message ->
+                if (success) {
+                    Storage.setAccountDetails(context, newEmail, passwordHash, encSymkey)
+                }
                 callback(success, message)
             }
         }
@@ -176,7 +179,10 @@ object Model {
         fun setAccountDetails(context: Context, email: String, passwordHash: String, encSymkey: String): Boolean {
             val emailStatus = LocalStorage.save(context, "usedEmail", email)
             val passwordStatus = LocalStorage.save(context, "passwordHash", passwordHash)
-            val symkeyStatus = LocalStorage.save(context, "encSymkey", encSymkey)
+            var symkeyStatus = true
+            if (encSymkey != "") {
+                symkeyStatus = LocalStorage.save(context, "encSymkey", encSymkey)
+            }
             return emailStatus && passwordStatus && symkeyStatus
         }
 
