@@ -33,7 +33,7 @@
     <string name="login_create_account">Create new account</string>
     <string name="login_remember_email">Remember Email</string>
     <string name="login_change_server_button">Change Server</string>
-    <string name="login_server_name_view">Connect to: KeyKeeper server</string>
+    <string name="login_server_connect">Connect to: %1$s</string>
 
     <!-- change server strings -->
     <string name="change_server_text_view">Change Server</string>

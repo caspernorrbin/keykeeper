@@ -5,11 +5,12 @@ import android.content.Intent
 import android.graphics.drawable.Animatable
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
+import android.view.Display.Mode
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import structure.*
 
@@ -22,7 +23,13 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var buttonCreateAccount: Button
     private lateinit var loadingIcon: ImageView
     private lateinit var rememberCheckBox: CheckBox
-    private lateinit var buttonChangeServer: Button
+    private lateinit var changeServerButton: Button
+    private lateinit var serverConnectLabel: TextView
+
+    // TODO: Add URLs
+    private val addServerItem: ServerItem = ServerItem("Add new", "", false)
+    private val defaultServerItem: ServerItem = ServerItem("KeyKeeper Server", "http://10.0.2.2:8080/", false)
+    private var selectedServer: ServerItem? = null
 
     private fun showStatusMessage(message: String, isErrorMessage: Boolean = false) {
         // Set appropriate text color
@@ -50,7 +57,11 @@ class LoginActivity : AppCompatActivity() {
         buttonCreateAccount = findViewById(R.id.login_create_button)
         loadingIcon = findViewById(R.id.login_loading_icon)
         rememberCheckBox = findViewById(R.id.login_remember_checkbox)
-        buttonChangeServer = findViewById(R.id.change_server)
+        changeServerButton = findViewById(R.id.login_change_server_button)
+        serverConnectLabel = findViewById(R.id.login_server_connect_label)
+
+        // Apply connected server if stored
+        selectedServer = updateServerConnect()
 
         // Apply remembered email if stored
         Model.Storage.getRememberedEmail(applicationContext)?.let {
@@ -68,7 +79,8 @@ class LoginActivity : AppCompatActivity() {
             // Check if valid email and non-empty password
             if(email.isValidEmail() && password.isNotEmpty()) {
                 swapBodyLoading(true)
-                
+
+                // TODO: Pass url from 'selectedServer'
                 Model.Communication.login(email, password) { successful, message ->
                     if(successful) {
                         // If checked save email
@@ -99,7 +111,7 @@ class LoginActivity : AppCompatActivity() {
         buttonCreateAccount.setOnClickListener {
             navigateToCreateAccount()
         }
-        buttonChangeServer.setOnClickListener{
+        changeServerButton.setOnClickListener{
             openChangeServerPopup()
         }
     }
@@ -154,11 +166,15 @@ class LoginActivity : AppCompatActivity() {
     private fun String.isValidEmail(): Boolean {
         return !TextUtils.isEmpty(this) && android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
     }
-    private fun openChangeServerPopup(): PopupWindow {
 
-        val window = PopupWindowFactory.create(R.layout.login_change_server, this, window.decorView.rootView)
-        //val serverItemLayout = layoutInflater.inflate(R.layout.server_item,null) // Try -1
-        //val serverItemLayout = findViewById<LinearLayout>(R.id.server_item_layout) // Try -2
+    private fun updateServerConnect(): ServerItem {
+        val server = Model.Storage.getSelectedServer(applicationContext) ?: defaultServerItem
+        serverConnectLabel.text = getString(R.string.login_server_connect, server.name)
+        return server
+    }
+
+    private fun openChangeServerPopup(): PopupWindow {
+        val window = PopupWindowFactory.create(R.layout.login_change_server_popup, this, window.decorView.rootView)
 
         // Allow editing within the window
         window.isFocusable = true
@@ -175,18 +191,27 @@ class LoginActivity : AppCompatActivity() {
 
         // Close window when clicked
         closeButton.setOnClickListener { window.dismiss() }
-
         val items = Model.Storage.getServerItems(view.context) ?: arrayOf()
         val itemList = items.toMutableList()
-        itemList.add(0, ServerItem("KeyKeeper Server", "", false))
-        itemList.add(ServerItem("Add new", "", false))
-        val serverItemAdapter = ServerItemAdapter(view.context, R.layout.server_item, R.id.server_item_label, itemList)
+        itemList.add(0, defaultServerItem)
+        itemList.add(addServerItem)
+        // Remove null elements
+        val serverItems = itemList.filter { it -> it != null }
+        val serverItemAdapter = ServerItemAdapter(view.context, R.layout.server_item, R.id.server_item_label, serverItems)
         changeServerSpinner.adapter = serverItemAdapter
+
+        // Set default selection
+        var index = serverItems.indexOfFirst { it -> it == selectedServer }
+        if (index == -1) {
+            index = 0
+        }
+        changeServerSpinner.setSelection(index)
+
 
         // Make the Edit texts visible when specific
         changeServerSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                val selectedItem = itemList[position]
+                val selectedItem = serverItems[position]
                 if (selectedItem.name == "Add new") {
                     serverName.visibility = View.VISIBLE
                     urlInput.visibility = View.VISIBLE
@@ -196,60 +221,47 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                // Do nothing
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                changeServerSpinner.setSelection(0)
             }
         }
 
         // Set the click listener for the button
         confirmButton.setOnClickListener {
             // Get the selected item and check if it is "Add new"
-            val selectedItem = itemList[changeServerSpinner.selectedItemPosition]
-            if (selectedItem.name == "Add new") {
+            var selectedItem = serverItems[changeServerSpinner.selectedItemPosition]
+            if (selectedItem == addServerItem) {
                 // Get the new server name and URL from the EditTexts
                 val newServerName = serverName.text.toString()
                 val newServerURL = urlInput.text.toString()
                 // Create a new ServerItem object and add it to the server list
                 val newServerItem = ServerItem(newServerName, newServerURL, true)
-                val added = Model.Storage.addServerItem(view.context, newServerItem)
-                if (added) {
-                    // Add the new server item to the spinner
-                    itemList.add(itemList.size-1,newServerItem)
-                    serverItemAdapter.notifyDataSetChanged()
-                    // Select the new server item in the spinner
-                    changeServerSpinner.setSelection(itemList.indexOf(newServerItem))
-                    // Hide the EditTexts
-                    serverName.visibility = View.GONE
-                    urlInput.visibility = View.GONE
+                if (Model.Storage.addServerItem(view.context, newServerItem)) {
+                    selectedItem = newServerItem
                 } else {
-                    Toast.makeText(view.context, "Failed to add new server item", Toast.LENGTH_SHORT).show()
+                    Log.e("addServerItem", "Failed to add server item")
                 }
-            } else {
-                // Save the selected server name to Shared Preferences
-                val selectedServerName = selectedItem.name
-                val sharedPreferences = view.context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-                val editor = sharedPreferences.edit()
-                editor.putString("selectedServerName", selectedServerName)
-                editor.apply()
+            }
+
+            if (Model.Storage.setSelectedServer(view.context, selectedItem)) {
+                selectedServer = updateServerConnect()
+                // Close window
                 window.dismiss()
-                // Set the saved server name to a TextView in another layout
-                val otherLayout = findViewById<ConstraintLayout>(R.id.Login_activity_layout)
-                val serverNameTextView = otherLayout.findViewById<TextView>(R.id.server_name_view)
-                serverNameTextView.text = "Connect to:$selectedServerName"
+            } else {
+                // TODO: Add error message
             }
         }
         /*
         //Remove selected item from spinner when remove button is clicked
         removeButton.setOnClickListener {
             val selectedItem = changeServerSpinner.selectedItem as ServerItem
-            if (selectedItem != itemList[0] && selectedItem != itemList.last()) {
+            if (selectedItem != serverItems[0] && selectedItem != serverItems.last()) {
                 if (Model.Storage.removeServerItem(view.context, selectedItem)) {
-                    itemList.remove(selectedItem)
+                    serverItems.remove(selectedItem)
                     serverItemAdapter.notifyDataSetChanged()
                 }
             }
         }*/
         return window
-        }
-
     }
+}

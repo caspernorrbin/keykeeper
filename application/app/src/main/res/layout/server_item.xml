@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:background="@color/bg_dark"
     android:id="@+id/server_item_layout"
     style="@style/Theme.KeyKeeper.ServerItem">
 
@@ -17,15 +16,5 @@
         android:textFontWeight="200"
         android:textSize="18sp"
         android:layout_weight="1"
-        tools:targetApi="p"
-        android:background="@drawable/bg_text_input"
-        />
-
-    <ImageView
-        android:id="@+id/server_item_remove"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/transparent"
-        android:contentDescription="@string/server_item_remove_the_server"
-        android:src="@drawable/ic_delete" />
+        tools:targetApi="p"/>
 </LinearLayout >
