@@ -227,6 +227,16 @@ class LoginActivity : AppCompatActivity() {
                 // Get the new server name and URL from the EditTexts
                 val newServerName = serverName.text.toString()
                 val newServerURL = urlInput.text.toString()
+
+                if (newServerName.isEmpty()) {
+                    Utils.showStatusMessage(statusLabel, "Cannot add server with no name", true)
+                    return@setOnClickListener
+                }
+                if (newServerURL.isEmpty()) {
+                    Utils.showStatusMessage(statusLabel, "Cannot add server with no url", true)
+                    return@setOnClickListener
+                }
+
                 // Create a new ServerItem object and add it to the server list
                 val newServerItem = ServerItem(newServerName, newServerURL, true)
                 if (Model.Storage.addServerItem(view.context, newServerItem)) {
