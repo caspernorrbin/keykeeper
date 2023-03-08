@@ -6,12 +6,17 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import communication.Account
 import communication.Item
+import communication.OfflineAccount
 import org.json.JSONArray
 
 @RequiresApi(Build.VERSION_CODES.O)
 
 object Model {
     private var symkey: String = ""
+
+    fun clearValues() {
+        symkey = ""
+    }
 
     object Communication  {
 
@@ -25,30 +30,71 @@ object Model {
             }
         }
 
+        fun updateAccount(context: Context, oldPassword: String, newEmail: String, newPassword: String, callback: (success: Boolean, message: String) -> Unit) {
+            val usedEmail = Storage.getUsedEmail(context)
+            if (symkey == "" || usedEmail == null) {
+                callback(false, "Application error")
+            }
 
-        fun login(email: String, password: String, callback: (success: Boolean, message: String) -> Unit) {
-            val passwordHash = Encryption.hashAuthentication(password, email)
-            Account.sendLoginRequest(email, passwordHash) { success, symOrError ->
-                // TODO: Add accounts to local storage to allow offline logins
+            val emailToUse = if (newEmail != "") newEmail else usedEmail!!
+            val passwordToUse = if (newPassword != "") newPassword else oldPassword
 
+            val oldPasswordHash = Encryption.hashAuthentication(oldPassword, usedEmail!!)
+            val passwordHash = Encryption.hashAuthentication(passwordToUse, emailToUse)
+
+            var encSymkey = ""
+            if (newPassword != "") {
+                encSymkey = Encryption.encryptSymkey(passwordToUse, symkey)
+            }
+
+            Account.sendUpdateAccountRequest(oldPasswordHash, newEmail, passwordHash, encSymkey) { success, message ->
                 if (success) {
-                    symkey = Encryption.decryptSymkey(password, symOrError)
-                    //  TODO: Maybe store encSymkey in permanent storage
+                    Storage.setAccountDetails(context, newEmail, passwordHash, encSymkey)
                 }
+                callback(success, message)
+            }
+        }
 
-                callback(success, if (success) "Logged in" else symOrError)
+        fun login(context: Context, offlineMode: Boolean, email: String, password: String, callback: (success: Boolean, message: String) -> Unit) {
+            if (offlineMode) {
+                OfflineAccount.sendLoginRequest(context, email, password) { success, symOrError ->
+                    if (success) {
+                        Storage.setOfflineMode(context, true)
+                        symkey = Encryption.decryptSymkey(password, symOrError)
+                    }
+
+                    callback(success, if (success) "Logged in" else symOrError)
+                }
+            } else {
+                val passwordHash = Encryption.hashAuthentication(password, email)
+                Account.sendLoginRequest(email, passwordHash) { success, symOrError ->
+
+                    if (success) {
+                        Storage.setAccountDetails(context, email, passwordHash, symOrError)
+                        Storage.setOfflineMode(context, false)
+
+                        symkey = Encryption.decryptSymkey(password, symOrError)
+                    }
+
+                    callback(success, if (success) "Logged in" else symOrError)
+                }
             }
         }
 
         fun getItems(context: Context, callback: (success: Boolean, message: String, data: Array<CredentialsItem>) -> Unit) {
-            Item.sendGetItemsRequest() { success, message, data ->
-                if (success) {
-                    val credentials = data.map { it.toCredentialsItem() }
-                    Storage.setItems(context, credentials)
-                }
+            if (Storage.inOfflineMode(context)) {
                 val res = Storage.getItems(context) ?: arrayOf()
-                Log.v("getItems.size", res.size.toString())
-                callback(success, message, res)
+                callback(res != null, "", res)
+            } else {
+                Item.sendGetItemsRequest() { success, message, data ->
+                    if (success) {
+                        val credentials = data.map { it.toCredentialsItem() }
+                        Storage.setItems(context, credentials)
+                    }
+                    val res = Storage.getItems(context) ?: arrayOf()
+                    Log.v("getItems.size", res.size.toString())
+                    callback(success, message, res)
+                }
             }
         }
 
@@ -178,6 +224,35 @@ object Model {
         }
         fun removeSelectedServer(context: Context): Boolean {
             return LocalStorage.remove(context, "selectedServer")
+        }
+
+        fun setOfflineMode(context: Context, mode: Boolean): Boolean {
+            return LocalStorage.save(context, "offlineMode", mode.toString())
+        }
+
+        fun inOfflineMode(context: Context) : Boolean {
+            return LocalStorage.load(context, "offlineMode") == true.toString()
+        }
+
+        fun setAccountDetails(context: Context, email: String, passwordHash: String, encSymkey: String): Boolean {
+            val emailStatus = LocalStorage.save(context, "usedEmail", email)
+            val passwordStatus = LocalStorage.save(context, "passwordHash", passwordHash)
+            var symkeyStatus = true
+            if (encSymkey != "") {
+                symkeyStatus = LocalStorage.save(context, "encSymkey", encSymkey)
+            }
+            return emailStatus && passwordStatus && symkeyStatus
+        }
+
+        fun getAccountDetails(context: Context): Triple<String, String, String>? {
+            val email = LocalStorage.load(context, "usedEmail")
+            val passwordHash = LocalStorage.load(context, "passwordHash")
+            val encSymkey = LocalStorage.load(context, "encSymkey")
+            return if (email != null && passwordHash != null && encSymkey != null) Triple(email, passwordHash, encSymkey) else null
+        }
+
+        fun getUsedEmail(context: Context): String? {
+            return LocalStorage.load(context, "usedEmail")
         }
     }
 }

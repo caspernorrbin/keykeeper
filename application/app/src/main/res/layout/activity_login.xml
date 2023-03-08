@@ -65,6 +65,12 @@
             android:layout_marginTop="4dp"
             android:text="@string/login_button" />
 
+        <CheckBox
+            android:id="@+id/login_offline_mode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login_offline_mode" />
+
         <TextView
             android:id="@+id/login_header_label2"
             android:layout_width="wrap_content"

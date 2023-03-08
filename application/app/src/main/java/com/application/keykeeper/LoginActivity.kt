@@ -5,13 +5,10 @@ import android.content.Intent
 import android.graphics.drawable.Animatable
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
-import android.view.Display.Mode
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.res.ResourcesCompat
 import structure.*
 
 class LoginActivity : AppCompatActivity() {
@@ -25,6 +22,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var rememberCheckBox: CheckBox
     private lateinit var changeServerButton: Button
     private lateinit var serverConnectLabel: TextView
+    private lateinit var offlineModeBox: CheckBox
 
     // TODO: Add URLs
     private val addServerItem: ServerItem = ServerItem("Add new", "", false)
@@ -46,6 +44,7 @@ class LoginActivity : AppCompatActivity() {
         rememberCheckBox = findViewById(R.id.login_remember_checkbox)
         changeServerButton = findViewById(R.id.login_change_server_button)
         serverConnectLabel = findViewById(R.id.login_server_connect_label)
+        offlineModeBox = findViewById(R.id.login_offline_mode)
 
         // Apply connected server if stored
         selectedServer = updateServerConnect()
@@ -68,7 +67,9 @@ class LoginActivity : AppCompatActivity() {
                 swapBodyLoading(true)
 
                 // TODO: Pass url from 'selectedServer'
-                Model.Communication.login(email, password) { successful, message ->
+                val offlineMode = offlineModeBox.isChecked
+
+                Model.Communication.login(this, offlineMode, email, password) { successful, message ->
                     if(successful) {
                         // If checked save email
                         if (rememberCheckBox.isChecked) {

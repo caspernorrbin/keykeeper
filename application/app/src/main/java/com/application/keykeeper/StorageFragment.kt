@@ -11,7 +11,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import kotlin.random.Random
+import java.security.SecureRandom
 import structure.*
 
 class StorageFragment: Fragment() {
@@ -22,6 +22,7 @@ class StorageFragment: Fragment() {
     private lateinit var adapter: CredentialsAdapter
     private lateinit var toolbar: Toolbar
     private lateinit var toolbarAddItemButton: ImageButton
+    private var offlineMode: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -49,6 +50,10 @@ class StorageFragment: Fragment() {
 
         // Allow the search bar to be opened from anywhere in its area, and not only the icon.
         searchView.setOnClickListener { searchView.isIconified = false }
+
+        // Hide the add item button if in offline mode
+        offlineMode = Model.Storage.inOfflineMode(requireContext())
+        toolbarAddItemButton.visibility = if (offlineMode) View.INVISIBLE else View.VISIBLE
 
         // Setup toolbar button
         toolbarAddItemButton.setOnClickListener {
@@ -108,6 +113,8 @@ class StorageFragment: Fragment() {
         val editButton = view.findViewById<Button>(R.id.storage_item_popup_edit_button)
         val deleteButton = view.findViewById<Button>(R.id.storage_item_popup_delete_button)
 
+        editButton.isEnabled = !offlineMode
+        deleteButton.isEnabled = !offlineMode
 
         // Display hidden password
         passwordLabel.text = item.password.replace(".".toRegex(), "*")
@@ -311,7 +318,7 @@ class StorageFragment: Fragment() {
 
         var password = ""
         for (i in 0..31) { // create 32 character randomized password from 'characters'
-            password += characters[Random.nextInt(characters.size)]
+            password += characters[SecureRandom().nextInt(characters.size)]
         }
         return password
     }
