@@ -43,8 +43,6 @@
     <string name="change_server_confirm">Confirm</string>
     <string name="change_server_remove_server">Remove Server</string>
 
-
-
     <!-- Create Account strings -->
     <string name="create_account_header">Create Account Debug</string>
     <string name="create_account_email">Account email</string>

@@ -31,19 +31,6 @@ class LoginActivity : AppCompatActivity() {
     private val defaultServerItem: ServerItem = ServerItem("KeyKeeper Server", "http://10.0.2.2:8080/", false)
     private var selectedServer: ServerItem? = null
 
-    private fun showStatusMessage(message: String, isErrorMessage: Boolean = false) {
-        // Set appropriate text color
-        val colorId = if (isErrorMessage) R.color.fg_error_message else R.color.fg_success_message
-        statusMessage.setTextColor(ResourcesCompat.getColor(resources, colorId, null))
-
-        statusMessage.text = message
-        statusMessage.visibility = View.VISIBLE
-    }
-
-    private fun hideStatusMessage() {
-        statusMessage.visibility = View.GONE
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -90,20 +77,20 @@ class LoginActivity : AppCompatActivity() {
                             Model.Storage.removeRememberedEmail(applicationContext)
                         }
 
-                        hideStatusMessage()
+                        Utils.hideStatusMessage(statusMessage)
                         navigateToMain()
                     } else {
                         // Display error message that input is invalid.
                         swapBodyLoading(false)
-                        showStatusMessage(message, true)
+                        Utils.showStatusMessage(statusMessage, message, true)
                     }
                 }
             } else {
                 // Display error message that input is invalid.
                 if(!email.isValidEmail()) {
-                    showStatusMessage("Invalid email format.", true)
+                    Utils.showStatusMessage(statusMessage, "Invalid email format.", true)
                 } else if(password.isEmpty()) {
-                    showStatusMessage("Invalid password.", true)
+                    Utils.showStatusMessage(statusMessage, "Invalid password.", true)
                 }
             }
         }
@@ -127,7 +114,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun navigateToCreateAccount() {
-        hideStatusMessage()
+        Utils.hideStatusMessage(statusMessage)
 
         val intent = Intent(this@LoginActivity, CreateAccountActivity::class.java)
         startActivity(intent)
@@ -141,7 +128,7 @@ class LoginActivity : AppCompatActivity() {
                 imm?.hideSoftInputFromWindow(it.windowToken, 0)
             }
 
-            hideStatusMessage()
+            Utils.hideStatusMessage(statusMessage)
 
             bodyLayout.visibility = View.INVISIBLE
             loadingIcon.visibility = View.VISIBLE
@@ -188,6 +175,7 @@ class LoginActivity : AppCompatActivity() {
         val urlInput = view.findViewById<EditText>(R.id.change_server_popup_url_input)
         val confirmButton = view.findViewById<Button>(R.id.change_server_popup_button)
         val removeButton = view.findViewById<Button>(R.id.change_server_remove)
+        val statusLabel = view.findViewById<TextView>(R.id.change_server_status_message)
 
         // Close window when clicked
         closeButton.setOnClickListener { window.dismiss() }
@@ -212,6 +200,7 @@ class LoginActivity : AppCompatActivity() {
         changeServerSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val selectedItem = serverItems[position]
+
                 if (selectedItem.name == "Add new") {
                     serverName.visibility = View.VISIBLE
                     urlInput.visibility = View.VISIBLE
@@ -219,6 +208,9 @@ class LoginActivity : AppCompatActivity() {
                     serverName.visibility = View.GONE
                     urlInput.visibility = View.GONE
                 }
+
+                removeButton.visibility = if (selectedItem.isRemovable) View.VISIBLE else View.GONE
+                Utils.hideStatusMessage(statusLabel)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -228,6 +220,7 @@ class LoginActivity : AppCompatActivity() {
 
         // Set the click listener for the button
         confirmButton.setOnClickListener {
+            Utils.hideStatusMessage(statusLabel)
             // Get the selected item and check if it is "Add new"
             var selectedItem = serverItems[changeServerSpinner.selectedItemPosition]
             if (selectedItem == addServerItem) {
@@ -239,7 +232,7 @@ class LoginActivity : AppCompatActivity() {
                 if (Model.Storage.addServerItem(view.context, newServerItem)) {
                     selectedItem = newServerItem
                 } else {
-                    Log.e("addServerItem", "Failed to add server item")
+                    Utils.showStatusMessage(statusLabel, "Failed to add server item", true)
                 }
             }
 
@@ -248,22 +241,33 @@ class LoginActivity : AppCompatActivity() {
                 // Close window
                 window.dismiss()
             } else {
-                Toast.makeText(view.context, "Failed to set selected server", Toast.LENGTH_SHORT).show()
+                Utils.showStatusMessage(statusLabel, "Failed to set selected server", true)
             }
         }
 
         //Remove selected item from spinner when remove button is clicked
         removeButton.setOnClickListener {
             val selectedItem = serverItems[changeServerSpinner.selectedItemPosition]
-            if (selectedItem != defaultServerItem && selectedItem != addServerItem) {
-                if (Model.Storage.removeServerItem(view.context, selectedItem)) {
-                    // Remove the selected item from the adapter
-                    serverItemAdapter.remove(selectedItem)
-                    // Select the default server
-                    changeServerSpinner.setSelection(0)
+            if (selectedItem.isRemovable) {
+                Utils.hideStatusMessage(statusLabel)
+                // Confirm delete
+                if (removeButton.tag == "delete") {
+                    removeButton.tag = "confirm"
+                    removeButton.setText(R.string.storage_popup_confirm_delete)
+                    removeButton.setBackgroundColor(resources.getColor(R.color.light_dangerous))
                 } else {
-                    // Show an error message if the server item couldn't be removed
-                    Toast.makeText(view.context, "Failed to remove the selected server item", Toast.LENGTH_SHORT).show()
+                    if (Model.Storage.removeServerItem(view.context, selectedItem)) {
+                        // Remove the selected item from the adapter
+                        serverItemAdapter.remove(selectedItem)
+                        changeServerSpinner.setSelection(0)
+                        // Remove selected
+                        if (selectedItem == selectedServer && Model.Storage.removeSelectedServer(view.context)) {
+                            selectedServer = updateServerConnect()
+                        }
+                    } else {
+                        // Show an error message if the server item couldn't be removed
+                        Utils.showStatusMessage(statusLabel, "Failed to remove the selected server item", true)
+                    }
                 }
             }
         }

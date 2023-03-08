@@ -176,5 +176,8 @@ object Model {
             val text = server.toJSON().toString()
             return LocalStorage.save(context, "selectedServer", text)
         }
+        fun removeSelectedServer(context: Context): Boolean {
+            return LocalStorage.remove(context, "selectedServer")
+        }
     }
 }

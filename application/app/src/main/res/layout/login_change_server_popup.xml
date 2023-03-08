@@ -61,7 +61,7 @@
             android:hint="@string/change_server_server_name"
             android:padding="13dp"
             android:textSize="14sp"
-            android:visibility="invisible"
+            android:visibility="gone"
             android:autofillHints="@string/change_server_server_name"
             android:inputType="textPersonName" />
 
@@ -76,7 +76,7 @@
             android:inputType="textUri"
             android:padding="13dp"
             android:textSize="14sp"
-            android:visibility="invisible"
+            android:visibility="gone"
             android:autofillHints="@string/change_server_url" />
 
         <Button
@@ -101,9 +101,17 @@
             android:layout_marginRight="3dp"
             android:text="@string/change_server_remove_server"
             android:textSize="12sp"
+            android:visibility="gone"
             android:tag="delete">
         </Button>
 
-
+        <TextView
+            android:id="@+id/change_server_status_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:visibility="gone" />
     </LinearLayout>
 </FrameLayout>
