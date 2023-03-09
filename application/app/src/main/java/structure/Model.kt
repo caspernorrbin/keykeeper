@@ -73,6 +73,10 @@ object Model {
                         Storage.setAccountDetails(context, email, passwordHash, symOrError)
                         Storage.setOfflineMode(context, false)
 
+                        // This loads all items once when logging in. Prevents cases where the user
+                        // never visits the storage view and then logs in to another account.
+                        getItems(context) { _, _, _ -> }
+
                         symkey = Encryption.decryptSymkey(password, symOrError)
                     }
 
