@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import structure.Model
 import structure.Utils
 
-
 class CreateAccountActivity : AppCompatActivity() {
     private lateinit var emailInput: EditText
     private lateinit var passwordInput: EditText

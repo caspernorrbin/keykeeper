@@ -13,7 +13,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import java.security.SecureRandom
 import structure.*
-
 class StorageFragment: Fragment() {
     private lateinit var viewOfLayout: View
     private lateinit var searchView: SearchView
@@ -23,7 +22,6 @@ class StorageFragment: Fragment() {
     private lateinit var toolbar: Toolbar
     private lateinit var toolbarAddItemButton: ImageButton
     private var offlineMode: Boolean = false
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         viewOfLayout = inflater.inflate(R.layout.fragment_storage, container, false)
@@ -73,7 +71,6 @@ class StorageFragment: Fragment() {
             adapter.addAll(items.toList())
         }
     }
-
     private fun onQueryTextListener(): SearchView.OnQueryTextListener {
         return object: SearchView.OnQueryTextListener {
             // When input is finalized
@@ -95,7 +92,6 @@ class StorageFragment: Fragment() {
             }
         }
     }
-
     private fun onSelectItem(adapter: AdapterView<CredentialsAdapter>, index: Int) {
         val item = adapter.getItemAtPosition(index)!! as CredentialsItem
         val context = adapter.context
@@ -170,6 +166,7 @@ class StorageFragment: Fragment() {
             val clip: ClipData = ClipData.newPlainText("Copied Username", item.username)
             clipboard!!.setPrimaryClip(clip)
         }
+
         passwordGroup.setOnClickListener {
             val clipboard =
                 ContextCompat.getSystemService(context, ClipboardManager::class.java)
@@ -177,7 +174,6 @@ class StorageFragment: Fragment() {
             val clip: ClipData = ClipData.newPlainText("Copied Password", item.password)
             clipboard!!.setPrimaryClip(clip)
         }
-
 
         // Toggle between displaying password, store state in tag value
         showPasswordButton.setOnClickListener {
@@ -192,9 +188,6 @@ class StorageFragment: Fragment() {
             }
         }
     }
-
-
-
     private fun openEditItemPopup(adapter: AdapterView<CredentialsAdapter>, index: Int): PopupWindow {
         val item = adapter.getItemAtPosition(index)!! as CredentialsItem
         val context = adapter.context
@@ -275,6 +268,7 @@ class StorageFragment: Fragment() {
         val notesInput = view.findViewById<EditText>(R.id.storage_item_popup_notes_input)
         val statusMessage = view.findViewById<TextView>(R.id.storage_item_popup_status_message)
         val randomPassword = view.findViewById<ImageButton>(R.id.storage_item_popup_randomize_password_button)
+
 
         // Close window when clicked
         closeButton.setOnClickListener { window.dismiss() }

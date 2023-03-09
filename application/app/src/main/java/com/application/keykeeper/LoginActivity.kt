@@ -26,7 +26,7 @@ class LoginActivity : AppCompatActivity() {
 
     // TODO: Add URLs
     private val addServerItem: ServerItem = ServerItem("Add new", "", false)
-    private val defaultServerItem: ServerItem = ServerItem("KeyKeeper Server", "http://10.0.2.2:8080/", false)
+    private val defaultServerItem: ServerItem = ServerItem("KeyKeeper Server", BuildConfig.SERVER_URL, false)
     private var selectedServer: ServerItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,11 +63,12 @@ class LoginActivity : AppCompatActivity() {
             val password = passwordInput.text.toString()
 
             // Check if valid email and non-empty password
-            if(email.isValidEmail() && password.isNotEmpty()) {
+            if(email.isValidEmail() && password.isNotEmpty() && selectedServer != null) {
                 swapBodyLoading(true)
 
                 // TODO: Pass url from 'selectedServer'
                 val offlineMode = offlineModeBox.isChecked
+                Model.Communication.setSelectedServer(selectedServer!!)
 
                 Model.Communication.login(this, offlineMode, email, password) { successful, message ->
                     if(successful) {
@@ -185,17 +186,16 @@ class LoginActivity : AppCompatActivity() {
         itemList.add(0, defaultServerItem)
         itemList.add(addServerItem)
         // Remove null elements
-        val serverItems = itemList.filter { it -> it != null }
+        val serverItems = itemList.filter { it != null }
         val serverItemAdapter = ServerItemAdapter(view.context, R.layout.server_item, R.id.server_item_label, serverItems)
         changeServerSpinner.adapter = serverItemAdapter
 
         // Set default selection
-        var index = serverItems.indexOfFirst { it -> it == selectedServer }
+        var index = serverItems.indexOfFirst { it == selectedServer }
         if (index == -1) {
             index = 0
         }
         changeServerSpinner.setSelection(index)
-
 
         // Make the Edit texts visible when specific
         changeServerSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {

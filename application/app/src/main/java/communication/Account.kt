@@ -1,5 +1,5 @@
 package communication
-import com.application.keykeeper.BuildConfig
+
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.Request
 import com.github.kittinunf.fuel.core.extensions.jsonBody
@@ -66,13 +66,12 @@ object Account {
 
     // Sends a request to login to the server and calls the callback function with the server
     // response. If the login was successful, the loggedIn property is set to true.
-    fun sendLoginRequest(email: String, passwordHash: String,
-                                callback: (successful: Boolean, responseBody: String) -> Unit) {
+    fun sendLoginRequest(email: String, passwordHash: String, url: String,
+                         callback: (successful: Boolean, responseBody: String) -> Unit) {
 
         val jsonPostData = this.jsonAccountData(email, passwordHash, null)
-
         // Make request.
-        Fuel.post(BuildConfig.SERVER_URL + "api/auth/login")
+        Fuel.post(url + "api/auth/login")
             .header("Content-Type", "application/json")
             .jsonBody(jsonPostData.toString())
             .responseObject(Deserializer(String::class)) { _, response, result ->
@@ -94,13 +93,13 @@ object Account {
     }
 
     // Sends a request to the server to create a new account.
-    fun sendCreateAccountRequest(email: String, passwordHash: String, encSymkey: String,
+    fun sendCreateAccountRequest(email: String, passwordHash: String, encSymkey: String, url: String,
                                         callback: (success: Boolean, message: String) -> Unit) {
 
         val jsonPostData = this.jsonAccountData(email, passwordHash, encSymkey)
 
         // Make request.
-        Fuel.post(BuildConfig.SERVER_URL + "api/account/create")
+        Fuel.post(url + "api/account/create")
             .header("Content-Type", "application/json")
             .jsonBody(jsonPostData.toString())
             .responseObject(ServerMessage.getDeserializer()) { _, response, result ->
@@ -115,19 +114,15 @@ object Account {
     }
 
     fun sendUpdateAccountRequest(oldPasswordHash: String, email: String, passwordHash: String, encSymkey: String,
-                                    callback: (success: Boolean, message: String) -> Unit) {
+                                 url: String, callback: (success: Boolean, message: String) -> Unit) {
         var jsonPostData = this.jsonAccountData(email, passwordHash, encSymkey)
         jsonPostData.put("oldpassword", oldPasswordHash)
-        println(jsonPostData)
 
-        Fuel.post(BuildConfig.SERVER_URL + "api/account/update")
+        Fuel.post(url + "api/account/update")
             .header("Cookie", sessionCookie)
             .header("Content-Type", "application/json")
             .jsonBody(jsonPostData.toString())
             .response() { _, response, result ->
-                // serverResponse always null on code 400 with deserializer?
-                //val (serverResponse, _) = result
-
                 when(response.statusCode) {
                     200, 400 -> JSONObject(String(response.data)).get("message").toString()
                     else -> "Something went wrong when communicating with the server. Try again later."

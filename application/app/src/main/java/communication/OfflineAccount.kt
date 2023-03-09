@@ -5,6 +5,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import structure.Encryption
 import structure.Model.Storage
+import structure.ServerItem
 
 @RequiresApi(Build.VERSION_CODES.O)
 object OfflineAccount {
