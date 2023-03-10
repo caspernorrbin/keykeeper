@@ -12,7 +12,6 @@ import org.json.JSONObject
  * the current user.
  */
 object Account {
-
     // Indicates whether the Account has successfully logged in or not.
     private var loggedIn: Boolean
 
@@ -31,7 +30,6 @@ object Account {
     }
 
     // Returns a JSONObject of the data associated with the account.
-
     private fun jsonAccountData(email: String, passwordHash: String,
                                 symkey: String? = null): JSONObject {
         // Create object containing data to be sent to the server.
@@ -122,7 +120,7 @@ object Account {
             .header("Cookie", sessionCookie)
             .header("Content-Type", "application/json")
             .jsonBody(jsonPostData.toString())
-            .response() { _, response, result ->
+            .response { _, response, result ->
                 when(response.statusCode) {
                     200, 400 -> JSONObject(String(response.data)).get("message").toString()
                     else -> "Something went wrong when communicating with the server. Try again later."

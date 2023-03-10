@@ -24,7 +24,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var serverConnectLabel: TextView
     private lateinit var offlineModeBox: CheckBox
 
-    // TODO: Add URLs
     private val addServerItem: ServerItem = ServerItem("Add new", "", false)
     private val defaultServerItem: ServerItem = ServerItem("KeyKeeper Server", BuildConfig.SERVER_URL, false)
     private var selectedServer: ServerItem? = null
@@ -66,7 +65,6 @@ class LoginActivity : AppCompatActivity() {
             if(email.isValidEmail() && password.isNotEmpty() && selectedServer != null) {
                 swapBodyLoading(true)
 
-                // TODO: Pass url from 'selectedServer'
                 val offlineMode = offlineModeBox.isChecked
                 Model.Communication.setSelectedServer(selectedServer!!)
 
@@ -140,7 +138,6 @@ class LoginActivity : AppCompatActivity() {
             // Necessary to disable buttons to hide keyboard if they are selected
             buttonLogin.isEnabled = false
             buttonCreateAccount.isEnabled = false
-
         } else {
             // Stop animating loading icon
             (loadingIcon.drawable as Animatable).stop()

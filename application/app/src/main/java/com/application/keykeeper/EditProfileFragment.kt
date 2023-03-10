@@ -25,7 +25,6 @@ class EditProfileFragment : Fragment() {
     private lateinit var buttonSaveChanges: Button
 
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
         // Inflate the layout for this fragment
         viewOfLayout = inflater.inflate(R.layout.fragment_edit_profile, container, false)
 

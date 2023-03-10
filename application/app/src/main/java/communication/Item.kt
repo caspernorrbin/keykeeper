@@ -69,7 +69,7 @@ object Item {
             callback.invoke(false, notLoggedInMessage)
         } else {
             sendAuthenticatedPostRequestWithServerMessageResponse(
-                url + "api/item/create", //BuildConfig.SERVER_URL + "api/item/create", // TODO remove comment
+                url + "api/item/create",
                 jsonPostData,
                 callback
             )

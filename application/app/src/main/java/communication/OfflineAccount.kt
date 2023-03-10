@@ -1,13 +1,9 @@
 package communication
 
 import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresApi
 import structure.Encryption
 import structure.Model.Storage
-import structure.ServerItem
 
-@RequiresApi(Build.VERSION_CODES.O)
 object OfflineAccount {
     fun sendLoginRequest(context: Context, email: String, password: String,
                          callback: (successful: Boolean, responseBody: String) -> Unit) {

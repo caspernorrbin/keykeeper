@@ -12,7 +12,6 @@ import android.widget.Button
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
 class DebugFragment: Fragment() {
-
     private lateinit var viewOfLayout: View
 
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

@@ -1,7 +1,6 @@
 package structure
 
 import org.json.JSONObject
-import kotlin.reflect.typeOf
 
 data class ServerItem(val name: String, val url: String, val isRemovable: Boolean = true) {
     override fun toString(): String {
@@ -10,6 +9,10 @@ data class ServerItem(val name: String, val url: String, val isRemovable: Boolea
 
     override fun equals(other: Any?): Boolean {
         return other is ServerItem && other.name == this.name && other.url == this.url
+    }
+
+    override fun hashCode(): Int {
+        return name.hashCode()
     }
 
     fun toJSON(): JSONObject {
