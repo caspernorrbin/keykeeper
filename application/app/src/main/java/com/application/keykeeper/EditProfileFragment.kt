@@ -15,7 +15,6 @@ import android.widget.TextView
 import structure.Model
 import structure.Utils
 
-
 class EditProfileFragment : Fragment() {
     private lateinit var textView: TextView
     private lateinit var viewOfLayout: View
@@ -26,7 +25,6 @@ class EditProfileFragment : Fragment() {
     private lateinit var buttonSaveChanges: Button
 
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
         // Inflate the layout for this fragment
         viewOfLayout = inflater.inflate(R.layout.fragment_edit_profile, container, false)
 
@@ -52,7 +50,6 @@ class EditProfileFragment : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
-
 
         // Set click listener for "Save Changes" button
         buttonSaveChanges.setOnClickListener {

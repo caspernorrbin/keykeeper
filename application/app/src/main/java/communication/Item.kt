@@ -1,6 +1,5 @@
 package communication
 
-import com.application.keykeeper.BuildConfig
 import com.github.kittinunf.fuel.core.extensions.jsonBody
 import communication.structure.DatabaseItem
 import communication.structure.ServerMessage
@@ -63,25 +62,25 @@ object Item {
             }
     }
 
-    fun sendCreateItemRequest(item: CredentialsItem, callback: (successful: Boolean, message: String) -> Unit) {
+    fun sendCreateItemRequest(item: CredentialsItem, url: String, callback: (successful: Boolean, message: String) -> Unit) {
         val jsonPostData = this.jsonItemData(item)
 
         if(!Account.isLoggedIn()) {
             callback.invoke(false, notLoggedInMessage)
         } else {
             sendAuthenticatedPostRequestWithServerMessageResponse(
-                 BuildConfig.SERVER_URL + "api/item/create",
+                url + "api/item/create",
                 jsonPostData,
                 callback
             )
         }
     }
 
-    fun sendGetItemsRequest(callback: (successful: Boolean, message: String, items: Array<DatabaseItem>) -> Unit) {
+    fun sendGetItemsRequest(url: String, callback: (successful: Boolean, message: String, items: Array<DatabaseItem>) -> Unit) {
         if(!Account.isLoggedIn()) {
             callback.invoke(false, notLoggedInMessage, arrayOf())
         } else {
-            Account.sendAuthenticatedGetRequest(BuildConfig.SERVER_URL + "api/item/getAll")
+            Account.sendAuthenticatedGetRequest(url + "api/item/getAll")
                 .responseObject(DatabaseItem.getArrayDeserializer()) { _, response, result ->
                     val (serverResponse, _) = result
 
@@ -94,28 +93,28 @@ object Item {
         }
     }
 
-    fun sendDeleteItemRequest(item: CredentialsItem, callback: (successful: Boolean, message: String) -> Unit) {
+    fun sendDeleteItemRequest(item: CredentialsItem, url: String, callback: (successful: Boolean, message: String) -> Unit) {
         val jsonPostData = this.jsonDeleteData(item)
 
         if(!Account.isLoggedIn()) {
             callback.invoke(false, notLoggedInMessage)
         } else {
             sendAuthenticatedPostRequestWithServerMessageResponse(
-                BuildConfig.SERVER_URL + "api/item/delete",
+                url + "api/item/delete",
                 jsonPostData,
                 callback
             )
         }
     }
 
-    fun sendUpdateItemRequest(item: CredentialsItem, callback: (successful: Boolean, message: String) -> Unit) {
+    fun sendUpdateItemRequest(item: CredentialsItem, url: String, callback: (successful: Boolean, message: String) -> Unit) {
         val jsonPostData = this.jsonUpdateData(item)
 
         if(!Account.isLoggedIn()) {
             callback.invoke(false, notLoggedInMessage)
         } else {
             sendAuthenticatedPostRequestWithServerMessageResponse(
-                BuildConfig.SERVER_URL + "api/item/update",
+                url + "api/item/update",
                 jsonPostData,
                 callback
             )

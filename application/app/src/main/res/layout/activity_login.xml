@@ -7,7 +7,9 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_image"
     android:theme="@style/Theme.KeyKeeper"
-    tools:context=".LoginActivity">
+    tools:context=".LoginActivity"
+    android:id="@+id/Login_activity_layout"
+    >
 
     <TextView
         android:id="@+id/login_header_label"
@@ -111,6 +113,27 @@
         app:layout_constraintTop_toTopOf="@+id/login_body_layout"
         android:layout_marginTop="120sp"
         app:srcCompat="@drawable/an_loading" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/login_server_connect_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/login_change_server_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login_change_server_button" />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

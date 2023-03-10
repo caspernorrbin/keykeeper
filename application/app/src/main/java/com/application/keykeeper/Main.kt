@@ -18,7 +18,6 @@ class Main : AppCompatActivity() {
     private lateinit var bottomNav : BottomNavigationView
     private lateinit var toolbar : Toolbar
     private lateinit var navController: NavController
-
     private lateinit var toolbarStorageAddItemButton: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {

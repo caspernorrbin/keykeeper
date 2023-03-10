@@ -13,7 +13,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import java.security.SecureRandom
 import structure.*
-
 class StorageFragment: Fragment() {
     private lateinit var viewOfLayout: View
     private lateinit var searchView: SearchView
@@ -101,6 +100,7 @@ class StorageFragment: Fragment() {
         val context = adapter.context
         val window = PopupWindowFactory.create(R.layout.storage_item_popup, context, viewOfLayout)
         val view = window.contentView
+        // Find components in this view
         val closeButton = view.findViewById<ImageButton>(R.id.storage_item_popup_close_button)
         val usernameGroup = view.findViewById<LinearLayout>(R.id.storage_item_popup_username_group)
         val usernameLabel = view.findViewById<TextView>(R.id.storage_item_popup_username_text)
@@ -170,6 +170,7 @@ class StorageFragment: Fragment() {
             val clip: ClipData = ClipData.newPlainText("Copied Username", item.username)
             clipboard!!.setPrimaryClip(clip)
         }
+
         passwordGroup.setOnClickListener {
             val clipboard =
                 ContextCompat.getSystemService(context, ClipboardManager::class.java)
@@ -177,7 +178,6 @@ class StorageFragment: Fragment() {
             val clip: ClipData = ClipData.newPlainText("Copied Password", item.password)
             clipboard!!.setPrimaryClip(clip)
         }
-
 
         // Toggle between displaying password, store state in tag value
         showPasswordButton.setOnClickListener {
@@ -193,8 +193,6 @@ class StorageFragment: Fragment() {
         }
     }
 
-
-
     private fun openEditItemPopup(adapter: AdapterView<CredentialsAdapter>, index: Int): PopupWindow {
         val item = adapter.getItemAtPosition(index)!! as CredentialsItem
         val context = adapter.context
@@ -203,6 +201,7 @@ class StorageFragment: Fragment() {
         window.isFocusable = true
         window.update()
         val view = window.contentView
+
         // Find components
         val applyButton = view.findViewById<Button>(R.id.storage_item_popup_apply_button)
         val closeButton = view.findViewById<ImageButton>(R.id.storage_item_popup_close_button)
@@ -238,8 +237,6 @@ class StorageFragment: Fragment() {
             )
 
             Model.Communication.updateItem(updateItem) { successful, message ->
-                println("Update item request: (successful: $successful), (message: $message)")
-
                 if(successful) {
                     fetchAndUpdateListView()
                     // Close pop-up
@@ -265,6 +262,7 @@ class StorageFragment: Fragment() {
         window.isFocusable = true
         window.update()
         val view = window.contentView
+
         // Find components
         val addButton = view.findViewById<Button>(R.id.storage_item_popup_add_button)
         val closeButton = view.findViewById<ImageButton>(R.id.storage_item_popup_close_button)
