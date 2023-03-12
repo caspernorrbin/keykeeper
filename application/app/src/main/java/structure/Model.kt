@@ -18,13 +18,17 @@ object Model {
         private lateinit var selectedServerURL: String
 
         fun setSelectedServer(newSelectedServer: ServerItem) {
-            // Split url to ensure correct format
-            val groups = Regex("(.+)://([^/]+)").find(newSelectedServer.url)?.groups!!
-            val protocol = groups[1]?.value
-            val site = groups[2]?.value
-            val url = "$protocol://$site/"
-            this.selectedServerURL = url
             this.selectedServer = newSelectedServer
+            // Split url to ensure correct format
+            val groups = Regex("(.+)://([^/]+)").find(newSelectedServer.url)?.groups
+            if (groups != null) {
+                val protocol = groups[1]?.value
+                val site = groups[2]?.value
+                val url = if (protocol != null && site != null) "$protocol://$site/" else newSelectedServer.url
+                this.selectedServerURL = url
+            } else {
+                this.selectedServerURL = newSelectedServer.url
+            }
         }
 
         fun createAccount(email: String, password: String, callback: (success: Boolean, message: String) -> Unit) {

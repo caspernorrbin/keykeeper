@@ -144,7 +144,6 @@ class StorageFragment: Fragment() {
             Utils.hideStatusMessage(statusMessage)
             openEditItemPopup(adapter, index).setOnDismissListener {
                 // Dismiss this if still open when the editor closes, possibly contains invalid data
-                // TODO: Fix overlaying backgrounds
                 window.dismiss()
             }
         }
@@ -180,9 +179,7 @@ class StorageFragment: Fragment() {
         }
 
         passwordGroup.setOnClickListener {
-            val clipboard =
-                ContextCompat.getSystemService(context, ClipboardManager::class.java)
-            // Todo de-encrypt the password first
+            val clipboard = ContextCompat.getSystemService(context, ClipboardManager::class.java)
             val clip: ClipData = ClipData.newPlainText("Copied Password", item.password)
             clipboard!!.setPrimaryClip(clip)
         }
@@ -194,9 +191,7 @@ class StorageFragment: Fragment() {
                 passwordLabel.text = item.password.replace(Regex("."), "*")
             } else {
                 showPasswordButton.tag = "revealed"
-                // Todo de-encrypt the password
                 passwordLabel.text = item.password
-
             }
         }
     }
@@ -231,6 +226,21 @@ class StorageFragment: Fragment() {
         // Close window when clicked
         closeButton.setOnClickListener { window.dismiss() }
         applyButton.setOnClickListener {
+            if (labelInput.text.isEmpty()) {
+                Utils.showStatusMessage(statusMessage, "Label field cannot be empty", true)
+                return@setOnClickListener
+            }
+
+            if (urlInput.text.isEmpty()) {
+                Utils.showStatusMessage(statusMessage, "Url field cannot be empty", true)
+                return@setOnClickListener
+            }
+
+            if (usernameInput.text.isEmpty() && passwordInput.text.isEmpty()) {
+                Utils.showStatusMessage(statusMessage, "Password and Username fields cannot both be empty", true)
+                return@setOnClickListener
+            }
+
             // Hide old message
             Utils.hideStatusMessage(statusMessage)
 
@@ -285,7 +295,21 @@ class StorageFragment: Fragment() {
         // Close window when clicked
         closeButton.setOnClickListener { window.dismiss() }
         addButton.setOnClickListener {
-            // TODO: Implement input validation
+            if (labelInput.text.isEmpty()) {
+                Utils.showStatusMessage(statusMessage, "Label field cannot be empty", true)
+                return@setOnClickListener
+            }
+
+            if (urlInput.text.isEmpty()) {
+                Utils.showStatusMessage(statusMessage, "Url field cannot be empty", true)
+                return@setOnClickListener
+            }
+
+            if (usernameInput.text.isEmpty() && passwordInput.text.isEmpty()) {
+                Utils.showStatusMessage(statusMessage, "Password and Username fields cannot both be empty", true)
+                return@setOnClickListener
+            }
+
             val newItem = CredentialsItem(
                 0,
                 labelInput.text.toString(),

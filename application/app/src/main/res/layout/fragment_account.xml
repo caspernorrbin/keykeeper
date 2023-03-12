@@ -43,21 +43,21 @@
         <Button
             android:id="@+id/account_logout_button"
             android:layout_width="match_parent"
-            android:layout_height="65dp"
+            android:layout_height="56dp"
             android:layout_marginTop="4dp"
             android:text="@string/account_logout" />
 
         <Button
             android:id="@+id/account_edit_profile_button"
             android:layout_width="match_parent"
-            android:layout_height="65dp"
+            android:layout_height="56dp"
             android:layout_marginTop="4dp"
             android:text="@string/account_edit_profile" />
 
         <Button
             android:id="@+id/account_delete_button"
             android:layout_width="match_parent"
-            android:layout_height="65dp"
+            android:layout_height="56dp"
             android:layout_marginTop="4dp"
             android:backgroundTint="@color/dangerous"
             android:tag="delete"

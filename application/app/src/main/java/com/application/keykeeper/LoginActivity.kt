@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Animatable
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
@@ -20,7 +19,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var buttonCreateAccount: Button
     private lateinit var loadingIcon: ImageView
     private lateinit var rememberCheckBox: CheckBox
-    private lateinit var changeServerButton: Button
+    private lateinit var changeServerButton: ImageButton
     private lateinit var serverConnectLabel: TextView
     private lateinit var offlineModeBox: CheckBox
 
@@ -102,6 +101,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    @Deprecated("Outdated")
     override fun onBackPressed() {
         // Prevent going back as it would close the app
     }
@@ -148,10 +148,6 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun String.isValidEmail(): Boolean {
-        return !TextUtils.isEmpty(this) && android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
-    }
-
     private fun updateServerConnect(): ServerItem {
         val server = Model.Storage.getSelectedServer(applicationContext) ?: defaultServerItem
         serverConnectLabel.text = getString(R.string.login_server_connect, server.name)
@@ -182,7 +178,7 @@ class LoginActivity : AppCompatActivity() {
         itemList.add(0, defaultServerItem)
         itemList.add(addServerItem)
         // Remove null elements
-        val serverItems = itemList.filter { it != null }
+        val serverItems = itemList.filterNotNull()
         val serverItemAdapter = ServerItemAdapter(view.context, R.layout.server_item, R.id.server_item_label, serverItems)
         changeServerSpinner.adapter = serverItemAdapter
 
@@ -229,8 +225,14 @@ class LoginActivity : AppCompatActivity() {
                     Utils.showStatusMessage(statusLabel, "Cannot add server with no name", true)
                     return@setOnClickListener
                 }
+
                 if (newServerURL.isEmpty()) {
                     Utils.showStatusMessage(statusLabel, "Cannot add server with no url", true)
+                    return@setOnClickListener
+                }
+
+                if (serverItems.any { it.name == newServerName }) {
+                    Utils.showStatusMessage(statusLabel, "Servers must have unique names", true)
                     return@setOnClickListener
                 }
 

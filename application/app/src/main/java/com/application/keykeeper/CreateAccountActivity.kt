@@ -2,7 +2,6 @@ package com.application.keykeeper
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -10,6 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import structure.Model
 import structure.Utils
+import structure.isValidEmail
 
 class CreateAccountActivity : AppCompatActivity() {
     private lateinit var emailInput: EditText
@@ -37,8 +37,7 @@ class CreateAccountActivity : AppCompatActivity() {
             if(email.isValidEmail()) {
                 Model.Communication.createAccount(email, password) { successful, message ->
                     if(successful) {
-                        // TODO: Perhaps also show a success message instead of just switching to
-                        // the login view?
+                        // navigate to the login
                         Utils.hideStatusMessage(statusMessage)
                         navigateToLogin()
                     } else {
@@ -51,11 +50,13 @@ class CreateAccountActivity : AppCompatActivity() {
                 Utils.showStatusMessage(statusMessage, "Invalid email.", true)
             }
         }
+
         buttonBack.setOnClickListener {
             this.onBackPressed()
         }
     }
 
+    @Deprecated("Outdated")
     override fun onBackPressed() {
         Utils.hideStatusMessage(statusMessage)
         navigateToLogin()
@@ -66,9 +67,5 @@ class CreateAccountActivity : AppCompatActivity() {
         Utils.hideStatusMessage(statusMessage)
         startActivity(intent)
         finish()
-    }
-
-    private fun String.isValidEmail(): Boolean {
-        return !TextUtils.isEmpty(this) && android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
     }
 }

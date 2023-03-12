@@ -1,100 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Removing scrollview will cause problems when editing the fields inside the linear layout -->
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:background="@drawable/bg_image"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg_image">
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="600dp">
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="148dp"
-            android:layout_marginTop="54dp"
-            android:layout_marginEnd="148dp"
-            android:text="@string/edit_profile_edit_profile_text_view"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="50dp">
 
         <EditText
             android:id="@+id/editTextEmail"
-            android:layout_width="281dp"
+            android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="12dp"
             android:autofillHints="emailAddress"
             android:hint="@string/edit_profile_new_email_edit_text"
-            android:inputType="textEmailAddress"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
-
+            android:inputType="textEmailAddress"/>
 
         <EditText
             android:id="@+id/editTextPassword"
-            android:layout_width="281dp"
+            android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="12dp"
             android:autofillHints="password"
             android:hint="@string/edit_profile_new_password_edit_text"
-            android:inputType="textPassword"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
+            android:inputType="textPassword" />
 
         <EditText
             android:id="@+id/editTextPassword2"
-            android:layout_width="281dp"
+            android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:autofillHints="password"
             android:hint="@string/edit_profile_new_password_edit_text_2"
-            android:inputType="textPassword"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
-
-        <Button
-            android:id="@+id/buttonSaveChanges"
-            android:layout_width="275dp"
-            android:layout_height="65dp"
-            android:layout_gravity="end"
-            android:layout_marginTop="28dp"
-            android:text="@string/edit_profile_save_changes_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextOldPassword" />
-
-        <EditText
-            android:id="@+id/editTextOldPassword"
-            android:layout_width="281dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="8dp"
-            android:autofillHints="password"
-            android:ems="10"
-            android:hint="@string/edit_profile_old_password_edit_text"
-            android:inputType="textPassword"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            android:inputType="textPassword"/>
 
         <TextView
             android:id="@+id/textView2"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/edit_profile_text_explanation_text_view"
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"/>
+
+        <EditText
+            android:id="@+id/editTextOldPassword"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="12dp"
+            android:autofillHints="password"
+            android:ems="10"
+            android:hint="@string/edit_profile_old_password_edit_text"
+            android:inputType="textPassword"/>
+
+        <Button
+            android:id="@+id/buttonSaveChanges"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:text="@string/edit_profile_save_changes_button" />
+
+        <TextView
+            android:id="@+id/edit_profile_status_label"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/edit_profile_text_explanation_text_view"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.338"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextPassword2" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:visibility="gone"/>
+    </LinearLayout>
 </ScrollView>
