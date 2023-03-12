@@ -75,7 +75,6 @@ object Model {
             } else {
                 val passwordHash = Encryption.hashAuthentication(password, email)
                 Account.sendLoginRequest(email, passwordHash, selectedServerURL) { success, symOrError ->
-
                     if (success) {
                         Storage.setAccountDetails(context, email, passwordHash, symOrError)
                         Storage.setOfflineMode(context, false)

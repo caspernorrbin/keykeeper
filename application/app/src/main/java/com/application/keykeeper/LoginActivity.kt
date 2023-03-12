@@ -137,6 +137,7 @@ class LoginActivity : AppCompatActivity() {
             // Necessary to disable buttons to hide keyboard if they are selected
             buttonLogin.isEnabled = false
             buttonCreateAccount.isEnabled = false
+            changeServerButton.isEnabled = false
         } else {
             // Stop animating loading icon
             (loadingIcon.drawable as Animatable).stop()
@@ -145,6 +146,7 @@ class LoginActivity : AppCompatActivity() {
 
             buttonLogin.isEnabled = true
             buttonCreateAccount.isEnabled = true
+            changeServerButton.isEnabled = true
         }
     }
 
