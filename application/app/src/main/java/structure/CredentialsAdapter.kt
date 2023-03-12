@@ -12,14 +12,11 @@ import com.application.keykeeper.R
 import kotlinx.coroutines.*
 import java.io.InputStream
 import java.net.URL
-
-
 class CredentialsAdapter(
     context: Context,
     @LayoutRes private val layoutResource: Int,
     private val items: List<CredentialsItem>
 ): ArrayAdapter<CredentialsItem>(context, layoutResource, items) {
-
     fun addAll(collection: Collection<CredentialsItem>, callback: (collection: Collection<CredentialsItem>) -> Unit) {
         // Load images before adding
         CoroutineScope(Dispatchers.Main).launch {
@@ -33,7 +30,6 @@ class CredentialsAdapter(
             callback(collection)
         }
     }
-
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = convertView?: LayoutInflater.from(context).inflate(layoutResource, parent, false)
         val item = getItem(position)
@@ -48,7 +44,6 @@ class CredentialsAdapter(
 
         return view
     }
-
     private fun getImageFromUrl(urlString: String?): Drawable? {
         return try {
             // Match for protocol and site
@@ -63,8 +58,7 @@ class CredentialsAdapter(
             null
         }
     }
-
      fun getItems(): List<CredentialsItem> {
         return this.items
-    }
+     }
 }

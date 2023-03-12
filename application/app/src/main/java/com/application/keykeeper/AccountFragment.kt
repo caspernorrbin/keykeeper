@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.navigation.findNavController
+import structure.Model
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -16,12 +17,8 @@ import androidx.navigation.findNavController
 class AccountFragment: Fragment() {
     private lateinit var viewOfLayout: View
     private lateinit var buttonLogout: Button
-    private lateinit var changeEmailButton: Button
-    private lateinit var changePasswordButton: Button
+    private lateinit var editProfileButton: Button
     private lateinit var emailLabel: TextView
-
-
-
 
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -29,22 +26,20 @@ class AccountFragment: Fragment() {
 
         // Find view components
         buttonLogout = viewOfLayout.findViewById(R.id.account_logout_button)
-        changeEmailButton = viewOfLayout.findViewById(R.id.account_change_email_button)
-        changePasswordButton = viewOfLayout.findViewById(R.id.account_change_password_button)
+        editProfileButton = viewOfLayout.findViewById(R.id.account_edit_profile_button)
         emailLabel = viewOfLayout.findViewById(R.id.account_email_label)
+
+        val context = requireContext()
+        val offlineMode = Model.Storage.inOfflineMode(context)
+        emailLabel.text = Model.Storage.getUsedEmail(context)
+        editProfileButton.isEnabled = !offlineMode
 
         // Assign on click listeners
         buttonLogout.setOnClickListener {
             navigateToLogin()
         }
 
-        changeEmailButton.setOnClickListener {
-            val controller = viewOfLayout.findNavController()
-            val action = AccountFragmentDirections.actionNavAccountFragmentToNavEditFragment()
-            controller.navigate(action)
-        }
-
-        changePasswordButton.setOnClickListener {
+        editProfileButton.setOnClickListener {
             val controller = viewOfLayout.findNavController()
             val action = AccountFragmentDirections.actionNavAccountFragmentToNavEditFragment()
             controller.navigate(action)
@@ -54,6 +49,7 @@ class AccountFragment: Fragment() {
     }
 
     private fun navigateToLogin() {
+        Model.clearValues()
         val intent = Intent(activity, LoginActivity::class.java)
         startActivity(intent)
         activity?.finish()

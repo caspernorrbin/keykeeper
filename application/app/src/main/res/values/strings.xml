@@ -25,6 +25,7 @@
     <string name="account_profile_image_text">Profile</string>
     <string name="account_profile_email">email@provider.com</string>
     <string name="account_logout">Logout</string>
+    <string name="account_edit_profile">Edit Profile</string>
     <string name="account_change_email">Change Email</string>
     <string name="account_change_password">Change Password</string>
     <string name="account_delete">Delete Account</string>
@@ -38,6 +39,17 @@
     <string name="login_no_account">No account?</string>
     <string name="login_create_account">Create new account</string>
     <string name="login_remember_email">Remember Email</string>
+    <string name="login_offline_mode">Offline login</string>
+    <string name="login_change_server_button">Change Server</string>
+    <string name="login_server_connect">Connect to: %1$s</string>
+
+    <!-- change server strings -->
+    <string name="change_server_text_view">Change Server</string>
+    <string name="change_server_popup_close_button_description">Close Popup</string>
+    <string name="change_server_url">Url</string>
+    <string name="change_server_server_name">Server Name</string>
+    <string name="change_server_confirm">Confirm</string>
+    <string name="change_server_remove_server">Remove Server</string>
 
     <!-- Create Account strings -->
     <string name="create_account_header">Create Account Debug</string>
@@ -76,6 +88,7 @@
     <string name="edit_profile_edit_profile_text_view">Edit Profile</string>
     <string name="edit_profile_save_changes_button">Save Changes</string>
     <string name="edit_profile_new_password_edit_text">New Password</string>
+    <string name="edit_profile_new_password_edit_text_2">Retype Password</string>
     <string name="edit_profile_new_email_edit_text">New Email</string>
     <string name="edit_profile_edit_email_check_box">Edit Email</string>
     <string name="edit_profile_edit_password_checkbox">Edit Password</string>
@@ -88,5 +101,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="account_test_test_example_text_view">test@test.example</string>
+    <string name="server_item_label">Label</string>
+    <string name="server_item_remove_the_server">Remove the server</string>
 
 </resources>

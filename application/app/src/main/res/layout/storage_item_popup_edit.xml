@@ -102,6 +102,7 @@
                 android:tag="hidden"/>
         </LinearLayout>
 
+
         <EditText
             android:id="@+id/storage_item_popup_notes_input"
             android:layout_width="match_parent"

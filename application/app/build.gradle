@@ -30,7 +30,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
-            buildConfigField "String", "SERVER_URL", '"http://keykeeper.platform-spanning.systems:8080/"'
+            buildConfigField "String", "SERVER_URL", '"https://keykeeper.platform-spanning.systems/"'
             signingConfig signingConfigs.debug
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
