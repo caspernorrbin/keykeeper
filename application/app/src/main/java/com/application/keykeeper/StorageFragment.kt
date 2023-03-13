@@ -4,7 +4,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.graphics.drawable.Animatable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +13,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import java.security.SecureRandom
 import structure.*
+
 class StorageFragment: Fragment() {
     private lateinit var viewOfLayout: View
     private lateinit var searchView: SearchView
@@ -59,7 +59,6 @@ class StorageFragment: Fragment() {
 
         // Setup toolbar button
         toolbarAddItemButton.setOnClickListener {
-            Log.v("setOnClickListener", "Clicked Add Item Button!")
             openCreateItemPopup()
         }
 
