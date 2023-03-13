@@ -2,8 +2,8 @@ package com.application.keykeeper
 
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.graphics.drawable.Animatable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +13,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import java.security.SecureRandom
 import structure.*
+
 class StorageFragment: Fragment() {
     private lateinit var viewOfLayout: View
     private lateinit var searchView: SearchView
@@ -21,6 +22,7 @@ class StorageFragment: Fragment() {
     private lateinit var adapter: CredentialsAdapter
     private lateinit var toolbar: Toolbar
     private lateinit var toolbarAddItemButton: ImageButton
+    private lateinit var loadingIcon: ImageView
     private var offlineMode: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -29,6 +31,7 @@ class StorageFragment: Fragment() {
         searchView = viewOfLayout.findViewById(R.id.storage_search_view)
         listView = viewOfLayout.findViewById(R.id.storage_list_view)
         textView = viewOfLayout.findViewById(R.id.storage_text_view)
+        loadingIcon = viewOfLayout.findViewById(R.id.storage_loading_icon)
 
         // Find toolbar outside this view in the activity
         toolbar = requireActivity().findViewById(R.id.toolbar)
@@ -56,7 +59,6 @@ class StorageFragment: Fragment() {
 
         // Setup toolbar button
         toolbarAddItemButton.setOnClickListener {
-            Log.v("setOnClickListener", "Clicked Add Item Button!")
             openCreateItemPopup()
         }
 
@@ -64,12 +66,17 @@ class StorageFragment: Fragment() {
     }
 
     private fun fetchAndUpdateListView() {
+        loadingIcon.visibility = View.VISIBLE
+        // Start animating loading icon
+        (loadingIcon.drawable as Animatable).start()
         Model.Communication.getItems(requireContext()) { successful, message, items ->
             if (!successful) {
                 Utils.showStatusMessage(textView, message, true)
             }
             adapter.clear()
-            adapter.addAll(items.toList())
+            adapter.addAll(items.toList()) {
+                loadingIcon.visibility = View.GONE
+            }
         }
     }
 
@@ -136,7 +143,6 @@ class StorageFragment: Fragment() {
             Utils.hideStatusMessage(statusMessage)
             openEditItemPopup(adapter, index).setOnDismissListener {
                 // Dismiss this if still open when the editor closes, possibly contains invalid data
-                // TODO: Fix overlaying backgrounds
                 window.dismiss()
             }
         }
@@ -147,7 +153,7 @@ class StorageFragment: Fragment() {
             if (deleteButton.tag == "delete") {
                 deleteButton.tag = "confirm"
                 deleteButton.setText(R.string.storage_popup_confirm_delete)
-                deleteButton.setBackgroundColor(context.resources.getColor(R.color.light_dangerous))
+                deleteButton.setBackgroundColor(context.resources.getColor(R.color.dark_dangerous))
             } else {
                 Model.Communication.deleteItem(item) { successful, message ->
                     if (successful) {
@@ -172,9 +178,7 @@ class StorageFragment: Fragment() {
         }
 
         passwordGroup.setOnClickListener {
-            val clipboard =
-                ContextCompat.getSystemService(context, ClipboardManager::class.java)
-            // Todo de-encrypt the password first
+            val clipboard = ContextCompat.getSystemService(context, ClipboardManager::class.java)
             val clip: ClipData = ClipData.newPlainText("Copied Password", item.password)
             clipboard!!.setPrimaryClip(clip)
         }
@@ -186,9 +190,7 @@ class StorageFragment: Fragment() {
                 passwordLabel.text = item.password.replace(Regex("."), "*")
             } else {
                 showPasswordButton.tag = "revealed"
-                // Todo de-encrypt the password
                 passwordLabel.text = item.password
-
             }
         }
     }
@@ -223,6 +225,21 @@ class StorageFragment: Fragment() {
         // Close window when clicked
         closeButton.setOnClickListener { window.dismiss() }
         applyButton.setOnClickListener {
+            if (labelInput.text.isEmpty()) {
+                Utils.showStatusMessage(statusMessage, "Label field cannot be empty", true)
+                return@setOnClickListener
+            }
+
+            if (urlInput.text.isEmpty()) {
+                Utils.showStatusMessage(statusMessage, "Url field cannot be empty", true)
+                return@setOnClickListener
+            }
+
+            if (usernameInput.text.isEmpty() && passwordInput.text.isEmpty()) {
+                Utils.showStatusMessage(statusMessage, "Password and Username fields cannot both be empty", true)
+                return@setOnClickListener
+            }
+
             // Hide old message
             Utils.hideStatusMessage(statusMessage)
 
@@ -277,7 +294,21 @@ class StorageFragment: Fragment() {
         // Close window when clicked
         closeButton.setOnClickListener { window.dismiss() }
         addButton.setOnClickListener {
-            // TODO: Implement input validation
+            if (labelInput.text.isEmpty()) {
+                Utils.showStatusMessage(statusMessage, "Label field cannot be empty", true)
+                return@setOnClickListener
+            }
+
+            if (urlInput.text.isEmpty()) {
+                Utils.showStatusMessage(statusMessage, "Url field cannot be empty", true)
+                return@setOnClickListener
+            }
+
+            if (usernameInput.text.isEmpty() && passwordInput.text.isEmpty()) {
+                Utils.showStatusMessage(statusMessage, "Password and Username fields cannot both be empty", true)
+                return@setOnClickListener
+            }
+
             val newItem = CredentialsItem(
                 0,
                 labelInput.text.toString(),

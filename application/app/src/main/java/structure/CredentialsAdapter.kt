@@ -10,23 +10,23 @@ import android.widget.*
 import androidx.annotation.LayoutRes
 import com.application.keykeeper.R
 import kotlinx.coroutines.*
-import java.io.InputStream
 import java.net.URL
+
 class CredentialsAdapter(
     context: Context,
     @LayoutRes private val layoutResource: Int,
     private val items: List<CredentialsItem>
 ): ArrayAdapter<CredentialsItem>(context, layoutResource, items) {
-    override fun addAll(collection: Collection<CredentialsItem>) {
+    fun addAll(collection: Collection<CredentialsItem>, callback: (collection: Collection<CredentialsItem>) -> Unit) {
         // Load images before adding
-        CoroutineScope(Dispatchers.Main).launch {
-            // Internet requests cannot be performed on main thread
-            withContext(Dispatchers.Default) {
-                collection.forEach {
-                    it.image = getImageFromUrl(it.uri)
+        CoroutineScope(Dispatchers.Default).launch {
+            collection.forEach {
+                it.image = getImageFromUrl(it.uri)
+                withContext(Dispatchers.Main) {
+                    super.add(it)
                 }
             }
-            super.addAll(collection)
+            callback(collection)
         }
     }
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -50,8 +50,9 @@ class CredentialsAdapter(
             val protocol = groups[1]?.value
             val site = groups[2]?.value
             val url = URL(protocol, site, "/favicon.ico")
-            val stream = url.content as InputStream
-            Drawable.createFromStream(stream, urlString)
+            val connection = url.openConnection()
+            connection.connectTimeout = 300
+            Drawable.createFromStream(connection.getInputStream(), urlString)
         } catch (e: Exception) {
             Log.e("getIconFromUrl", e.toString() + ' ' + e.message)
             null

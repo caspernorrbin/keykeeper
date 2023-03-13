@@ -13,7 +13,7 @@
 
     <TextView
         android:id="@+id/login_header_label"
-        android:layout_width="186dp"
+        android:layout_width="wrap_content"
         android:layout_height="71dp"
         android:gravity="center"
         android:text="@string/login_header"
@@ -21,18 +21,19 @@
         app:layout_constraintBottom_toTopOf="@+id/login_body_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
     <LinearLayout
         android:id="@+id/login_body_layout"
-        android:layout_width="275dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:padding="10dp"
+        android:layout_margin="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.6">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
         <EditText
             android:id="@+id/login_email_input"
@@ -56,7 +57,13 @@
             android:id="@+id/login_remember_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/login_remember_email"/>
+            android:text="@string/login_remember_email" />
+
+        <CheckBox
+            android:id="@+id/login_offline_mode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login_offline_mode" />
 
         <Button
             android:id="@+id/login_button"
@@ -64,12 +71,6 @@
             android:layout_height="65dp"
             android:layout_marginTop="4dp"
             android:text="@string/login_button" />
-
-        <CheckBox
-            android:id="@+id/login_offline_mode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/login_offline_mode" />
 
         <TextView
             android:id="@+id/login_header_label2"
@@ -88,7 +89,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
             android:text="@string/login_create_account"
-            android:textSize="14sp" />
+            android:textSize="12sp" />
     </LinearLayout>
 
     <TextView
@@ -107,32 +108,40 @@
         android:id="@+id/login_loading_icon"
         android:layout_width="46dp"
         android:layout_height="46dp"
-        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/login_body_layout"
         app:layout_constraintEnd_toEndOf="@+id/login_body_layout"
         app:layout_constraintStart_toStartOf="@+id/login_body_layout"
         app:layout_constraintTop_toTopOf="@+id/login_body_layout"
-        android:layout_marginTop="120sp"
-        app:srcCompat="@drawable/an_loading" />
+        app:srcCompat="@drawable/an_loading"
+        android:visibility="gone"
+        android:contentDescription="@string/login_loading"/>
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:gravity="center"
+        android:padding="5dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="5dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/login_server_connect_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:text="@string/login_server_connect" />
 
-        <Button
+        <ImageButton
             android:id="@+id/login_change_server_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/login_change_server_button" />
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:backgroundTint="@color/transparent"
+            android:contentDescription="@string/login_change_server_button"
+            android:src="@drawable/ic_change" />
     </LinearLayout>
 
 

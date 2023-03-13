@@ -2,7 +2,6 @@ package structure
 
 import android.content.Context
 import android.util.Log
-import org.json.JSONArray
 
 object LocalStorage {
     // Stores in `data/data/[package_name]/shared_prefs/[app name].xml`

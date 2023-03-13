@@ -1,8 +1,6 @@
 package structure
 
-import android.os.Build
 import android.security.keystore.KeyProperties
-import androidx.annotation.RequiresApi
 import at.favre.lib.crypto.bcrypt.BCrypt
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
@@ -11,8 +9,6 @@ import javax.crypto.spec.SecretKeySpec
 import java.security.SecureRandom
 import java.security.MessageDigest
 import java.util.Base64
-
-@RequiresApi(Build.VERSION_CODES.O)
 
 /**
  * Handles all encryption and hashing of symmetric keys, items, and passwords
@@ -81,7 +77,7 @@ object Encryption {
     }
 
     // Encrypts an item using the symmetric key
-    fun encryptString(symkeyString: String, str: String): String {
+    private fun encryptString(symkeyString: String, str: String): String {
         // Extract the IV and symmetric key and generate a cipher
         val (iv, symkey) = splitIvSym(symkeyString)
         val cipher = generateEncryptCipher(symkey, iv)
@@ -92,7 +88,7 @@ object Encryption {
     }
 
     // Decrypts an item using the symmetric key
-    fun decryptString(symkeyString: String, str: String): String {
+    private fun decryptString(symkeyString: String, str: String): String {
         // Extract the IV and symmetric key and generate a cipher
         val (iv, symkey) = splitIvSym(symkeyString)
         val cipher = generateDecryptCipher(symkey, iv)

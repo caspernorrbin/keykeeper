@@ -1,6 +1,7 @@
 package structure
 
 import android.graphics.Color
+import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
 

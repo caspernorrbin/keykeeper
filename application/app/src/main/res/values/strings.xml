@@ -22,10 +22,17 @@
     <string name="debug_button">Confirm</string>
 
     <!-- Account strings -->
+    <string name="account_profile_image_text">Profile</string>
+    <string name="account_profile_email">email@provider.com</string>
     <string name="account_logout">Logout</string>
+    <string name="account_edit_profile">Edit Profile</string>
+    <string name="account_change_email">Change Email</string>
+    <string name="account_change_password">Change Password</string>
+    <string name="account_delete">Delete Account</string>
+    <string name="account_delete_confirm">Confirm Delete</string>
 
     <!-- Login strings -->
-    <string name="login_header">Login</string>
+    <string name="login_header">Welcome to KeyKeeper</string>
     <string name="login_email">Email</string>
     <string name="login_password">Password</string>
     <string name="login_button">Login</string>
@@ -35,6 +42,7 @@
     <string name="login_offline_mode">Offline login</string>
     <string name="login_change_server_button">Change Server</string>
     <string name="login_server_connect">Connect to: %1$s</string>
+    <string name="login_loading">Loading</string>
 
     <!-- change server strings -->
     <string name="change_server_text_view">Change Server</string>
@@ -54,14 +62,19 @@
     <string name="storage_query">Search …</string>
     <string name="storage_query_no_match">No Match</string>
 
+    <!-- Storage Item strings -->
+    <string name="storage_item_url">URL</string>
+    <string name="storage_item_name">Name</string>
+
     <!-- Storage Popup strings -->
+    <string name="storage_popup_click_prompt">Click field to copy</string>
     <string name="storage_popup_url">Url</string>
     <string name="storage_popup_label">Label</string>
     <string name="storage_popup_username">Username</string>
     <string name="storage_popup_password">Password</string>
     <string name="storage_popup_show_password">Show password</string>
-    <string name="storage_popup_notes">Notes</string>
-    <string name="storage_popup_apply">Apply</string>
+    <string name="storage_popup_notes">Notes (Optional)</string>
+    <string name="storage_popup_apply">Apply Changes</string>
     <string name="storage_popup_add">Add Item</string>
     <string name="storage_popup_edit">Edit</string>
     <string name="storage_popup_delete">Delete</string>
@@ -81,15 +94,12 @@
     <string name="edit_profile_edit_email_check_box">Edit Email</string>
     <string name="edit_profile_edit_password_checkbox">Edit Password</string>
     <string name="edit_profile_old_password_edit_text">Old Password</string>
-    <string name="edit_profile_text_explanation_text_view">Write your old password to confirm</string>
-
+    <string name="edit_profile_text_explanation_text_view">Enter your old password to confirm</string>
 
     <!-- Profile strings -->
     <string name="account_edit_profile_button">Edit Profile</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="account_test_test_example_text_view">test@test.example</string>
+    <!-- Server Item strings -->
     <string name="server_item_label">Label</string>
     <string name="server_item_remove_the_server">Remove the server</string>
-
 </resources>

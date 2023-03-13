@@ -1,15 +1,11 @@
 package structure
 
 import android.content.Context
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import communication.Account
 import communication.Item
 import communication.OfflineAccount
 import org.json.JSONArray
-
-@RequiresApi(Build.VERSION_CODES.O)
 
 object Model {
     private var symkey: String = ""
@@ -22,13 +18,17 @@ object Model {
         private lateinit var selectedServerURL: String
 
         fun setSelectedServer(newSelectedServer: ServerItem) {
-            // Split url to ensure correct format
-            val groups = Regex("(.+)://([^/]+)").find(newSelectedServer.url)?.groups!!
-            val protocol = groups[1]?.value
-            val site = groups[2]?.value
-            val url = "$protocol://$site/"
-            this.selectedServerURL = url
             this.selectedServer = newSelectedServer
+            // Split url to ensure correct format
+            val groups = Regex("(.+)://([^/]+)").find(newSelectedServer.url)?.groups
+            if (groups != null) {
+                val protocol = groups[1]?.value
+                val site = groups[2]?.value
+                val url = if (protocol != null && site != null) "$protocol://$site/" else newSelectedServer.url
+                this.selectedServerURL = url
+            } else {
+                this.selectedServerURL = newSelectedServer.url
+            }
         }
 
         fun createAccount(email: String, password: String, callback: (success: Boolean, message: String) -> Unit) {
@@ -49,14 +49,10 @@ object Model {
 
             val emailToUse = if (newEmail != "") newEmail else usedEmail!!
             val passwordToUse = if (newPassword != "") newPassword else oldPassword
+            val encSymkey = if (newPassword != "") Encryption.encryptSymkey(passwordToUse, symkey) else ""
 
             val oldPasswordHash = Encryption.hashAuthentication(oldPassword, usedEmail!!)
             val passwordHash = Encryption.hashAuthentication(passwordToUse, emailToUse)
-
-            var encSymkey = ""
-            if (newPassword != "") {
-                encSymkey = Encryption.encryptSymkey(passwordToUse, symkey)
-            }
 
             Account.sendUpdateAccountRequest(oldPasswordHash, newEmail, passwordHash, encSymkey, selectedServerURL) { success, message ->
                 if (success) {
@@ -79,7 +75,6 @@ object Model {
             } else {
                 val passwordHash = Encryption.hashAuthentication(password, email)
                 Account.sendLoginRequest(email, passwordHash, selectedServerURL) { success, symOrError ->
-
                     if (success) {
                         Storage.setAccountDetails(context, email, passwordHash, symOrError)
                         Storage.setOfflineMode(context, false)
@@ -115,25 +110,16 @@ object Model {
 
         fun createItem(item: CredentialsItem, callback: (success: Boolean, message: String) -> Unit) {
             val encItem = Encryption.encryptItem(symkey, item)
-            Item.sendCreateItemRequest(encItem, selectedServerURL) { success, message ->
-                // TODO: Anything to do here?
-                callback(success, message)
-            }
+            Item.sendCreateItemRequest(encItem, selectedServerURL, callback)
         }
 
         fun deleteItem(item: CredentialsItem, callback: (success: Boolean, message: String) -> Unit) {
-            Item.sendDeleteItemRequest(item, selectedServerURL) { success, message ->
-                // TODO: Anything to do here?
-                callback(success, message)
-            }
+            Item.sendDeleteItemRequest(item, selectedServerURL, callback)
         }
 
         fun updateItem(updatedItem: CredentialsItem, callback: (success: Boolean, message: String) -> Unit) {
             val updatedEncItem = Encryption.encryptItem(symkey, updatedItem)
-            Item.sendUpdateItemRequest(updatedEncItem, selectedServerURL) { success, message ->
-                // TODO: Anything to do here?
-                callback(success, message)
-            }
+            Item.sendUpdateItemRequest(updatedEncItem, selectedServerURL, callback)
         }
     }
 
